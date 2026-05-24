@@ -132,6 +132,35 @@ Business-specific validation belongs to C2-F. Database writes belong to C2-A. Al
 
 ## C2-A1 Build Record - Google Sheets Write Adapter
 
+## C2-A2 Build Record - Airtable Write Adapter
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-a2-airtable-write-adapter`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-a2-core-airtable-write-adapter-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-A2_CORE_Airtable_Write_Adapter_v1`
+- Uses HTTP Request with Airtable Personal Access Token
+- Writes through Airtable API create-record endpoint
+
+**Passed tests:**
+- Valid Airtable write
+- Upstream validation failed
+- Missing base ID
+- Airtable PAT write confirmed
+
+**Implementation note:**  
+C2-A2 is built as the second destination adapter in the C2-A Data Sync Pipeline family. It accepts validated C2-F output, maps payload fields to Airtable fields, creates a record, and returns a standard write result object.
+
+**Excluded by design:**  
+Google Sheets writes belong to C2-A1. HubSpot writes belong to C2-A3. Deduplication belongs to C2-D. Alerts belong to C2-I. Conditional routing belongs to C2-B.
+
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-a1-google-sheets-write-adapter`  
 **Last tested:** 2026-05-25  

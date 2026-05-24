@@ -1,0 +1,44 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_test_airtable_lead_valid",
+    "event_type": "lead_intake",
+    "source_component": "C2-C",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need Airtable automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "passed",
+      "checked_fields": ["name", "email", "message"],
+      "failed_fields": []
+    },
+    "error": null,
+    "next_action": "route_payload"
+  },
+  "config": {
+    "destination": "airtable",
+    "base_id": "appxStJmpwo788OGn",
+    "table_name": "Leads",
+    "field_map": {
+      "event_id": "Event ID",
+      "event_type": "Event Type",
+      "payload.name": "Name",
+      "payload.email": "Email",
+      "payload.company": "Company",
+      "payload.message": "Message",
+      "source_component": "Source",
+      "metadata.origin": "Origin",
+      "metadata.environment": "Environment"
+    },
+    "default_next_action": "notify_team"
+  }
+}

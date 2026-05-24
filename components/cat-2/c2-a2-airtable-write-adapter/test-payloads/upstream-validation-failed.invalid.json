@@ -1,0 +1,43 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_test_airtable_missing_email",
+    "event_type": "lead_intake",
+    "source_component": "C2-C",
+    "payload": {
+      "name": "Riya Sharma",
+      "company": "GrowthOps Studio",
+      "message": "We need Airtable automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "failed",
+      "checked_fields": ["name", "email", "message"],
+      "failed_fields": ["email"]
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "destination": "airtable",
+    "base_id": "appxStJmpwo788OGn",
+    "table_name": "Leads",
+    "field_map": {
+      "event_id": "Event ID",
+      "event_type": "Event Type",
+      "payload.name": "Name",
+      "payload.email": "Email",
+      "payload.company": "Company",
+      "payload.message": "Message"
+    },
+    "default_next_action": "notify_team"
+  }
+}

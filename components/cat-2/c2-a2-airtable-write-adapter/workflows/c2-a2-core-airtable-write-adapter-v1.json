@@ -1,0 +1,241 @@
+{
+  "name": "C2-A2_CORE_Airtable_Write_Adapter_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -256
+      ],
+      "id": "23526c22-02ed-4b17-96b7-34cff8144b2f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "60f62717-c01b-4aa2-b0ed-983603ac766b",
+              "leftValue": "={{ $json.stop_before_http }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        16
+      ],
+      "id": "9f40cad7-e127-4c46-844e-96fa413a1b2a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prepared = $input.first().json || {};\n\nreturn [\n  {\n    json: {\n      success: prepared.success,\n      component_id: prepared.component_id,\n      component_version: prepared.component_version,\n      event_id: prepared.event_id,\n      event_type: prepared.event_type,\n      destination: prepared.destination,\n      write: prepared.write,\n      payload: prepared.payload,\n      metadata: prepared.metadata,\n      error: prepared.error,\n      next_action: prepared.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        176
+      ],
+      "id": "883fdd84-cf01-4a49-bee6-f4fd9a663917",
+      "name": "Pass Failure Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "const httpOutput = $input.first().json || {};\nconst prepared = $(\"Prepare Airtable Create Request\").first().json;\nconst context = prepared.context;\n\nconst recordId = httpOutput.id || null;\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: context.component_id,\n      component_version: context.component_version,\n      event_id: context.event_id,\n      event_type: context.event_type,\n      destination: {\n        ...context.destination,\n        record_id: recordId\n      },\n      write: {\n        status: \"created\",\n        fields_written: context.write.fields_written\n      },\n      payload: context.payload,\n      metadata: context.metadata,\n      error: null,\n      next_action: context.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -176
+      ],
+      "id": "f915abec-54a3-4dba-aec9-75b1d495e6ab",
+      "name": "Normalize Write Result"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction fail({ code, message, details = [], inputSnapshot = {} }) {\n  return [\n    {\n      json: {\n        stop_before_http: true,\n        success: false,\n        component_id: \"C2-A2\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        destination: {\n          type: \"airtable\",\n          base_id: input.config?.base_id || null,\n          table_name: input.config?.table_name || null,\n          record_id: null\n        },\n        write: {\n          status: \"failed\",\n          fields_written: []\n        },\n        payload: input.input?.payload || {},\n        metadata: input.input?.metadata || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\",\n        input_snapshot: inputSnapshot\n      }\n    }\n  ];\n}\n\nfunction getByPath(obj, path) {\n  return path.split(\".\").reduce((acc, key) => {\n    if (acc && Object.prototype.hasOwnProperty.call(acc, key)) {\n      return acc[key];\n    }\n    return undefined;\n  }, obj);\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\",\n    inputSnapshot: input\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\",\n    inputSnapshot: input\n  });\n}\n\nconst validatedInput = input.input;\nconst config = input.config || {};\n\nif (validatedInput.success !== true) {\n  return fail({\n    code: \"UPSTREAM_VALIDATION_FAILED\",\n    message: \"C2-A2 will not write records when upstream validation failed.\",\n    details: [\n      {\n        upstream_component: validatedInput.component_id || null,\n        upstream_error: validatedInput.error || null\n      }\n    ],\n    inputSnapshot: input\n  });\n}\n\nif (!config.base_id) {\n  return fail({\n    code: \"MISSING_BASE_ID\",\n    message: \"config.base_id is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.table_name) {\n  return fail({\n    code: \"MISSING_TABLE_NAME\",\n    message: \"config.table_name is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.field_map || typeof config.field_map !== \"object\") {\n  return fail({\n    code: \"MISSING_FIELD_MAP\",\n    message: \"config.field_map is required.\",\n    inputSnapshot: input\n  });\n}\n\nconst fieldMap = config.field_map;\nconst fields = {};\nconst fieldsWritten = [];\n\nfor (const [sourcePath, airtableField] of Object.entries(fieldMap)) {\n  const value = getByPath(validatedInput, sourcePath);\n  fields[airtableField] = value ?? \"\";\n  fieldsWritten.push(airtableField);\n}\n\n// System fields if present in Airtable table\nfields[\"Received At\"] = validatedInput.received_at || \"\";\nfields[\"Written At\"] = new Date().toISOString();\n\nconst encodedTableName = encodeURIComponent(config.table_name);\n\nreturn [\n  {\n    json: {\n      stop_before_http: false,\n      request: {\n        base_id: config.base_id,\n        table_name: config.table_name,\n        url: `https://api.airtable.com/v0/${config.base_id}/${encodedTableName}`,\n        body: {\n          fields\n        }\n      },\n      context: {\n        component_id: \"C2-A2\",\n        component_version: \"v1\",\n        event_id: validatedInput.event_id || null,\n        event_type: validatedInput.event_type || null,\n        destination: {\n          type: \"airtable\",\n          base_id: config.base_id,\n          table_name: config.table_name,\n          record_id: null\n        },\n        write: {\n          status: \"prepared\",\n          fields_written: fieldsWritten\n        },\n        payload: validatedInput.payload || {},\n        metadata: validatedInput.metadata || {},\n        next_action: config.default_next_action || \"notify_team\"\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "1eb182e1-550b-4b9a-b7f1-4049abb16983",
+      "name": "Prepare Airtable Create Request"
+    },
+    {
+      "parameters": {
+        "method": "=POST",
+        "url": "={{ $json.request.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_AIRTABLE_PAT"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.request.body) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        -176
+      ],
+      "id": "f50fbd06-ba94-4d66-a422-7c61e36aa6b3",
+      "name": "Create Airtable Record",
+      "credentials": {
+        "googleApi": {
+          "id": "oCfDDkEpICFS2XbS",
+          "name": "Google Service Account account"
+        },
+        "airtableTokenApi": {
+          "id": "9fduOwPT2yj2pCVM",
+          "name": "Airtable PAT - LexNova Test"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-F",
+            "component_version": "v1",
+            "event_id": "evt_test_airtable_missing_config",
+            "event_type": "lead_intake",
+            "source_component": "C2-C",
+            "payload": {
+              "name": "Riya Sharma",
+              "email": "riya@example.com",
+              "company": "GrowthOps Studio",
+              "message": "We need Airtable automation help."
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "validation": {
+              "status": "passed",
+              "checked_fields": [
+                "name",
+                "email",
+                "message"
+              ],
+              "failed_fields": []
+            },
+            "error": null,
+            "next_action": "route_payload"
+          },
+          "config": {
+            "destination": "airtable",
+            "table_name": "Leads",
+            "field_map": {
+              "payload.name": "Name",
+              "payload.email": "Email"
+            },
+            "default_next_action": "notify_team"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Airtable Create Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create Airtable Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pass Failure Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Airtable Create Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Airtable Record": {
+      "main": [
+        [
+          {
+            "node": "Normalize Write Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5e02af74-2dab-436f-aac1-6bf9d155e649",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "o8JuF6r12UdZHie1",
+  "tags": []
+}

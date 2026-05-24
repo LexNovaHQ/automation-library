@@ -1,0 +1,32 @@
+﻿{
+  "success": false,
+  "component_id": "C2-A2",
+  "component_version": "v1",
+  "event_id": "evt_test_airtable_missing_config",
+  "event_type": "lead_intake",
+  "destination": {
+    "type": "airtable",
+    "base_id": null,
+    "table_name": "Leads",
+    "record_id": null
+  },
+  "write": {
+    "status": "failed",
+    "fields_written": []
+  },
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "company": "GrowthOps Studio",
+    "message": "We need Airtable automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "MISSING_BASE_ID",
+    "message": "config.base_id is required."
+  },
+  "next_action": "route_to_failure_log"
+}
