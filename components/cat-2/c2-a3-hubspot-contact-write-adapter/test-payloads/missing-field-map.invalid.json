@@ -1,0 +1,33 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_test_hubspot_missing_config",
+    "event_type": "lead_intake",
+    "source_component": "C2-C",
+    "payload": {
+      "firstname": "Riya",
+      "lastname": "Sharma",
+      "email": "riya.c2a3.test@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need HubSpot automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "passed",
+      "checked_fields": ["firstname", "lastname", "email", "company", "message"],
+      "failed_fields": []
+    },
+    "error": null,
+    "next_action": "route_payload"
+  },
+  "config": {
+    "destination": "hubspot",
+    "object_type": "contacts",
+    "default_next_action": "notify_team"
+  }
+}

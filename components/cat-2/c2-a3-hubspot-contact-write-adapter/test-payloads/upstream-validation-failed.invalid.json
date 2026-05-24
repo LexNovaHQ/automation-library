@@ -1,0 +1,42 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_test_hubspot_missing_email",
+    "event_type": "lead_intake",
+    "source_component": "C2-C",
+    "payload": {
+      "firstname": "Riya",
+      "lastname": "Sharma",
+      "company": "GrowthOps Studio",
+      "message": "We need HubSpot automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "failed",
+      "checked_fields": ["firstname", "lastname", "email", "company", "message"],
+      "failed_fields": ["email"]
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "destination": "hubspot",
+    "object_type": "contacts",
+    "field_map": {
+      "payload.firstname": "firstname",
+      "payload.lastname": "lastname",
+      "payload.email": "email",
+      "payload.company": "company",
+      "payload.message": "message"
+    },
+    "default_next_action": "notify_team"
+  }
+}

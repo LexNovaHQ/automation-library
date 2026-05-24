@@ -1,0 +1,35 @@
+﻿{
+  "success": true,
+  "component_id": "C2-A3",
+  "component_version": "v1",
+  "event_id": "evt_test_hubspot_contact_valid",
+  "event_type": "lead_intake",
+  "destination": {
+    "type": "hubspot",
+    "object_type": "contacts",
+    "record_id": "hubspot_contact_id_sample"
+  },
+  "write": {
+    "status": "created",
+    "fields_written": [
+      "firstname",
+      "lastname",
+      "email",
+      "company",
+      "message"
+    ]
+  },
+  "payload": {
+    "firstname": "Riya",
+    "lastname": "Sharma",
+    "email": "riya.c2a3.test@example.com",
+    "company": "GrowthOps Studio",
+    "message": "We need HubSpot automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": null,
+  "next_action": "notify_team"
+}

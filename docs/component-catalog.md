@@ -133,7 +133,34 @@ Business-specific validation belongs to C2-F. Database writes belong to C2-A. Al
 ## C2-A1 Build Record - Google Sheets Write Adapter
 
 ## C2-A2 Build Record - Airtable Write Adapter
+## C2-A3 Build Record - HubSpot Contact Write Adapter
 
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-a3-hubspot-contact-write-adapter`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-a3-core-hubspot-contact-write-adapter-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-A3_CORE_HubSpot_Contact_Write_Adapter_v1`
+- Uses HTTP Request with HubSpot Service Key
+- Writes through HubSpot CRM Contacts API create-contact endpoint
+
+**Passed tests:**
+- Valid HubSpot contact write
+- Upstream validation failed
+- Missing field map
+- HubSpot Service Key read/write confirmed
+
+**Implementation note:**  
+C2-A3 is built as the third destination adapter in the C2-A Data Sync Pipeline family. It accepts validated C2-F output, maps payload fields to HubSpot contact properties, creates a contact, and returns a standard write result object.
+
+**Excluded by design:**  
+Google Sheets writes belong to C2-A1. Airtable writes belong to C2-A2. Deduplication/update belongs to C2-D. Alerts belong to C2-I. Conditional routing belongs to C2-B.
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-a2-airtable-write-adapter`  
 **Last tested:** 2026-05-25  

@@ -1,0 +1,31 @@
+﻿{
+  "success": false,
+  "component_id": "C2-A3",
+  "component_version": "v1",
+  "event_id": "evt_test_hubspot_missing_email",
+  "event_type": "lead_intake",
+  "destination": {
+    "type": "hubspot",
+    "object_type": "contacts",
+    "record_id": null
+  },
+  "write": {
+    "status": "failed",
+    "fields_written": []
+  },
+  "payload": {
+    "firstname": "Riya",
+    "lastname": "Sharma",
+    "company": "GrowthOps Studio",
+    "message": "We need HubSpot automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "UPSTREAM_VALIDATION_FAILED",
+    "message": "C2-A3 will not write records when upstream validation failed."
+  },
+  "next_action": "route_to_failure_log"
+}
