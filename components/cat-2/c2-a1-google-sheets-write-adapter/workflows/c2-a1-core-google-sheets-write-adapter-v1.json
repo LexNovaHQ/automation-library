@@ -1,0 +1,236 @@
+{
+  "name": "C2-A1_CORE_Google_Sheets_Write_Adapter_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -256
+      ],
+      "id": "91c19627-0ee6-4b64-b9cf-bcdcf0d1e703",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction fail({ code, message, details = [], inputSnapshot = {} }) {\n  return [\n    {\n      json: {\n        stop_before_http: true,\n        success: false,\n        component_id: \"C2-A1\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        destination: {\n          type: \"google_sheets\",\n          spreadsheet_id: input.config?.spreadsheet_id || null,\n          sheet_name: input.config?.sheet_name || null,\n          record_id: null\n        },\n        write: {\n          status: \"failed\",\n          fields_written: []\n        },\n        payload: input.input?.payload || {},\n        metadata: input.input?.metadata || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\",\n        input_snapshot: inputSnapshot\n      }\n    }\n  ];\n}\n\nfunction getByPath(obj, path) {\n  return path.split(\".\").reduce((acc, key) => {\n    if (acc && Object.prototype.hasOwnProperty.call(acc, key)) {\n      return acc[key];\n    }\n    return undefined;\n  }, obj);\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\",\n    inputSnapshot: input\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\",\n    inputSnapshot: input\n  });\n}\n\nconst validatedInput = input.input;\nconst config = input.config || {};\n\nif (validatedInput.success !== true) {\n  return fail({\n    code: \"UPSTREAM_VALIDATION_FAILED\",\n    message: \"C2-A1 will not write records when upstream validation failed.\",\n    details: [\n      {\n        upstream_component: validatedInput.component_id || null,\n        upstream_error: validatedInput.error || null\n      }\n    ],\n    inputSnapshot: input\n  });\n}\n\nif (!config.spreadsheet_id) {\n  return fail({\n    code: \"MISSING_SPREADSHEET_ID\",\n    message: \"config.spreadsheet_id is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.sheet_name) {\n  return fail({\n    code: \"MISSING_SHEET_NAME\",\n    message: \"config.sheet_name is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.field_map || typeof config.field_map !== \"object\") {\n  return fail({\n    code: \"MISSING_FIELD_MAP\",\n    message: \"config.field_map is required.\",\n    inputSnapshot: input\n  });\n}\n\nconst fieldMap = config.field_map;\n\n// Fixed column order based on target sheet headers\nconst headers = [\n  \"Event ID\",\n  \"Event Type\",\n  \"Name\",\n  \"Email\",\n  \"Company\",\n  \"Message\",\n  \"Source\",\n  \"Origin\",\n  \"Environment\",\n  \"Received At\",\n  \"Written At\"\n];\n\nconst rowObject = {};\nconst fieldsWritten = [];\n\nfor (const [sourcePath, targetHeader] of Object.entries(fieldMap)) {\n  const value = getByPath(validatedInput, sourcePath);\n  rowObject[targetHeader] = value ?? \"\";\n  fieldsWritten.push(targetHeader);\n}\n\n// Add system fields if not mapped directly\nrowObject[\"Received At\"] = validatedInput.received_at || \"\";\nrowObject[\"Written At\"] = new Date().toISOString();\n\nconst rowValues = headers.map(header => rowObject[header] ?? \"\");\n\nconst range = `${config.sheet_name}!A:K`;\n\nreturn [\n  {\n    json: {\n      stop_before_http: false,\n      request: {\n        spreadsheet_id: config.spreadsheet_id,\n        range,\n        url: `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheet_id}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n        body: {\n          values: [rowValues]\n        }\n      },\n      context: {\n        component_id: \"C2-A1\",\n        component_version: \"v1\",\n        event_id: validatedInput.event_id || null,\n        event_type: validatedInput.event_type || null,\n        destination: {\n          type: \"google_sheets\",\n          spreadsheet_id: config.spreadsheet_id,\n          sheet_name: config.sheet_name,\n          record_id: null\n        },\n        write: {\n          status: \"prepared\",\n          fields_written: fieldsWritten\n        },\n        payload: validatedInput.payload || {},\n        metadata: validatedInput.metadata || {},\n        next_action: config.default_next_action || \"notify_team\"\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "4fc88209-a422-4767-bb1b-79fb7ab31a2a",
+      "name": "Prepare Sheet Append Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "60f62717-c01b-4aa2-b0ed-983603ac766b",
+              "leftValue": "={{ $json.stop_before_http }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        16
+      ],
+      "id": "d5ff8c31-be40-45fd-b916-40293aecf22b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "=POST",
+        "url": "={{ $json.request.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.request.body) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        -176
+      ],
+      "id": "d0a9e1b8-d575-4adc-94b9-20c216dbc502",
+      "name": "Append Row to Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "oCfDDkEpICFS2XbS",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const prepared = $input.first().json || {};\n\nreturn [\n  {\n    json: {\n      success: prepared.success,\n      component_id: prepared.component_id,\n      component_version: prepared.component_version,\n      event_id: prepared.event_id,\n      event_type: prepared.event_type,\n      destination: prepared.destination,\n      write: prepared.write,\n      payload: prepared.payload,\n      metadata: prepared.metadata,\n      error: prepared.error,\n      next_action: prepared.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        176
+      ],
+      "id": "f765d51f-849d-4c6a-ae2c-4c0302c4fd2e",
+      "name": "Pass Failure Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "const httpOutput = $input.first().json || {};\nconst prepared = $(\"Prepare Sheet Append Request\").first().json;\nconst context = prepared.context;\n\nlet recordId = null;\n\nif (httpOutput.updates && httpOutput.updates.updatedRange) {\n  recordId = httpOutput.updates.updatedRange;\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: context.component_id,\n      component_version: context.component_version,\n      event_id: context.event_id,\n      event_type: context.event_type,\n      destination: {\n        ...context.destination,\n        record_id: recordId\n      },\n      write: {\n        status: \"created\",\n        fields_written: context.write.fields_written\n      },\n      payload: context.payload,\n      metadata: context.metadata,\n      error: null,\n      next_action: context.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -176
+      ],
+      "id": "e1ad8fde-ffcf-4896-b788-3a9d336b9d22",
+      "name": "Normalize Write Result"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": false,
+            "component_id": "C2-F",
+            "component_version": "v1",
+            "event_id": "evt_test_missing_email",
+            "event_type": "lead_intake",
+            "source_component": "C2-C",
+            "payload": {
+              "name": "Riya Sharma",
+              "company": "GrowthOps Studio",
+              "message": "We need automation help."
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "validation": {
+              "status": "failed",
+              "checked_fields": [
+                "name",
+                "email",
+                "message"
+              ],
+              "failed_fields": [
+                "email"
+              ]
+            },
+            "error": {
+              "code": "VALIDATION_FAILED",
+              "message": "Payload failed validation."
+            },
+            "next_action": "route_to_failure_log"
+          },
+          "config": {
+            "destination": "google_sheets",
+            "spreadsheet_id": "1IilXyGD0Q_kT7eEs9R6YDE4AxnqHANHNflcHwvHu5Hg",
+            "sheet_name": "Leads",
+            "field_map": {
+              "event_id": "Event ID",
+              "event_type": "Event Type",
+              "payload.name": "Name",
+              "payload.email": "Email",
+              "payload.company": "Company",
+              "payload.message": "Message"
+            },
+            "default_next_action": "notify_team"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Append Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sheet Append Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append Row to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pass Failure Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Row to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Normalize Write Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2ad18523-cc0a-4afe-9423-87350de3ff82",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "4rst013NepNZc3zq",
+  "tags": []
+}

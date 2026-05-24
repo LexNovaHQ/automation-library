@@ -130,6 +130,35 @@ Business-specific validation belongs to C2-F. Database writes belong to C2-A. Al
 
 ## C2-F Build Record — Payload Validation Layer
 
+## C2-A1 Build Record - Google Sheets Write Adapter
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-a1-google-sheets-write-adapter`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-a1-core-google-sheets-write-adapter-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-A1_CORE_Google_Sheets_Write_Adapter_v1`
+- Uses HTTP Request with Google Service Account API credential
+- Writes through Google Sheets API append endpoint
+
+**Passed tests:**
+- Valid lead write
+- Upstream validation failed
+- Missing spreadsheet ID
+- Google Sheets service account read/write confirmed
+
+**Implementation note:**  
+C2-A1 is built as the first destination adapter in the C2-A Data Sync Pipeline family. It accepts validated C2-F output, maps payload fields to Google Sheets columns, appends a row, and returns a standard write result object.
+
+**Excluded by design:**  
+Airtable writes belong to C2-A2. HubSpot writes belong to C2-A3. Deduplication belongs to C2-D. Alerts belong to C2-I. Conditional routing belongs to C2-B.
+
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-f-payload-validation-layer`  
 **Last tested:** 2026-05-25  

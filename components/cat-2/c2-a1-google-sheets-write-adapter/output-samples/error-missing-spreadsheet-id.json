@@ -1,0 +1,32 @@
+﻿{
+  "success": false,
+  "component_id": "C2-A1",
+  "component_version": "v1",
+  "event_id": "evt_test_missing_config",
+  "event_type": "lead_intake",
+  "destination": {
+    "type": "google_sheets",
+    "spreadsheet_id": null,
+    "sheet_name": "Leads",
+    "record_id": null
+  },
+  "write": {
+    "status": "failed",
+    "fields_written": []
+  },
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "company": "GrowthOps Studio",
+    "message": "We need automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "MISSING_SPREADSHEET_ID",
+    "message": "config.spreadsheet_id is required."
+  },
+  "next_action": "route_to_failure_log"
+}

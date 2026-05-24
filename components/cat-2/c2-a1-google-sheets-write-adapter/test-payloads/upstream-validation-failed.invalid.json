@@ -1,0 +1,43 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_test_missing_email",
+    "event_type": "lead_intake",
+    "source_component": "C2-C",
+    "payload": {
+      "name": "Riya Sharma",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "failed",
+      "checked_fields": ["name", "email", "message"],
+      "failed_fields": ["email"]
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "destination": "google_sheets",
+    "spreadsheet_id": "1IilXyGD0Q_kT7eEs9R6YDE4AxnqHANHNflcHwvHu5Hg",
+    "sheet_name": "Leads",
+    "field_map": {
+      "event_id": "Event ID",
+      "event_type": "Event Type",
+      "payload.name": "Name",
+      "payload.email": "Email",
+      "payload.company": "Company",
+      "payload.message": "Message"
+    },
+    "default_next_action": "notify_team"
+  }
+}

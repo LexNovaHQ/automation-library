@@ -1,0 +1,31 @@
+﻿{
+  "success": false,
+  "component_id": "C2-A1",
+  "component_version": "v1",
+  "event_id": "evt_test_missing_email",
+  "event_type": "lead_intake",
+  "destination": {
+    "type": "google_sheets",
+    "spreadsheet_id": "1IilXyGD0Q_kT7eEs9R6YDE4AxnqHANHNflcHwvHu5Hg",
+    "sheet_name": "Leads",
+    "record_id": null
+  },
+  "write": {
+    "status": "failed",
+    "fields_written": []
+  },
+  "payload": {
+    "name": "Riya Sharma",
+    "company": "GrowthOps Studio",
+    "message": "We need automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "UPSTREAM_VALIDATION_FAILED",
+    "message": "C2-A1 will not write records when upstream validation failed."
+  },
+  "next_action": "route_to_failure_log"
+}
