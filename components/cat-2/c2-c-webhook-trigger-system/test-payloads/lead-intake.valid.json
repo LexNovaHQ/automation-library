@@ -1,0 +1,18 @@
+﻿{
+  "data": {
+    "event_type": "lead_intake",
+    "source": "webhook",
+    "origin": "manual_test",
+    "environment": "test",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help."
+    }
+  },
+  "config": {
+    "default_next_action": "validate_payload",
+    "require_payload": true
+  }
+}

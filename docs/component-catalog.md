@@ -95,6 +95,37 @@ Every component is recorded with:
 
 **Borrowed from other categories:** C4-A (classification), C4-B (extraction), C4-D (content gen), C4-E (multi-agent), C5-A (auth for protected webhooks)
 
+## C2-C Build Record — Webhook Trigger System
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-c-webhook-trigger-system`  
+**Last tested:** 2026-05-24  
+
+**Workflow files:**
+- `workflows/c2-c-core-event-normalizer-v1.json`
+- `workflows/c2-c-webhook-receiver-wrapper-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-C_CORE_Event_Normalizer_v1`
+- External webhook wrapper: `C2-C_WEBHOOK_Receiver_Wrapper_v1`
+
+**Passed tests:**
+- Lead intake success
+- Payment success
+- WhatsApp-style message success
+- Missing event_type failure
+- Missing payload failure
+- Empty input failure
+
+**Implementation note:**  
+C2-C is built as a reusable webhook entry layer. The core normalizer accepts `{ data, config }`, returns a normalized success/error object, and remains reusable across templates. The wrapper handles external POST requests and converts raw webhook input into the core contract.
+
+**Excluded by design:**  
+Business-specific validation belongs to C2-F. Database writes belong to C2-A. Alerts belong to C2-I. AI classification belongs to C2-K / C4-A. Deduplication belongs to C2-D.
+
 **High-leverage components in this category** (borrowed by 3+ other categories): C2-A, C2-B, C2-C, C2-I, C2-L
 
 ---
@@ -299,11 +330,116 @@ The 26 "Not done" components ranked by leverage. Priority order = build sequence
 
 ---
 
+# Appendix A — Demo Toolkit Bindings (per Category)
+
+**Purpose:** Each category's components bind to a specific demo toolkit. Portfolio templates inherit these bindings — they do NOT pick their own tools. This enforces the architectural rule that **tools bind to components, not to templates.** When a real paying client engages, components re-bind to the client's tools (their CRM, their form provider, their email service). Component logic stays identical — only the connection/auth config changes.
+
+**Why this matters:** Without category-level toolkit locks, each template would have bespoke tool integrations, violating the "components are atomic" principle. Demo consistency = portfolio coherence + faster assembly + cleaner generalization to client work.
+
+---
+
+## A.1 — Category 2 Demo Toolkit v1.0 (locked per D-DAY2-003)
+
+All Category 2 portfolio templates (Templates #1-#5) assemble against this binding table.
+
+| Function | Tool | Used By Components | Notes |
+|---|---|---|---|
+| Workflow engine | n8n self-hosted (Docker) | All | Per Day 1 infrastructure lock |
+| AI/LLM | Groq + Llama 3.3 70B (free tier) | C2-K, C4-* | Per D-DAY2-002. Backup: Gemini 2.5 Flash-Lite. |
+| Form intake | Tally (free) | C2-E, C2-F, C2-G | Modern UX, generous free tier, recognized on Upwork |
+| CRM destination | HubSpot free tier | C2-A, C2-B, C2-D (when CRM-bound) | Most-requested CRM signal on Upwork |
+| Flexible database | Airtable free tier | C2-A, C2-D, C2-N (table-shaped data) | "Database for non-techies" |
+| File storage | Google Drive | C2-G | Universal file destination |
+| Spreadsheet destination | Google Sheets | C2-A, C2-N (tabular logs/exports) | Default for tabular automation |
+| Email send | Gmail (App Password) | C2-I, C2-J | Sufficient for demo volume |
+| Team notification | Slack free workspace | C2-I, C2-J | Default B2B alert tool |
+| Customer messaging | WhatsApp Cloud API (Meta direct, free tier) | C2-M (when built) | Free Meta tier, no Twilio markup |
+| Payment | Stripe test mode | C2-H | Test transactions are free |
+| Calendar/scheduling | Calendly free tier | C2-L (when built) | Most recognized. Cal.com = self-host upgrade path. |
+| Webhook testing | webhook.site + n8n native | C2-C | Zero signup |
+
+---
+
+### A.1.1 — Role separation within the toolkit
+
+To prevent the wrong tool being used for the wrong job, the following destination roles are fixed:
+
+| Use case | Destination |
+|---|---|
+| CRM-shaped data (leads, contacts, deals, opportunities) | **HubSpot** |
+| Arbitrary records / project tracking / inventory / content | **Airtable** |
+| Simple tabular logs, exports, line items, financial records | **Google Sheets** |
+| File payloads (PDFs, images, attachments) | **Google Drive** |
+| Document generation outputs (PDFs/Docs from data) | **Google Drive** |
+
+C2-A (Data Sync Pipeline) supports all three (HubSpot, Airtable, Sheets) as destinations from Day 1 — implemented via n8n's native nodes for each.
+
+---
+
+### A.1.2 — Client-engagement re-binding
+
+When a paying client engages, the Cat 2 components re-bind to their tools. The toolkit is the **demo default**, not the only supported configuration. Examples:
+
+| Demo Default | Common Client Substitutes |
+|---|---|
+| Tally | Typeform, Jotform, Webflow forms, native HTML forms, Google Forms |
+| HubSpot | Pipedrive, Salesforce, Zoho CRM, GoHighLevel, Close.com, custom DB |
+| Airtable | Notion databases, monday.com, Smartsheet, Coda |
+| Gmail | Mailgun, SendGrid, Postmark, Resend, Microsoft 365 SMTP |
+| Slack | Microsoft Teams, Discord, Telegram, email-only |
+| Stripe | Razorpay (India), PayPal, LemonSqueezy, Paddle, Square |
+| Calendly | Cal.com, Acuity, SavvyCal, native CRM scheduling |
+| Groq + Llama 3.3 70B | Claude (any version), GPT-4/4o/5, Gemini 2.5 Flash/Pro, self-hosted Ollama |
+
+The C2-K LLM-in-Workflow Adapter is explicitly model-agnostic — uses n8n's OpenAI node with swappable base URL. Same logic, any provider.
+
+---
+
+### A.1.3 — Cat 2 demo account prerequisites
+
+The accounts created ONCE for the entire Cat 2 sprint (no credit cards required):
+
+1. Groq API key — console.groq.com
+2. Tally account — tally.so
+3. HubSpot free CRM — hubspot.com (real workspace, demo company)
+4. Airtable workspace — airtable.com
+5. Slack demo workspace — slack.com/create
+6. Gmail App Password — myaccount.google.com → Security (2FA required first)
+7. Stripe test mode account — dashboard.stripe.com/register (switch Live → Test in dashboard)
+8. Calendly free account — calendly.com/signup (defer until Template #4)
+
+Credentials stored locally in `D:\Code\lexnova-secrets.txt` — NEVER committed to GitHub.
+
+---
+
+## A.2 — Category 1 Demo Toolkit (TBD)
+
+Will be locked when Category 1 sprint begins. Expected anchor tools: Apollo (free), Instantly OR Smartlead (trial), GMass (already configured), domain warming via existing setup.
+
+## A.3 — Category 3 Demo Toolkit (TBD)
+
+Will be locked when Category 3 sprint begins. Anchor tools likely: GHL trial OR HubSpot (depending on offering positioning), Tally, Stripe, e-signature (DocuSign free OR HelloSign trial).
+
+## A.4 — Category 4 Demo Toolkit (TBD)
+
+Will be locked when Category 4 sprint begins. Anchor tools likely: Groq + Llama 3.3 70B (continued), vector DB (Pinecone free OR Supabase pgvector), document sources (Google Drive, Notion).
+
+## A.5 — Category 5 Demo Toolkit (TBD)
+
+Will be locked when Category 5 sprint begins. Anchor tools likely: Firebase + Cloudflare Pages (existing Lex Nova stack), magic-link auth, custom HTML/CSS.
+
+## A.6 — Category 6 Demo Toolkit (TBD)
+
+Will be locked when Category 6 sprint begins. Mostly soft tooling (checklists, SOPs, report templates) + the underlying tools clients are using (Make.com, Zapier, n8n logs).
+
+---
+
 # Version History
 
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-05-24 | Initial catalog. 80 components across 6 categories. Locks: D65-A, D-PHASE2-004, D-PHASE2-005-A. |
+| v1.1 | 2026-05-24 | Added Appendix A — Demo Toolkit Bindings. Cat 2 toolkit locked per D-DAY2-003. Cat 1, 3, 4, 5, 6 toolkits marked TBD pending their sprints. |
 
 ---
 

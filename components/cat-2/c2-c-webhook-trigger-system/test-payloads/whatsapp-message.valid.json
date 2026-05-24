@@ -1,0 +1,17 @@
+﻿{
+  "data": {
+    "event_type": "message_received",
+    "source": "webhook",
+    "origin": "whatsapp_mock",
+    "environment": "test",
+    "payload": {
+      "from": "+919999999999",
+      "message": "Hi, I want to book a consultation.",
+      "timestamp": "2026-05-24T10:30:00Z"
+    }
+  },
+  "config": {
+    "default_next_action": "validate_message",
+    "require_payload": true
+  }
+}

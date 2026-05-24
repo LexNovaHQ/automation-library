@@ -1,0 +1,12 @@
+﻿{
+  "data": {
+    "event_type": "lead_intake",
+    "source": "webhook",
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "config": {
+    "default_next_action": "validate_payload",
+    "require_payload": true
+  }
+}

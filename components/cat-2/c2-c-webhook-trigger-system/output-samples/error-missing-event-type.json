@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C2-C",
+  "component_version": "v1",
+  "event_id": "evt_sample_missing_event_type",
+  "event_type": null,
+  "source": "webhook",
+  "received_at": "2026-05-24T00:00:00.000Z",
+  "payload": {
+    "name": "Riya Sharma"
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "MISSING_EVENT_TYPE",
+    "message": "event_type is required.",
+    "field": "data.event_type"
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -1,0 +1,20 @@
+﻿{
+  "success": false,
+  "component_id": "C2-C",
+  "component_version": "v1",
+  "event_id": "evt_sample_empty_input",
+  "event_type": null,
+  "source": "webhook",
+  "received_at": "2026-05-24T00:00:00.000Z",
+  "payload": {},
+  "metadata": {
+    "origin": null,
+    "environment": "test"
+  },
+  "error": {
+    "code": "EMPTY_INPUT",
+    "message": "Input object is empty.",
+    "field": "root"
+  },
+  "next_action": "route_to_failure_log"
+}

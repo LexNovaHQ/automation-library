@@ -1,0 +1,150 @@
+{
+  "name": "C2-C_CORE_Event_Normalizer_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b5eae841-3cdb-4a2b-9bea-b7affdd1b9e9",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction generateEventId() {\n  return `evt_${Date.now()}`;\n}\n\nfunction makeOutput({\n  success,\n  eventType = null,\n  source = \"webhook\",\n  origin = null,\n  environment = \"test\",\n  payload = {},\n  error = null,\n  nextAction = \"route_to_failure_log\"\n}) {\n  return {\n    success,\n    component_id: \"C2-C\",\n    component_version: \"v1\",\n    event_id: generateEventId(),\n    event_type: eventType,\n    source,\n    received_at: new Date().toISOString(),\n    payload,\n    metadata: {\n      origin,\n      environment\n    },\n    error,\n    next_action: nextAction\n  };\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        error: {\n          code: \"EMPTY_INPUT\",\n          message: \"Input object is empty.\",\n          field: \"root\"\n        }\n      })\n    }\n  ];\n}\n\nif (!input.data || typeof input.data !== \"object\") {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        error: {\n          code: \"MISSING_DATA_OBJECT\",\n          message: \"Input must include a data object.\",\n          field: \"data\"\n        }\n      })\n    }\n  ];\n}\n\nconst data = input.data;\nconst config = input.config || {};\n\nconst eventType = data.event_type || null;\nconst source = data.source || \"webhook\";\nconst origin = data.origin || null;\nconst environment = data.environment || \"test\";\nconst payload = data.payload;\nconst requirePayload = config.require_payload !== false;\nconst defaultNextAction = config.default_next_action || \"validate_payload\";\n\nif (!eventType) {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        eventType: null,\n        source,\n        origin,\n        environment,\n        payload: payload || {},\n        error: {\n          code: \"MISSING_EVENT_TYPE\",\n          message: \"event_type is required.\",\n          field: \"data.event_type\"\n        }\n      })\n    }\n  ];\n}\n\nif (requirePayload && payload === undefined) {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        eventType,\n        source,\n        origin,\n        environment,\n        payload: {},\n        error: {\n          code: \"MISSING_PAYLOAD\",\n          message: \"payload object is required.\",\n          field: \"data.payload\"\n        }\n      })\n    }\n  ];\n}\n\nif (requirePayload && (payload === null || typeof payload !== \"object\" || Array.isArray(payload))) {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        eventType,\n        source,\n        origin,\n        environment,\n        payload: {},\n        error: {\n          code: \"INVALID_PAYLOAD_TYPE\",\n          message: \"payload must be a JSON object.\",\n          field: \"data.payload\"\n        }\n      })\n    }\n  ];\n}\n\nreturn [\n  {\n    json: makeOutput({\n      success: true,\n      eventType,\n      source,\n      origin,\n      environment,\n      payload: payload || {},\n      error: null,\n      nextAction: defaultNextAction\n    })\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d4aaf4cf-8ea7-4659-a145-1d8ff989e28e",
+      "name": "Normalize + Validate Event"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21bcb8b4-dd3a-4a32-8725-1bb71fb5379b",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "1d389045-477b-4ddb-bbcd-478e244c7fa6",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e3e0858c-c35a-47f4-950e-0e177a8bfcbd",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "53f46cf1-6d2a-447b-bbf3-7f4f3c1de5e6",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "9ff8357a-28a2-4959-a922-f78c3d6578a4",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "bc2df37f-b968-46e9-89d3-fdf412914bb6",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "954f5b79-ad4a-4ce4-b49d-9cb36bc1d770",
+              "name": "received_at",
+              "value": "={{ $json.received_at }}",
+              "type": "string"
+            },
+            {
+              "id": "6478053b-fc74-485b-b3e0-d80dbeecfa37",
+              "name": "payload",
+              "value": "={{ $json.payload }}",
+              "type": "object"
+            },
+            {
+              "id": "bd3be3ca-3fc8-43cd-bae4-f13ef9b72f75",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "object"
+            },
+            {
+              "id": "a82440cd-e3a3-4256-90b6-7c5027bbed82",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "397a5f1a-d020-4db6-99b1-855657a0280d",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "52ed80b8-1be9-4229-a1c4-f4bfc25321d3",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Normalize + Validate Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize + Validate Event": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "646138ef-1c6b-4b7d-bf00-b57c09c3d495",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "6rDJqTdpwQNnFh9l",
+  "tags": []
+}

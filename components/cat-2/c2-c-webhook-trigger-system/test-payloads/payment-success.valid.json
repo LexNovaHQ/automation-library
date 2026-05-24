@@ -1,0 +1,19 @@
+﻿{
+  "data": {
+    "event_type": "payment_success",
+    "source": "webhook",
+    "origin": "stripe_test",
+    "environment": "test",
+    "payload": {
+      "customer_name": "Amit Verma",
+      "customer_email": "amit@example.com",
+      "amount": 25000,
+      "currency": "INR",
+      "payment_status": "paid"
+    }
+  },
+  "config": {
+    "default_next_action": "validate_payment",
+    "require_payload": true
+  }
+}

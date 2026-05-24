@@ -1,0 +1,14 @@
+﻿{
+  "data": {
+    "source": "webhook",
+    "origin": "manual_test",
+    "environment": "test",
+    "payload": {
+      "name": "Riya Sharma"
+    }
+  },
+  "config": {
+    "default_next_action": "validate_payload",
+    "require_payload": true
+  }
+}
