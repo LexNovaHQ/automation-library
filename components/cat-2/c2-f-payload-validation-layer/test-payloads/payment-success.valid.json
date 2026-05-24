@@ -1,0 +1,33 @@
+﻿{
+  "event": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_test_payment_valid",
+    "event_type": "payment_success",
+    "source": "webhook",
+    "received_at": "2026-05-24T00:00:00.000Z",
+    "payload": {
+      "customer_name": "Amit Verma",
+      "customer_email": "amit@example.com",
+      "amount": 25000,
+      "currency": "INR",
+      "payment_status": "paid"
+    },
+    "metadata": {
+      "origin": "stripe_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "validate_payment"
+  },
+  "config": {
+    "required_fields": ["customer_name", "customer_email", "amount", "payment_status"],
+    "field_rules": {
+      "customer_email": "email",
+      "amount": "number",
+      "payment_status": "allowed:paid,failed,pending"
+    },
+    "default_next_action": "route_payment"
+  }
+}

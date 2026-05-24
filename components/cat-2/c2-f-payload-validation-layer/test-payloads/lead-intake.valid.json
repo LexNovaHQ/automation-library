@@ -1,0 +1,31 @@
+﻿{
+  "event": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_test_lead_valid",
+    "event_type": "lead_intake",
+    "source": "webhook",
+    "received_at": "2026-05-24T00:00:00.000Z",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "validate_payload"
+  },
+  "config": {
+    "required_fields": ["name", "email", "message"],
+    "field_rules": {
+      "email": "email",
+      "message": "min_length:10"
+    },
+    "default_next_action": "route_payload"
+  }
+}

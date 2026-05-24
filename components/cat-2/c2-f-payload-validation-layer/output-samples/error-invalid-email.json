@@ -1,0 +1,35 @@
+﻿{
+  "success": false,
+  "component_id": "C2-F",
+  "component_version": "v1",
+  "event_id": "evt_test_invalid_email",
+  "event_type": "lead_intake",
+  "source_component": "C2-C",
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "not-an-email",
+    "company": "GrowthOps Studio",
+    "message": "We need automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "validation": {
+    "status": "failed",
+    "checked_fields": ["name", "email", "message"],
+    "failed_fields": ["email"]
+  },
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Payload failed validation.",
+    "details": [
+      {
+        "field": "email",
+        "rule": "email",
+        "issue": "email must be a valid email."
+      }
+    ]
+  },
+  "next_action": "route_to_failure_log"
+}

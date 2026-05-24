@@ -1,0 +1,25 @@
+﻿{
+  "success": true,
+  "component_id": "C2-F",
+  "component_version": "v1",
+  "event_id": "evt_test_lead_valid",
+  "event_type": "lead_intake",
+  "source_component": "C2-C",
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "company": "GrowthOps Studio",
+    "message": "We need automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "validation": {
+    "status": "passed",
+    "checked_fields": ["name", "email", "message"],
+    "failed_fields": []
+  },
+  "error": null,
+  "next_action": "route_payload"
+}

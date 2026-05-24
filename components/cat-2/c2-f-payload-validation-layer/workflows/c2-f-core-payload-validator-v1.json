@@ -1,0 +1,193 @@
+{
+  "name": "C2-F_CORE_Payload_Validator_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -208
+      ],
+      "id": "00123a13-f6ba-44f5-8857-715e925db1d1",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction makeOutput({\n  success,\n  event = {},\n  validationStatus,\n  checkedFields = [],\n  failedFields = [],\n  error = null,\n  nextAction\n}) {\n  return {\n    success,\n    component_id: \"C2-F\",\n    component_version: \"v1\",\n    event_id: event.event_id || null,\n    event_type: event.event_type || null,\n    source_component: event.component_id || null,\n    payload: event.payload || {},\n    metadata: event.metadata || {},\n    validation: {\n      status: validationStatus,\n      checked_fields: checkedFields,\n      failed_fields: failedFields\n    },\n    error,\n    next_action: nextAction\n  };\n}\n\nfunction fail({ event = {}, code, message, details = [], checkedFields = [], failedFields = [] }) {\n  return [\n    {\n      json: makeOutput({\n        success: false,\n        event,\n        validationStatus: \"failed\",\n        checkedFields,\n        failedFields,\n        error: {\n          code,\n          message,\n          details\n        },\n        nextAction: \"route_to_failure_log\"\n      })\n    }\n  ];\n}\n\nfunction isEmpty(value) {\n  return value === undefined || value === null || value === \"\";\n}\n\nfunction isValidEmail(value) {\n  if (typeof value !== \"string\") return false;\n  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);\n}\n\nfunction parseRule(rule) {\n  if (typeof rule !== \"string\") return { type: null };\n\n  if (rule === \"email\") return { type: \"email\" };\n  if (rule === \"number\") return { type: \"number\" };\n\n  if (rule.startsWith(\"min_length:\")) {\n    return {\n      type: \"min_length\",\n      value: Number(rule.split(\":\")[1])\n    };\n  }\n\n  if (rule.startsWith(\"allowed:\")) {\n    return {\n      type: \"allowed\",\n      values: rule\n        .replace(\"allowed:\", \"\")\n        .split(\",\")\n        .map(v => v.trim())\n    };\n  }\n\n  return { type: \"unknown\", raw: rule };\n}\n\n// 1. Input object check\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\",\n    details: [{ field: \"root\", issue: \"Input object is empty.\" }]\n  });\n}\n\n// 2. Event object check\nif (!input.event || typeof input.event !== \"object\") {\n  return fail({\n    code: \"MISSING_EVENT_OBJECT\",\n    message: \"Input must include an event object.\",\n    details: [{ field: \"event\", issue: \"Missing event object.\" }]\n  });\n}\n\nconst event = input.event;\nconst config = input.config || {};\nconst payload = event.payload || {};\nconst requiredFields = Array.isArray(config.required_fields) ? config.required_fields : [];\nconst fieldRules = config.field_rules || {};\nconst defaultNextAction = config.default_next_action || \"route_payload\";\n\n// 3. Upstream failure check\nif (event.success === false) {\n  return fail({\n    event,\n    code: \"UPSTREAM_EVENT_FAILED\",\n    message: \"Upstream event was already marked as failed.\",\n    details: [\n      {\n        field: \"event.success\",\n        issue: \"Cannot validate failed upstream event.\",\n        upstream_error: event.error || null\n      }\n    ]\n  });\n}\n\n// 4. Payload object check\nif (!event.payload || typeof event.payload !== \"object\" || Array.isArray(event.payload)) {\n  return fail({\n    event,\n    code: \"MISSING_OR_INVALID_PAYLOAD\",\n    message: \"Event payload must be a JSON object.\",\n    details: [{ field: \"event.payload\", issue: \"Missing or invalid payload object.\" }]\n  });\n}\n\nconst checkedFields = [];\nconst failedFields = [];\nconst details = [];\n\n// 5. Required field validation\nfor (const field of requiredFields) {\n  checkedFields.push(field);\n\n  if (isEmpty(payload[field])) {\n    failedFields.push(field);\n    details.push({\n      field,\n      rule: \"required\",\n      issue: `${field} is required.`\n    });\n  }\n}\n\n// 6. Field rule validation\nfor (const [field, ruleString] of Object.entries(fieldRules)) {\n  if (!checkedFields.includes(field)) {\n    checkedFields.push(field);\n  }\n\n  const value = payload[field];\n\n  // Avoid duplicate errors if required field already failed\n  if (isEmpty(value)) {\n    continue;\n  }\n\n  const rule = parseRule(ruleString);\n\n  if (rule.type === \"email\" && !isValidEmail(value)) {\n    failedFields.push(field);\n    details.push({\n      field,\n      rule: \"email\",\n      issue: `${field} must be a valid email.`\n    });\n  }\n\n  if (rule.type === \"number\" && typeof value !== \"number\") {\n    failedFields.push(field);\n    details.push({\n      field,\n      rule: \"number\",\n      issue: `${field} must be a number.`\n    });\n  }\n\n  if (rule.type === \"min_length\") {\n    if (typeof value !== \"string\" || value.length < rule.value) {\n      failedFields.push(field);\n      details.push({\n        field,\n        rule: ruleString,\n        issue: `${field} must be at least ${rule.value} characters.`\n      });\n    }\n  }\n\n  if (rule.type === \"allowed\") {\n    if (!rule.values.includes(String(value))) {\n      failedFields.push(field);\n      details.push({\n        field,\n        rule: ruleString,\n        issue: `${field} must be one of: ${rule.values.join(\", \")}.`\n      });\n    }\n  }\n\n  if (rule.type === \"unknown\") {\n    failedFields.push(field);\n    details.push({\n      field,\n      rule: rule.raw,\n      issue: `Unknown validation rule: ${rule.raw}.`\n    });\n  }\n}\n\n// 7. Validation failure\nif (failedFields.length > 0) {\n  return fail({\n    event,\n    code: \"VALIDATION_FAILED\",\n    message: \"Payload failed validation.\",\n    details,\n    checkedFields,\n    failedFields: [...new Set(failedFields)]\n  });\n}\n\n// 8. Success\nreturn [\n  {\n    json: makeOutput({\n      success: true,\n      event,\n      validationStatus: \"passed\",\n      checkedFields,\n      failedFields: [],\n      error: null,\n      nextAction: defaultNextAction\n    })\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -208
+      ],
+      "id": "77e3252a-7ab0-4d31-be9a-d9bd3229d9c8",
+      "name": "Validate Payload Against Config"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "049613c6-3a51-40b3-b0d8-2fb2a0f7c110",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "b775ae33-f02c-460f-b2a1-2ddef35209ce",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "5203075b-a958-4732-a1a7-e13c0750ce82",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "09f8853a-1345-4229-984a-7f589c14f4a8",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "fde9aaf7-8913-4945-808b-5fa2e5e08550",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "cf8a42d8-6ca2-4eae-a299-35f7ff817c9d",
+              "name": "source_component",
+              "value": "={{ $json.source_component }}",
+              "type": "string"
+            },
+            {
+              "id": "f6bc0a1c-6333-46cf-9e61-05bfbf799c4e",
+              "name": "payload",
+              "value": "={{ $json.payload }}",
+              "type": "object"
+            },
+            {
+              "id": "fa20db19-3cc9-4a34-9da9-cd1b930d7a32",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "object"
+            },
+            {
+              "id": "47b60279-5098-4634-b643-126b789739a1",
+              "name": "validation",
+              "value": "={{ $json.validation }}",
+              "type": "object"
+            },
+            {
+              "id": "4e3f11f5-631c-4820-9efd-0fa1133cc2b2",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "fe5f8100-10cf-4621-90a0-a922c108e491",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -208
+      ],
+      "id": "0f1e4557-8eba-49a0-a4f3-6df3ba0cd615",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "event": {
+            "success": true,
+            "component_id": "C2-C",
+            "component_version": "v1",
+            "event_id": "evt_test_payment_valid",
+            "event_type": "payment_success",
+            "source": "webhook",
+            "received_at": "2026-05-24T00:00:00.000Z",
+            "payload": {
+              "customer_name": "Amit Verma",
+              "customer_email": "amit@example.com",
+              "amount": 25000,
+              "currency": "INR",
+              "payment_status": "paid"
+            },
+            "metadata": {
+              "origin": "stripe_test",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "validate_payment"
+          },
+          "config": {
+            "required_fields": [
+              "customer_name",
+              "customer_email",
+              "amount",
+              "payment_status"
+            ],
+            "field_rules": {
+              "customer_email": "email",
+              "amount": "number",
+              "payment_status": "allowed:paid,failed,pending"
+            },
+            "default_next_action": "route_payment"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Validate Payload Against Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Payload Against Config": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7fd12960-2c79-414a-863e-79e4d97dfb91",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "7QkHoVuFYTYXaMAz",
+  "tags": []
+}

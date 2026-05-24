@@ -1,0 +1,40 @@
+﻿{
+  "success": false,
+  "component_id": "C2-F",
+  "component_version": "v1",
+  "event_id": "evt_test_empty_payload",
+  "event_type": "lead_intake",
+  "source_component": "C2-C",
+  "payload": {},
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "validation": {
+    "status": "failed",
+    "checked_fields": ["name", "email", "message"],
+    "failed_fields": ["name", "email", "message"]
+  },
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Payload failed validation.",
+    "details": [
+      {
+        "field": "name",
+        "rule": "required",
+        "issue": "name is required."
+      },
+      {
+        "field": "email",
+        "rule": "required",
+        "issue": "email is required."
+      },
+      {
+        "field": "message",
+        "rule": "required",
+        "issue": "message is required."
+      }
+    ]
+  },
+  "next_action": "route_to_failure_log"
+}

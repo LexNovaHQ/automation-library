@@ -1,0 +1,35 @@
+﻿{
+  "success": false,
+  "component_id": "C2-F",
+  "component_version": "v1",
+  "event_id": "evt_test_short_message",
+  "event_type": "lead_intake",
+  "source_component": "C2-C",
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "company": "GrowthOps Studio",
+    "message": "Hi"
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "validation": {
+    "status": "failed",
+    "checked_fields": ["name", "email", "message"],
+    "failed_fields": ["message"]
+  },
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Payload failed validation.",
+    "details": [
+      {
+        "field": "message",
+        "rule": "min_length:10",
+        "issue": "message must be at least 10 characters."
+      }
+    ]
+  },
+  "next_action": "route_to_failure_log"
+}

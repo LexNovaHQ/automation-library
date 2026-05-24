@@ -128,6 +128,35 @@ Business-specific validation belongs to C2-F. Database writes belong to C2-A. Al
 
 **High-leverage components in this category** (borrowed by 3+ other categories): C2-A, C2-B, C2-C, C2-I, C2-L
 
+## C2-F Build Record — Payload Validation Layer
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-f-payload-validation-layer`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-f-core-payload-validator-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-F_CORE_Payload_Validator_v1`
+
+**Passed tests:**
+- Valid lead intake
+- Valid payment success
+- Missing email failure
+- Invalid email failure
+- Short message failure
+- Empty payload failure
+
+**Implementation note:**  
+C2-F is built as a reusable validation layer for normalized C2-C events. It accepts `{ event, config }`, validates payload fields against configurable rules, and returns a standard success/failure validation object.
+
+**Excluded by design:**  
+External webhook receiving belongs to C2-C. Database writes belong to C2-A. Conditional routing belongs to C2-B. Alerts belong to C2-I. AI classification belongs to C2-K / C4-A.
+
 ---
 
 # Category 3 — Client Onboarding System (GHL + Make.com)
