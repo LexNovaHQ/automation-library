@@ -1,0 +1,189 @@
+{
+  "name": "C2-P_CORE_Suppression_Opt_Out_Guard_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        -240
+      ],
+      "id": "0be7876a-6b07-4247-a4fd-31752266979d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction normalize(value) {\n  return value === undefined || value === null\n    ? \"\"\n    : String(value).trim().toLowerCase();\n}\n\nfunction normalizePhone(value) {\n  return normalize(value).replace(/[^0-9]/g, \"\");\n}\n\nfunction emailDomain(value) {\n  const email = normalize(value);\n  if (!email.includes(\"@\")) return \"\";\n  return email.split(\"@\")[1];\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-P\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        suppression: {\n          status: \"failed\",\n          decision: null,\n          allowed_to_contact: null,\n          recommended_action: null,\n          reasons: [],\n          matched_records: [],\n          checked_records: 0\n        },\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-P will not run suppression check when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"suppression_check\") {\n  return fail({\n    code: \"SUPPRESSION_NOT_REQUESTED\",\n    message: \"source.next_action is not suppression_check.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nconst incoming = {\n  email: normalize(payload.email),\n  phone: normalizePhone(payload.phone),\n  domain: emailDomain(payload.email),\n  consent_status: normalize(payload.consent_status)\n};\n\nconst suppressionRecords = Array.isArray(config.suppression_records)\n  ? config.suppression_records\n  : [];\n\nconst blockedEmails = (config.blocked_emails || []).map(normalize);\nconst blockedPhones = (config.blocked_phones || []).map(normalizePhone);\nconst blockedDomains = (config.blocked_domains || []).map(normalize);\n\nconst allowedConsentValues = (config.allowed_consent_values || []).map(normalize);\nconst manualReviewConsentValues = (config.manual_review_consent_values || []).map(normalize);\n\nconst reasons = [];\nconst matchedRecords = [];\n\nif (incoming.email && blockedEmails.includes(incoming.email)) {\n  reasons.push(\"blocked_email_match\");\n}\n\nif (incoming.phone && blockedPhones.includes(incoming.phone)) {\n  reasons.push(\"blocked_phone_match\");\n}\n\nif (incoming.domain && blockedDomains.includes(incoming.domain)) {\n  reasons.push(\"blocked_domain_match\");\n}\n\nfor (const record of suppressionRecords) {\n  const recordEmail = normalize(record.email);\n  const recordPhone = normalizePhone(record.phone);\n  const recordDomain = emailDomain(record.email);\n  const recordStatus = normalize(record.status || \"active\");\n\n  if (recordStatus && recordStatus !== \"active\") {\n    continue;\n  }\n\n  const recordReasons = [];\n\n  if (incoming.email && recordEmail && incoming.email === recordEmail) {\n    recordReasons.push(\"suppression_email_match\");\n  }\n\n  if (incoming.phone && recordPhone && incoming.phone === recordPhone) {\n    recordReasons.push(\"suppression_phone_match\");\n  }\n\n  if (incoming.domain && recordDomain && incoming.domain === recordDomain) {\n    recordReasons.push(\"suppression_domain_match\");\n  }\n\n  if (recordReasons.length > 0) {\n    reasons.push(...recordReasons);\n    matchedRecords.push({\n      record_id: record.record_id || null,\n      reason: record.reason || null,\n      source: record.source || null,\n      status: record.status || null,\n      match_reasons: recordReasons\n    });\n  }\n}\n\nlet decision = \"allowed\";\nlet allowedToContact = true;\nlet recommendedAction = config.default_next_action || \"write_record\";\nlet status = \"clear\";\n\nif (reasons.length > 0) {\n  decision = \"blocked\";\n  allowedToContact = false;\n  recommendedAction = \"do_not_contact\";\n  status = \"blocked\";\n} else if (config.require_consent === true) {\n  if (!incoming.consent_status) {\n    decision = \"manual_review\";\n    allowedToContact = false;\n    recommendedAction = \"manual_review\";\n    status = \"consent_review_required\";\n    reasons.push(\"missing_consent_status\");\n  } else if (manualReviewConsentValues.includes(incoming.consent_status)) {\n    decision = \"manual_review\";\n    allowedToContact = false;\n    recommendedAction = \"manual_review\";\n    status = \"consent_review_required\";\n    reasons.push(\"uncertain_consent_status\");\n  } else if (!allowedConsentValues.includes(incoming.consent_status)) {\n    decision = \"blocked\";\n    allowedToContact = false;\n    recommendedAction = \"do_not_contact\";\n    status = \"blocked\";\n    reasons.push(\"consent_not_allowed\");\n  }\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-P\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      suppression: {\n        status,\n        decision,\n        allowed_to_contact: allowedToContact,\n        recommended_action: recommendedAction,\n        reasons: [...new Set(reasons)],\n        matched_records: matchedRecords,\n        checked_records: suppressionRecords.length,\n        consent_status: incoming.consent_status || null\n      },\n      source_result: source,\n      error: null,\n      next_action: recommendedAction\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -240
+      ],
+      "id": "5cd75290-56d4-4ed7-9328-d87a38569160",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "74a393a1-f410-4f0b-a9fa-a923eedf188c",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "cbb1d19d-071a-4288-b7c9-493c19b7b077",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "3f98199c-12fb-4597-af12-5a4c6fb7e8f0",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "183b16d2-68c6-4768-b1b2-aa36d9ee1bca",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "809b8673-a76e-4801-93ac-fd00a8c9c263",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "5b59873a-60a5-46ef-8bc2-7a650035a9ae",
+              "name": "suppression",
+              "value": "={{ $json.suppression }}",
+              "type": "object"
+            },
+            {
+              "id": "da660c92-7265-4cf3-84d4-8e3addd20e39",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "06b9e5df-99cb-4d14-8cd4-a3bdfcf072a0",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "f003a5ca-43c4-4277-b948-21ce38f604d0",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        -240
+      ],
+      "id": "79d501f5-44a9-447c-8e07-7c427d234bf1",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-D",
+            "component_version": "v1",
+            "event_id": "evt_suppression_allowed",
+            "event_type": "lead_intake",
+            "payload": {
+              "name": "Riya Sharma",
+              "email": "riya@example.com",
+              "phone": "+919999999999",
+              "company": "GrowthOps Studio",
+              "message": "Need automation help.",
+              "consent_status": "opted_in"
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "dedupe": {
+              "decision": "new_record",
+              "recommended_action": "create_record"
+            },
+            "error": null,
+            "next_action": "suppression_check"
+          },
+          "config": {
+            "suppression_records": [],
+            "blocked_domains": [
+              "spamdomain.example"
+            ],
+            "blocked_emails": [],
+            "blocked_phones": [],
+            "require_consent": true,
+            "allowed_consent_values": [
+              "opted_in",
+              "consented",
+              "subscribed"
+            ],
+            "manual_review_consent_values": [
+              "unknown",
+              "not_provided"
+            ],
+            "default_next_action": "write_record"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "964870b3-6087-47e7-afa7-9458c47b54d4",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "rUBD6RPUcsuLf7ti",
+  "tags": []
+}

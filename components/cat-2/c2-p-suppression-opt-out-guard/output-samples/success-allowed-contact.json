@@ -1,0 +1,26 @@
+﻿{
+  "success": true,
+  "component_id": "C2-P",
+  "component_version": "v1",
+  "event_id": "evt_suppression_allowed",
+  "event_type": "lead_intake",
+  "suppression": {
+    "status": "clear",
+    "decision": "allowed",
+    "allowed_to_contact": true,
+    "recommended_action": "write_record",
+    "reasons": [],
+    "matched_records": [],
+    "checked_records": 0,
+    "consent_status": "opted_in"
+  },
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_suppression_allowed",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "suppression_check"
+  },
+  "error": null,
+  "next_action": "write_record"
+}

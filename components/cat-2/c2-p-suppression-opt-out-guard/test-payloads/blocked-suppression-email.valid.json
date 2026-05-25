@@ -1,0 +1,46 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-D",
+    "component_version": "v1",
+    "event_id": "evt_suppression_email_blocked",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "phone": "+919999999999",
+      "company": "GrowthOps Studio",
+      "message": "Need automation help.",
+      "consent_status": "opted_in"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "dedupe": {
+      "decision": "new_record",
+      "recommended_action": "create_record"
+    },
+    "error": null,
+    "next_action": "suppression_check"
+  },
+  "config": {
+    "suppression_records": [
+      {
+        "record_id": "sup_001",
+        "email": "riya@example.com",
+        "phone": null,
+        "reason": "unsubscribed",
+        "source": "email_platform",
+        "status": "active"
+      }
+    ],
+    "blocked_domains": [],
+    "blocked_emails": [],
+    "blocked_phones": [],
+    "require_consent": true,
+    "allowed_consent_values": ["opted_in", "consented", "subscribed"],
+    "manual_review_consent_values": ["unknown", "not_provided"],
+    "default_next_action": "write_record"
+  }
+}

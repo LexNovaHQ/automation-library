@@ -1,0 +1,32 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-D",
+    "component_version": "v1",
+    "event_id": "evt_suppression_upstream_failed",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": {
+      "code": "DEDUPE_NOT_REQUESTED",
+      "message": "source.next_action is not dedupe_check."
+    },
+    "next_action": "suppression_check"
+  },
+  "config": {
+    "suppression_records": [],
+    "blocked_domains": [],
+    "blocked_emails": [],
+    "blocked_phones": [],
+    "require_consent": true,
+    "allowed_consent_values": ["opted_in", "consented", "subscribed"],
+    "manual_review_consent_values": ["unknown", "not_provided"],
+    "default_next_action": "write_record"
+  }
+}

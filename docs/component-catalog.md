@@ -809,3 +809,35 @@ C2-D v1 is built as the reusable dedupe decision layer. It does not perform live
 
 **Excluded by design:**  
 Live Airtable/Sheets/HubSpot lookup belongs to C2-D2 or platform lookup adapters. Record creation/update/merge belongs to C2-A adapters. Manual review belongs to C5-E / C5-W. Error logging belongs to C6-G.
+
+## C2-P Build Record - Suppression / Opt-Out Guard
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-p-suppression-opt-out-guard`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-p-core-suppression-opt-out-guard-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-P_CORE_Suppression_Opt_Out_Guard_v1`
+- Evaluates incoming records against suppression records, blocked emails, blocked phones, blocked domains, and consent rules
+- Returns suppression decision: `allowed`, `blocked`, or `manual_review`
+- Returns downstream recommended action: `write_record`, `do_not_contact`, or `manual_review`
+
+**Passed tests:**
+- Allowed contact
+- Blocked suppression email
+- Blocked domain
+- Manual review unknown consent
+- Upstream failed
+- Suppression not requested
+
+**Implementation note:**  
+C2-P v1 is built as the reusable suppression/opt-out decision layer. It does not perform live lookup and does not mutate records. Suppression lookup, unsubscribe writeback, and platform-specific consent sync belong to downstream or platform-specific components.
+
+**Excluded by design:**  
+Live suppression lookup belongs to C2-P2 or platform lookup adapters. Record writeback belongs to C2-A adapters. Notifications belong to C2-I / C2-M. Manual review belongs to C5-E / C5-W. Error logging belongs to C6-G.

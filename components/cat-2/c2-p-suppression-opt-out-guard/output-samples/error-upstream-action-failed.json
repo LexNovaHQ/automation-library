@@ -1,0 +1,31 @@
+﻿{
+  "success": false,
+  "component_id": "C2-P",
+  "component_version": "v1",
+  "event_id": "evt_suppression_upstream_failed",
+  "event_type": "lead_intake",
+  "suppression": {
+    "status": "failed",
+    "decision": null,
+    "allowed_to_contact": null,
+    "recommended_action": null,
+    "reasons": [],
+    "matched_records": [],
+    "checked_records": 0
+  },
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_suppression_upstream_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "DEDUPE_NOT_REQUESTED",
+      "message": "source.next_action is not dedupe_check."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-P will not run suppression check when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

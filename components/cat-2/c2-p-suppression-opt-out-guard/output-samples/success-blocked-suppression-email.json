@@ -1,0 +1,34 @@
+﻿{
+  "success": true,
+  "component_id": "C2-P",
+  "component_version": "v1",
+  "event_id": "evt_suppression_email_blocked",
+  "event_type": "lead_intake",
+  "suppression": {
+    "status": "blocked",
+    "decision": "blocked",
+    "allowed_to_contact": false,
+    "recommended_action": "do_not_contact",
+    "reasons": ["suppression_email_match"],
+    "matched_records": [
+      {
+        "record_id": "sup_001",
+        "reason": "unsubscribed",
+        "source": "email_platform",
+        "status": "active",
+        "match_reasons": ["suppression_email_match"]
+      }
+    ],
+    "checked_records": 1,
+    "consent_status": "opted_in"
+  },
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_suppression_email_blocked",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "suppression_check"
+  },
+  "error": null,
+  "next_action": "do_not_contact"
+}
