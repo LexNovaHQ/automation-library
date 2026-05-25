@@ -1,0 +1,31 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-B",
+    "component_version": "v1",
+    "event_id": "evt_status_manual_review",
+    "event_type": "content_draft",
+    "routing": {
+      "status": "fallback",
+      "matched": false,
+      "matched_rule_id": null,
+      "route_key": "manual_review",
+      "target_component": "C5-W"
+    },
+    "source_result": {
+      "component_id": "C2-A2",
+      "event_id": "evt_status_manual_review",
+      "event_type": "content_draft",
+      "success": true,
+      "next_action": "unknown_action"
+    },
+    "error": null,
+    "next_action": "manual_review"
+  },
+  "config": {
+    "owner": "ops",
+    "priority": "normal",
+    "status_mode": "auto",
+    "default_next_action": "manual_review"
+  }
+}

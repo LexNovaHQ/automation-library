@@ -1,0 +1,8 @@
+﻿{
+  "config": {
+    "owner": "ops",
+    "priority": "normal",
+    "status_mode": "auto",
+    "default_next_action": "manual_review"
+  }
+}

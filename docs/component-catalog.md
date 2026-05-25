@@ -679,3 +679,35 @@ C6-G v1 is built as the reusable error-log and retry-queue object generator. It 
 
 **Excluded by design:**  
 Database/status-table write belongs to C5-W / C2-A. Error owner notification belongs to C2-I. Actual retry execution belongs to C6-G2. Diagnostic auto-fix belongs to later C6 components.
+
+## C5-W Build Record - Automation Status Control Table
+
+**Status:** Built v1.0  
+**Location:** `components/cat-5/c5-w-automation-status-control-table`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c5-w-core-automation-status-control-table-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C5-W_CORE_Automation_Status_Control_Table_v1`
+- Creates standardized automation status/control records
+- Classifies workflow status and stage from upstream component outputs
+- Extracts destination, approval, error, retry, routing, and notification fields
+- Prepares a control record for Airtable/Sheets/Supabase/dashboard storage
+
+**Passed tests:**
+- Completed lead status
+- Pending approval status
+- Error logged status
+- Manual review status
+- Missing input
+
+**Implementation note:**  
+C5-W v1 is built as the reusable automation control-record generator. It does not store the record itself. Storage belongs to C2-A adapters or later dashboard/database components.
+
+**Excluded by design:**  
+Database writes belong to C2-A1/C2-A2 or later storage adapters. Error log creation belongs to C6-G. Human approval creation belongs to C2-O. Notifications belong to C2-I. KPI monitoring belongs to C5-X.

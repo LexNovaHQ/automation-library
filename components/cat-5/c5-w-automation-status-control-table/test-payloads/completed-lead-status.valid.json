@@ -1,0 +1,44 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-I1",
+    "component_version": "v1",
+    "event_id": "evt_status_completed_lead",
+    "event_type": "lead_intake",
+    "notification": {
+      "channel": "email",
+      "status": "sent",
+      "to": "shwetabh.singh@lexnovahq.com",
+      "subject": "New lead_intake record created"
+    },
+    "source_result": {
+      "component_id": "C2-A3",
+      "destination": {
+        "type": "hubspot",
+        "object_type": "contacts",
+        "record_id": "123456789"
+      },
+      "write": {
+        "status": "created"
+      }
+    },
+    "payload": {
+      "firstname": "Riya",
+      "lastname": "Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "end"
+  },
+  "config": {
+    "owner": "sales",
+    "priority": "normal",
+    "status_mode": "auto",
+    "default_next_action": "end"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "name": "C5-W_CORE_Automation_Status_Control_Table_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        -176
+      ],
+      "id": "ac02d979-66b5-45bb-b761-604b59110a6f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4b73990f-ba7b-495e-a406-b746e8551038",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c48c56ec-1c76-4558-9a0a-5466071ef3d0",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "27c22a5c-c8eb-4162-9f37-e02004ece8b8",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "9fb1cf8d-b9c6-4dee-b5b5-da6f219b83ef",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "cfe0c03a-d6f8-4b7c-8a7d-6bcf0df5972c",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "84598f2c-3d3f-4306-9fd9-b93a7d8b1321",
+              "name": "control_record",
+              "value": "={{ $json.control_record }}",
+              "type": "object"
+            },
+            {
+              "id": "3468c478-b4bd-40b4-8d3f-38de05f2255c",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "8bc6aea5-e195-4c99-853e-2218ddf07df3",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "00477204-7eef-4d3c-ba4b-705f3b8870c0",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -176
+      ],
+      "id": "039c6cfa-af62-4b3a-b204-eb42a5d69a3d",
+      "name": "Final Output Contract"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction safe(value, fallback = null) {\n  return value === undefined || value === null || value === \"\" ? fallback : value;\n}\n\nfunction getNestedDestination(source) {\n  return source.destination || source.source_result?.destination || {};\n}\n\nfunction getNestedWrite(source) {\n  return source.write || source.source_result?.write || {};\n}\n\nfunction classifyStatus(source) {\n  if (source.error_log?.status === \"logged\") return \"failed\";\n  if (source.approval?.status === \"pending\") return \"pending_approval\";\n  if (source.routing?.status === \"fallback\") return \"manual_review\";\n  if (source.notification?.status === \"sent\" && source.success === true) return \"completed\";\n  if (source.write?.status === \"created\" && source.success === true) return \"record_created\";\n  if (source.success === false) return \"failed\";\n  return \"in_progress\";\n}\n\nfunction classifyStage(source) {\n  if (source.error_log?.status === \"logged\") return \"error_logged\";\n  if (source.approval?.status === \"pending\") return \"approval_requested\";\n  if (source.routing?.status === \"matched\") return \"route_matched\";\n  if (source.routing?.status === \"fallback\") return \"manual_review\";\n  if (source.notification?.status === \"sent\") return \"notification_sent\";\n  if (source.write?.status === \"created\") return \"record_written\";\n  if (source.validation?.status === \"passed\") return \"validated\";\n  if (source.validation?.status === \"failed\") return \"validation_failed\";\n  return \"received\";\n}\n\nfunction classifyApprovalStatus(source) {\n  if (source.approval?.status) return source.approval.status;\n  return \"not_required\";\n}\n\nfunction classifyErrorStatus(source) {\n  if (source.error_log?.status === \"logged\") return \"logged\";\n  if (source.error) return \"present\";\n  return \"none\";\n}\n\nfunction classifyRetryStatus(source) {\n  if (source.error_log?.retry_status) return source.error_log.retry_status;\n  return \"not_required\";\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C5-W\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        control_record: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst destination = getNestedDestination(source);\nconst write = getNestedWrite(source);\nconst createdAt = nowIso();\n\nconst currentStatus = config.current_status || classifyStatus(source);\nconst currentStage = config.current_stage || classifyStage(source);\n\nconst controlRecord = {\n  record_type: \"automation_status\",\n  event_id: safe(source.event_id),\n  event_type: safe(source.event_type),\n  current_status: currentStatus,\n  current_stage: currentStage,\n  owner: config.owner || source.error_log?.owner_email || source.approval?.reviewer_email || \"unassigned\",\n  priority: config.priority || source.error_log?.severity || \"normal\",\n\n  source_component: safe(source.component_id),\n  source_component_version: safe(source.component_version),\n  last_component: safe(source.component_id),\n\n  destination_type: safe(destination.type),\n  destination_record_id: safe(destination.record_id),\n  write_status: safe(write.status),\n\n  approval_id: safe(source.approval?.approval_id),\n  approval_status: classifyApprovalStatus(source),\n  approval_type: safe(source.approval?.approval_type),\n  reviewer_email: safe(source.approval?.reviewer_email),\n\n  error_id: safe(source.error_log?.error_id),\n  error_status: classifyErrorStatus(source),\n  error_code: safe(source.error_log?.source_error_code || source.error?.code),\n  error_severity: safe(source.error_log?.severity),\n  retry_status: classifyRetryStatus(source),\n  retry_attempts: safe(source.error_log?.retry_attempts, 0),\n\n  notification_channel: safe(source.notification?.channel || source.notification_payload?.channel),\n  notification_status: safe(source.notification?.status),\n  notification_to: safe(source.notification?.to || source.notification_payload?.to),\n\n  next_action: config.default_next_action || source.next_action || \"manual_review\",\n  manual_notes: config.manual_notes || \"\",\n  created_at: config.created_at || createdAt,\n  updated_at: createdAt\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C5-W\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      control_record: controlRecord,\n      source_result: source,\n      error: null,\n      next_action: controlRecord.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -176
+      ],
+      "id": "deb65697-9848-4e85-9dec-15cbbc9cdab7",
+      "name": "Create Status Control Record"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-I1",
+            "component_version": "v1",
+            "event_id": "evt_status_completed_lead",
+            "event_type": "lead_intake",
+            "notification": {
+              "channel": "email",
+              "status": "sent",
+              "to": "shwetabh.singh@lexnovahq.com",
+              "subject": "New lead_intake record created"
+            },
+            "source_result": {
+              "component_id": "C2-A3",
+              "destination": {
+                "type": "hubspot",
+                "object_type": "contacts",
+                "record_id": "123456789"
+              },
+              "write": {
+                "status": "created"
+              }
+            },
+            "payload": {
+              "firstname": "Riya",
+              "lastname": "Sharma",
+              "email": "riya@example.com",
+              "company": "GrowthOps Studio"
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "end"
+          },
+          "config": {
+            "owner": "sales",
+            "priority": "normal",
+            "status_mode": "auto",
+            "default_next_action": "end"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Status Control Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Status Control Record": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c96cfa56-1f7c-4f80-892b-9827e82c33f3",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "XdF5uLjubYevq2pl",
+  "tags": []
+}

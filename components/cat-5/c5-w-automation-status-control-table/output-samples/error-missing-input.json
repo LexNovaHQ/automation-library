@@ -1,0 +1,14 @@
+﻿{
+  "success": false,
+  "component_id": "C5-W",
+  "component_version": "v1",
+  "event_id": null,
+  "event_type": null,
+  "control_record": null,
+  "source_result": {},
+  "error": {
+    "code": "MISSING_INPUT_OBJECT",
+    "message": "Input must include an input object."
+  },
+  "next_action": "route_to_failure_log"
+}
