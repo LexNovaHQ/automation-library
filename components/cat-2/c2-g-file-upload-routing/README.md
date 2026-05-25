@@ -1,13 +1,13 @@
 ﻿# C2-G - File Upload Routing
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Routes uploaded files to storage, extracts metadata, and links files to downstream records or workflows.
+Routes uploaded files by type, source, metadata, and downstream processing need.
 
 ## Standard Folder Structure
 - workflows/

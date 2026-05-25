@@ -1,13 +1,13 @@
 ﻿# C2-Q - Publishing Adapter Family
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Parent component for publishing adapters such as Shopify blog, LinkedIn, Meta/Facebook, TikTok, and email campaign handoff.
+Parent family for publishing adapters such as Shopify blog, LinkedIn, Meta, TikTok, and other content publishing workflows.
 
 ## Standard Folder Structure
 - workflows/

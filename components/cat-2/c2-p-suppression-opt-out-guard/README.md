@@ -1,13 +1,13 @@
 ﻿# C2-P - Suppression / Opt-Out Guard
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Checks unsubscribe, Do Not Contact, Do Not Call, consent, or suppression records before email, call, SMS, or campaign actions.
+Checks unsubscribe, do-not-contact, consent, suppression, and opt-out rules before outreach or messaging.
 
 ## Standard Folder Structure
 - workflows/

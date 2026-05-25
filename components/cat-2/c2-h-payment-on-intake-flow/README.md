@@ -1,13 +1,13 @@
 ﻿# C2-H - Payment-on-Intake Flow
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Handles payment-link or checkout-triggered intake flows and passes payment status to downstream components.
+Connects payment confirmation events to intake, onboarding, status updates, and downstream workflows.
 
 ## Standard Folder Structure
 - workflows/

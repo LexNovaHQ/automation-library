@@ -1,13 +1,13 @@
-﻿# C2-L - Calendar/Scheduling Automation
+﻿# C2-L - Calendar / Scheduling Automation
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Handles calendar booking, scheduling, reminders, rescheduling, and handoff to CRM or notification systems.
+Creates scheduling, booking, reminder, rescheduling, and calendar handoff workflow objects.
 
 ## Standard Folder Structure
 - workflows/

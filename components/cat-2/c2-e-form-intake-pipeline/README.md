@@ -1,13 +1,13 @@
 ﻿# C2-E - Form Intake Pipeline
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Receives form submissions, normalizes form data, and hands off to validation, sync, routing, and notification components.
+Normalizes form submissions from Typeform, Tally, website forms, or webhook payloads into standardized workflow input.
 
 ## Standard Folder Structure
 - workflows/

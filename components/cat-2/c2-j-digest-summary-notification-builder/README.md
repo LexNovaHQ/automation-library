@@ -1,13 +1,13 @@
-﻿# C2-J - Digest/Summary Notification Builder
+﻿# C2-J - Digest / Summary Notification Builder
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Builds scheduled daily/weekly summaries from workflow events, records, tasks, or logs.
+Builds daily, weekly, or event-batch summaries from automation records, approvals, errors, and workflow status.
 
 ## Standard Folder Structure
 - workflows/

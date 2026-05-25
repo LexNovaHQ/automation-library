@@ -1,13 +1,13 @@
 ﻿# C2-M - WhatsApp Message Automation
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Handles WhatsApp-style message intake, outbound notifications, and message-status sync where supported.
+Handles WhatsApp-based intake, notifications, reminders, and message workflow objects.
 
 ## Standard Folder Structure
 - workflows/

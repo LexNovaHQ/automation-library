@@ -1,13 +1,13 @@
-﻿# C2-N - CSV/Excel Parser
+﻿# C2-N - CSV / Excel Parser
 
 ## Status
-Planned / Phase 1 skeleton created.
+Planned / skeleton created.
 
 ## Category
-C2 - Custom Automation Workflows
+C2 - Automation Workflows
 
 ## Purpose
-Parses uploaded or synced CSV/Excel files into structured rows for validation, routing, sync, and reporting.
+Parses CSV or Excel rows into standardized records for validation, dedupe, writing, or review.
 
 ## Standard Folder Structure
 - workflows/
