@@ -1,0 +1,67 @@
+﻿{
+  "success": true,
+  "component_id": "C4-E",
+  "component_version": "v1",
+  "event_id": "evt_c4e_follow_up",
+  "event_type": "lead_follow_up",
+  "email_draft": {
+    "subject": "A simple workflow map for CartLift",
+    "body": "Hi Aman, following up on your note about comparing tools for abandoned cart follow-up and lead alerts. Before choosing tools, it may help to map the workflow first: what triggers the follow-up, where the lead/customer data goes, and when your team should be alerted. That keeps the setup clean before implementation.",
+    "cta": "Would you like me to prepare that workflow map?",
+    "email_type": "follow_up",
+    "personalization_used": ["Aman", "CartLift", "abandoned cart follow-up", "lead alerts", "comparing tools"],
+    "assumptions": [],
+    "risk_flags": [],
+    "approval_required": true,
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4m_handoff": {
+    "next_component": "C4-M",
+    "input": {
+      "success": true,
+      "component_id": "C4-E",
+      "component_version": "v1",
+      "event_id": "evt_c4e_follow_up",
+      "event_type": "ai_email_draft",
+      "ai_result": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "task_type": "email_draft",
+        "status": "completed",
+        "parsed_json": {
+          "draft_title": "A simple workflow map for CartLift",
+          "draft_summary": "Email draft generated for follow_up: A simple workflow map for CartLift",
+          "email_subject": "A simple workflow map for CartLift",
+          "human_approval_required": true
+        }
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "draft_type": "email",
+      "draft_status": "needs_review",
+      "approval_type": "email_review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "sales",
+      "priority": "normal",
+      "default_next_action": "request_approval"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4e_follow_up",
+    "event_type": "lead_follow_up",
+    "success": true,
+    "next_action": "generate_email_draft"
+  },
+  "error": null,
+  "next_action": "package_draft_for_approval"
+}

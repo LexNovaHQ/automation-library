@@ -1,0 +1,33 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4e_missing_llm",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_email_draft"
+  },
+  "config": {
+    "email_type": "first_response",
+    "email_goal": "Respond to lead.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "email_rules": {
+        "default_max_words": 130
+      }
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

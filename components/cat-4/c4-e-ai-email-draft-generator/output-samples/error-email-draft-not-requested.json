@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C4-E",
+  "component_version": "v1",
+  "event_id": "evt_c4e_not_requested",
+  "event_type": "lead_intake",
+  "email_draft": null,
+  "c4m_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4e_not_requested",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "write_record"
+  },
+  "error": {
+    "code": "EMAIL_DRAFT_NOT_REQUESTED",
+    "message": "source.next_action is not generate_email_draft."
+  },
+  "next_action": "route_to_failure_log"
+}

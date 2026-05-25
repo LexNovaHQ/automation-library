@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C4-E",
+  "component_version": "v1",
+  "event_id": "evt_c4e_missing_llm",
+  "event_type": "lead_intake",
+  "email_draft": null,
+  "c4m_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4e_missing_llm",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "generate_email_draft"
+  },
+  "error": {
+    "code": "MISSING_LLM_CONFIG",
+    "message": "config.llm is required."
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -1,0 +1,24 @@
+﻿{
+  "success": false,
+  "component_id": "C4-E",
+  "component_version": "v1",
+  "event_id": "evt_c4e_upstream_failed",
+  "event_type": "lead_intake",
+  "email_draft": null,
+  "c4m_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4e_upstream_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C4-E will not generate email draft when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

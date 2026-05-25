@@ -1,0 +1,68 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4e_follow_up",
+    "event_type": "lead_follow_up",
+    "payload": {
+      "name": "Aman Mehta",
+      "email": "aman@example.com",
+      "company": "CartLift",
+      "message": "We are still comparing tools but want to automate abandoned cart follow-up and lead alerts.",
+      "previous_interaction": "Asked for automation options two days ago."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_email_draft"
+  },
+  "config": {
+    "email_type": "follow_up",
+    "email_goal": "Send a short follow-up that offers to map the workflow before implementation.",
+    "recipient_context": "Lead is comparing tools and has not committed yet.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency",
+        "primary_customer_type": "Shopify store owners and ecommerce operators"
+      },
+      "voice_profile": {
+        "tone": ["clear", "helpful", "direct"],
+        "style": "short paragraphs, no hype",
+        "reading_level": "simple business English",
+        "phrases_to_avoid": ["guaranteed ROI", "instant growth"]
+      },
+      "offer_profile": {
+        "primary_offer_name": "Shopify Automation Workflow Map",
+        "primary_offer_description": "A scoped workflow map before implementation."
+      },
+      "email_rules": {
+        "default_max_words": 110,
+        "default_cta": "ask if they want the workflow map",
+        "include_question_at_end": true,
+        "pricing_allowed": false,
+        "must_include": ["acknowledge they are comparing tools", "mention workflow map"],
+        "must_avoid": ["pressure", "fake urgency"]
+      },
+      "risk_boundaries": {
+        "forbidden_claims": ["guaranteed revenue", "guaranteed ROI"],
+        "manual_review_triggers": ["performance claim", "uncertain fact"]
+      },
+      "approval_rules": {
+        "default_policy": "approval_required_before_external_action",
+        "primary_reviewer_email": "shwetabh.singh@lexnovahq.com"
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.2,
+      "max_tokens": 700
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

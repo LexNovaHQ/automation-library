@@ -1008,3 +1008,38 @@ C2-O2 v1 is built as the reusable approval response capture layer. It does not u
 
 **Excluded by design:**  
 Approval request creation belongs to C2-O. Review queue creation belongs to C5-E. Notifications belong to C2-I. Status/storage updates belong to C2-A/C5-W. Publishing/sending belongs to C2-Q/C2-I. Error logging belongs to C6-G.
+
+## C4-E Build Record - AI Email Draft Generator
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-e-ai-email-draft-generator`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-e-core-ai-email-draft-generator-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-E_CORE_AI_Email_Draft_Generator_v1`
+- Generates client-configured email draft objects from lead/source context
+- Uses `client_ai_profile`, email rules, voice rules, offer rules, and risk boundaries
+- Calls Groq through OpenAI-compatible chat completions
+- Returns structured `email_draft`
+- Creates C4-M-compatible handoff for approval packaging
+- Does not send emails or act autonomously
+
+**Passed tests:**
+- First response email
+- Follow-up email
+- Upstream failed
+- Email draft not requested
+- Missing client profile
+- Missing LLM config
+
+**Implementation note:**  
+C4-E v1 is built as a client-configurable AI email draft processor, not a generic AI writer and not an autonomous agent. It produces draft objects only. Sending, approval, status tracking, and storage belong to downstream components.
+
+**Excluded by design:**  
+Generic LLM call belongs to C2-K. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Email sending belongs to C2-I/future sender adapters. Status tracking belongs to C5-W. Error logging belongs to C6-G.

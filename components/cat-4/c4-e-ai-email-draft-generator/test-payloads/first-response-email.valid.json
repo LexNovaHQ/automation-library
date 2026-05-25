@@ -1,0 +1,86 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4e_first_response",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help for lead intake and CRM updates.",
+      "source": "website_form"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_email_draft"
+  },
+  "config": {
+    "email_type": "first_response",
+    "email_goal": "Respond to an inbound lead and offer a simple workflow map as the next step.",
+    "recipient_context": "Inbound lead asking about automation help.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency",
+        "primary_customer_type": "Shopify store owners and ecommerce operators",
+        "one_line_description": "GrowthOps Studio helps Shopify brands automate lead intake, CRM updates, abandoned cart follow-up, and team notifications."
+      },
+      "audience_profile": {
+        "ideal_customer": "Shopify brand with growing lead/customer volume and manual follow-up problems.",
+        "pain_points": ["missed leads", "slow follow-up", "manual CRM updates", "campaign tracking gaps"],
+        "urgency_signals": ["mentions missed leads", "mentions manual CRM updates", "mentions abandoned cart", "mentions urgent setup"]
+      },
+      "voice_profile": {
+        "tone": ["clear", "helpful", "direct"],
+        "style": "short paragraphs, no hype, no aggressive sales language",
+        "reading_level": "simple business English",
+        "phrases_to_use": ["workflow map", "clean setup", "review before build"],
+        "phrases_to_avoid": ["game-changing", "revolutionary", "guaranteed ROI"],
+        "banned_claims_or_phrases": ["guaranteed revenue", "instant growth"]
+      },
+      "offer_profile": {
+        "primary_offer_name": "Lead Intake + CRM Automation System",
+        "primary_offer_description": "A workflow that captures leads, validates payloads, removes duplicates, updates CRM records, and alerts the team.",
+        "main_outcome": "fewer missed leads and faster follow-up",
+        "not_included": ["paid ads management", "guaranteed revenue outcome"]
+      },
+      "email_rules": {
+        "default_max_words": 130,
+        "default_cta": "ask if they want a workflow map first",
+        "include_question_at_end": true,
+        "pricing_allowed": false,
+        "case_study_allowed": false,
+        "urgency_allowed": false,
+        "format": "plain_text",
+        "personalization_allowed_fields": ["lead name", "company name", "form message", "pain point", "source"],
+        "never_pretend_to_know": ["their revenue", "their tech stack unless provided", "their results", "their team size"],
+        "must_include": ["acknowledge the specific request", "mention the relevant workflow", "offer a small next step"],
+        "must_avoid": ["hard selling", "guaranteed results", "fake urgency", "overly technical jargon"]
+      },
+      "risk_boundaries": {
+        "forbidden_claims": ["guaranteed revenue", "guaranteed ROI", "instant growth"],
+        "guarantees_allowed": false,
+        "roi_or_performance_claims_allowed": false,
+        "manual_review_triggers": ["pricing claim", "performance claim", "uncertain fact", "missing context"]
+      },
+      "approval_rules": {
+        "default_policy": "approval_required_before_external_action",
+        "primary_reviewer_email": "shwetabh.singh@lexnovahq.com",
+        "allowed_actions": ["approve", "reject", "revise"]
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.2,
+      "max_tokens": 700
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

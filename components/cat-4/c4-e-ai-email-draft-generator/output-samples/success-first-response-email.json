@@ -1,0 +1,67 @@
+﻿{
+  "success": true,
+  "component_id": "C4-E",
+  "component_version": "v1",
+  "event_id": "evt_c4e_first_response",
+  "event_type": "lead_intake",
+  "email_draft": {
+    "subject": "Mapping your lead intake workflow",
+    "body": "Hi Riya, thanks for reaching out. Based on your message, the first useful step would be to map a clean workflow for capturing leads, validating the payload, updating your CRM, and notifying your team when action is needed. I can outline the workflow and tools first so you can review the setup before anything is built.",
+    "cta": "Would you like me to prepare the workflow map?",
+    "email_type": "first_response",
+    "personalization_used": ["Riya", "lead intake", "CRM updates", "GrowthOps Studio"],
+    "assumptions": [],
+    "risk_flags": [],
+    "approval_required": true,
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4m_handoff": {
+    "next_component": "C4-M",
+    "input": {
+      "success": true,
+      "component_id": "C4-E",
+      "component_version": "v1",
+      "event_id": "evt_c4e_first_response",
+      "event_type": "ai_email_draft",
+      "ai_result": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "task_type": "email_draft",
+        "status": "completed",
+        "parsed_json": {
+          "draft_title": "Mapping your lead intake workflow",
+          "draft_summary": "Email draft generated for first_response: Mapping your lead intake workflow",
+          "email_subject": "Mapping your lead intake workflow",
+          "human_approval_required": true
+        }
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "draft_type": "email",
+      "draft_status": "needs_review",
+      "approval_type": "email_review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "sales",
+      "priority": "normal",
+      "default_next_action": "request_approval"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4e_first_response",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "generate_email_draft"
+  },
+  "error": null,
+  "next_action": "package_draft_for_approval"
+}
