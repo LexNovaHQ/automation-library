@@ -1,0 +1,24 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c2n_missing_rows",
+    "event_type": "csv_import",
+    "metadata": {
+      "origin": "csv_upload",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "csv",
+    "source_name": "leads.csv",
+    "field_map": {
+      "name": "Full Name",
+      "email": "Email"
+    },
+    "default_next_action": "validate_batch_payload"
+  }
+}

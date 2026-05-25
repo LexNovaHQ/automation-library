@@ -1114,3 +1114,40 @@ C2-E v1 is built as the reusable form intake normalization layer. Form platform 
 
 **Excluded by design:**  
 Webhook/front-door receiving belongs to C2-C. Validation belongs to C2-F. Dedupe belongs to C2-D. Suppression belongs to C2-P. Lead qualification belongs to C4-L. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.
+
+## C2-N Build Record - CSV / Excel Parser
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-n-csv-excel-parser`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-n-core-csv-excel-parser-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-N_CORE_CSV_Excel_Parser_v1`
+- Parses spreadsheet-style row arrays into standardized record objects
+- Supports CSV, Excel, Google Sheets export, Airtable export, and manual/pasted rows
+- Supports configurable field maps and start row numbers
+- Normalizes email and consent status
+- Preserves row number and empty-field metadata
+- Creates C2-F-compatible batch validation handoff
+- Does not validate, dedupe, qualify, write, or notify directly
+
+**Passed tests:**
+- CSV rows
+- Excel rows
+- Messy rows
+- Upstream failed
+- Parser not requested
+- Missing rows
+- Missing field map
+
+**Implementation note:**  
+C2-N v1 is built as the reusable spreadsheet row parser. File upload/reading happens before C2-N through C2-G or a parent workflow. C2-N expects row arrays and standardizes them for downstream validation and automation.
+
+**Excluded by design:**  
+File upload/storage belongs to C2-G. Validation belongs to C2-F. Dedupe belongs to C2-D. Suppression belongs to C2-P. Lead qualification belongs to C4-L. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.

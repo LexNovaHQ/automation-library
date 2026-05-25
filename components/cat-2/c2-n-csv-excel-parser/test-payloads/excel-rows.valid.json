@@ -1,0 +1,51 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c2n_excel_rows",
+    "event_type": "excel_import",
+    "rows": [
+      {
+        "Name": "Neha Kapoor",
+        "Email Address": "neha@example.com",
+        "Company Name": "OpsFlow",
+        "Inquiry": "Need CRM automation and daily reporting.",
+        "Opt In": true
+      },
+      {
+        "Name": "Dev Rao",
+        "Email Address": "dev@example.com",
+        "Company Name": "ScaleCart",
+        "Inquiry": "Want workflow cleanup for ecommerce operations.",
+        "Opt In": false
+      }
+    ],
+    "metadata": {
+      "origin": "excel_upload",
+      "environment": "test",
+      "filename": "lead-list.xlsx",
+      "uploaded_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "excel",
+    "source_name": "lead-list.xlsx",
+    "field_map": {
+      "name": "Name",
+      "email": "Email Address",
+      "company": "Company Name",
+      "message": "Inquiry",
+      "consent": "Opt In"
+    },
+    "default_consent_status": "not_provided",
+    "start_row_number": 2,
+    "validation_rules": {
+      "required_fields": ["name", "email", "message"],
+      "email_fields": ["email"]
+    },
+    "default_next_action": "validate_batch_payload"
+  }
+}

@@ -1,0 +1,26 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c2n_missing_field_map",
+    "event_type": "csv_import",
+    "rows": [
+      {
+        "Full Name": "Riya Sharma",
+        "Email": "riya@example.com"
+      }
+    ],
+    "metadata": {
+      "origin": "csv_upload",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "csv",
+    "source_name": "leads.csv",
+    "default_next_action": "validate_batch_payload"
+  }
+}

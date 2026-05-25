@@ -1,0 +1,50 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "manual_test",
+    "component_version": "v1",
+    "event_id": "evt_c2n_messy_rows",
+    "event_type": "spreadsheet_import",
+    "rows": [
+      {
+        "contact_name": "Riya Sharma",
+        "contact_email": " RIYA@EXAMPLE.COM ",
+        "company": "GrowthOps Studio",
+        "notes": "Need automation help.",
+        "consent_status": "unknown"
+      },
+      {
+        "contact_name": "",
+        "contact_email": "bad-email",
+        "company": "",
+        "notes": "",
+        "consent_status": ""
+      }
+    ],
+    "metadata": {
+      "origin": "manual_paste",
+      "environment": "test",
+      "filename": "manual-paste"
+    },
+    "error": null,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "manual_rows",
+    "source_name": "manual-paste",
+    "field_map": {
+      "name": "contact_name",
+      "email": "contact_email",
+      "company": "company",
+      "message": "notes",
+      "consent_status": "consent_status"
+    },
+    "default_consent_status": "not_provided",
+    "start_row_number": 1,
+    "validation_rules": {
+      "required_fields": ["name", "email"],
+      "email_fields": ["email"]
+    },
+    "default_next_action": "validate_batch_payload"
+  }
+}

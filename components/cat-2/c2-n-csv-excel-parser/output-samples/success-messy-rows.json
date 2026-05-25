@@ -1,0 +1,91 @@
+﻿{
+  "success": true,
+  "component_id": "C2-N",
+  "component_version": "v1",
+  "event_id": "evt_c2n_messy_rows",
+  "event_type": "spreadsheet_import",
+  "parsed_records": [
+    {
+      "record_id": "row_1",
+      "row_number": 1,
+      "payload": {
+        "row_number": 1,
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "phone": "",
+        "company": "GrowthOps Studio",
+        "website": "",
+        "message": "Need automation help.",
+        "source": "manual-paste",
+        "consent_status": "unknown",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "manual_test",
+        "source_type": "manual_rows",
+        "source_name": "manual-paste",
+        "empty_fields": ["phone", "website"],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    },
+    {
+      "record_id": "row_2",
+      "row_number": 2,
+      "payload": {
+        "row_number": 2,
+        "name": "",
+        "email": "bad-email",
+        "phone": "",
+        "company": "",
+        "website": "",
+        "message": "",
+        "source": "manual-paste",
+        "consent_status": "not_provided",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "manual_test",
+        "source_type": "manual_rows",
+        "source_name": "manual-paste",
+        "empty_fields": ["name", "phone", "company", "website", "message"],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    }
+  ],
+  "batch_summary": {
+    "total_rows_received": 2,
+    "total_records_parsed": 2,
+    "empty_rows_skipped": 0,
+    "source_type": "manual_rows",
+    "source_name": "manual-paste"
+  },
+  "c2f_batch_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-N",
+      "component_version": "v1",
+      "event_id": "evt_c2n_messy_rows",
+      "event_type": "parsed_spreadsheet_batch",
+      "records": [],
+      "error": null,
+      "next_action": "validate_batch_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "manual_test",
+    "event_id": "evt_c2n_messy_rows",
+    "event_type": "spreadsheet_import",
+    "success": true,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "error": null,
+  "next_action": "validate_batch_payload"
+}

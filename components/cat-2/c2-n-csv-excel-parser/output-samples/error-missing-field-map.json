@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-N",
+  "component_version": "v1",
+  "event_id": "evt_c2n_missing_field_map",
+  "event_type": "csv_import",
+  "parsed_records": [],
+  "batch_summary": {
+    "total_rows_received": 0,
+    "total_records_parsed": 0,
+    "empty_rows_skipped": 0,
+    "source_type": "csv",
+    "source_name": "leads.csv"
+  },
+  "c2f_batch_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c2n_missing_field_map",
+    "event_type": "csv_import",
+    "success": true,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "error": {
+    "code": "MISSING_FIELD_MAP",
+    "message": "config.field_map is required."
+  },
+  "next_action": "route_to_failure_log"
+}

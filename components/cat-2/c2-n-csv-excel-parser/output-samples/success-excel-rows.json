@@ -1,0 +1,91 @@
+﻿{
+  "success": true,
+  "component_id": "C2-N",
+  "component_version": "v1",
+  "event_id": "evt_c2n_excel_rows",
+  "event_type": "excel_import",
+  "parsed_records": [
+    {
+      "record_id": "row_2",
+      "row_number": 2,
+      "payload": {
+        "row_number": 2,
+        "name": "Neha Kapoor",
+        "email": "neha@example.com",
+        "phone": "",
+        "company": "OpsFlow",
+        "website": "",
+        "message": "Need CRM automation and daily reporting.",
+        "source": "lead-list.xlsx",
+        "consent_status": "opted_in",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "C2-G",
+        "source_type": "excel",
+        "source_name": "lead-list.xlsx",
+        "empty_fields": ["phone", "website"],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    },
+    {
+      "record_id": "row_3",
+      "row_number": 3,
+      "payload": {
+        "row_number": 3,
+        "name": "Dev Rao",
+        "email": "dev@example.com",
+        "phone": "",
+        "company": "ScaleCart",
+        "website": "",
+        "message": "Want workflow cleanup for ecommerce operations.",
+        "source": "lead-list.xlsx",
+        "consent_status": "not_provided",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "C2-G",
+        "source_type": "excel",
+        "source_name": "lead-list.xlsx",
+        "empty_fields": ["phone", "website"],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    }
+  ],
+  "batch_summary": {
+    "total_rows_received": 2,
+    "total_records_parsed": 2,
+    "empty_rows_skipped": 0,
+    "source_type": "excel",
+    "source_name": "lead-list.xlsx"
+  },
+  "c2f_batch_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-N",
+      "component_version": "v1",
+      "event_id": "evt_c2n_excel_rows",
+      "event_type": "parsed_spreadsheet_batch",
+      "records": [],
+      "error": null,
+      "next_action": "validate_batch_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email", "message"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c2n_excel_rows",
+    "event_type": "excel_import",
+    "success": true,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "error": null,
+  "next_action": "validate_batch_payload"
+}

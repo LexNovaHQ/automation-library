@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-N",
+  "component_version": "v1",
+  "event_id": "evt_c2n_not_requested",
+  "event_type": "csv_import",
+  "parsed_records": [],
+  "batch_summary": {
+    "total_rows_received": 0,
+    "total_records_parsed": 0,
+    "empty_rows_skipped": 0,
+    "source_type": "csv",
+    "source_name": "leads.csv"
+  },
+  "c2f_batch_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c2n_not_requested",
+    "event_type": "csv_import",
+    "success": true,
+    "next_action": "validate_payload"
+  },
+  "error": {
+    "code": "PARSER_NOT_REQUESTED",
+    "message": "source.next_action is not parse_spreadsheet_rows."
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c2n_upstream_failed",
+    "event_type": "csv_import",
+    "rows": [],
+    "metadata": {
+      "origin": "csv_upload",
+      "environment": "test",
+      "filename": "leads.csv"
+    },
+    "error": {
+      "code": "FILE_UPLOAD_FAILED",
+      "message": "CSV file could not be read."
+    },
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "csv",
+    "source_name": "leads.csv",
+    "field_map": {
+      "name": "Full Name",
+      "email": "Email"
+    },
+    "default_next_action": "validate_batch_payload"
+  }
+}

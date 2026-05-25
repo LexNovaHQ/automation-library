@@ -1,0 +1,57 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c2n_csv_rows",
+    "event_type": "csv_import",
+    "rows": [
+      {
+        "Full Name": "Riya Sharma",
+        "Email": "riya@example.com",
+        "Phone": "+919999999999",
+        "Company": "GrowthOps Studio",
+        "Website": "https://growthops.example",
+        "Message": "Need lead intake and CRM automation.",
+        "Consent": "Yes"
+      },
+      {
+        "Full Name": "Aman Mehta",
+        "Email": "aman@example.com",
+        "Phone": "",
+        "Company": "CartLift",
+        "Website": "https://cartlift.example",
+        "Message": "Need abandoned cart follow-up and lead alerts.",
+        "Consent": "opted_in"
+      }
+    ],
+    "metadata": {
+      "origin": "csv_upload",
+      "environment": "test",
+      "filename": "leads.csv",
+      "uploaded_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "config": {
+    "source_type": "csv",
+    "source_name": "leads.csv",
+    "field_map": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "website": "Website",
+      "message": "Message",
+      "consent": "Consent"
+    },
+    "default_consent_status": "not_provided",
+    "start_row_number": 2,
+    "validation_rules": {
+      "required_fields": ["name", "email"],
+      "email_fields": ["email"]
+    },
+    "default_next_action": "validate_batch_payload"
+  }
+}

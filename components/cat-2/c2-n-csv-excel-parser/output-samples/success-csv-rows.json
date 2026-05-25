@@ -1,0 +1,100 @@
+﻿{
+  "success": true,
+  "component_id": "C2-N",
+  "component_version": "v1",
+  "event_id": "evt_c2n_csv_rows",
+  "event_type": "csv_import",
+  "parsed_records": [
+    {
+      "record_id": "row_2",
+      "row_number": 2,
+      "payload": {
+        "row_number": 2,
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "phone": "+919999999999",
+        "company": "GrowthOps Studio",
+        "website": "https://growthops.example",
+        "message": "Need lead intake and CRM automation.",
+        "source": "leads.csv",
+        "consent_status": "opted_in",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "C2-G",
+        "original_event_type": "csv_import",
+        "source_type": "csv",
+        "source_name": "leads.csv",
+        "empty_fields": [],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    },
+    {
+      "record_id": "row_3",
+      "row_number": 3,
+      "payload": {
+        "row_number": 3,
+        "name": "Aman Mehta",
+        "email": "aman@example.com",
+        "phone": "",
+        "company": "CartLift",
+        "website": "https://cartlift.example",
+        "message": "Need abandoned cart follow-up and lead alerts.",
+        "source": "leads.csv",
+        "consent_status": "opted_in",
+        "imported_at": "2026-05-25T00:00:00.000Z"
+      },
+      "metadata": {
+        "source_component": "C2-G",
+        "original_event_type": "csv_import",
+        "source_type": "csv",
+        "source_name": "leads.csv",
+        "empty_fields": ["phone"],
+        "parsed_at": "2026-05-25T00:00:00.000Z"
+      }
+    }
+  ],
+  "batch_summary": {
+    "total_rows_received": 2,
+    "total_records_parsed": 2,
+    "empty_rows_skipped": 0,
+    "source_type": "csv",
+    "source_name": "leads.csv"
+  },
+  "c2f_batch_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-N",
+      "component_version": "v1",
+      "event_id": "evt_c2n_csv_rows",
+      "event_type": "parsed_spreadsheet_batch",
+      "records": [],
+      "metadata": {
+        "source_type": "csv",
+        "source_name": "leads.csv",
+        "total_rows_received": 2,
+        "total_records_parsed": 2,
+        "empty_rows_skipped": 0
+      },
+      "error": null,
+      "next_action": "validate_batch_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c2n_csv_rows",
+    "event_type": "csv_import",
+    "success": true,
+    "next_action": "parse_spreadsheet_rows"
+  },
+  "error": null,
+  "next_action": "validate_batch_payload"
+}
