@@ -1,0 +1,20 @@
+﻿{
+  "success": false,
+  "component_id": "C2-O2",
+  "component_version": "v1",
+  "event_id": "evt_approval_response_not_requested",
+  "event_type": "ai_email_draft",
+  "approval_response": null,
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_approval_response_not_requested",
+    "event_type": "ai_email_draft",
+    "success": true,
+    "next_action": "notify_reviewer"
+  },
+  "error": {
+    "code": "APPROVAL_RESPONSE_NOT_REQUESTED",
+    "message": "source.next_action is not capture_approval_response."
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -1,0 +1,43 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O",
+    "component_version": "v1",
+    "event_id": "evt_approval_response_revise",
+    "event_type": "ai_email_draft",
+    "approval": {
+      "approval_id": "appr_evt_approval_response_revise_sample",
+      "status": "pending",
+      "approval_type": "email_review",
+      "approval_title": "Review email draft",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "allowed_actions": ["approve", "reject", "revise"],
+      "context": {
+        "draft_id": "draft_email_002",
+        "draft_title": "Follow-up email for Shopify automation lead"
+      }
+    },
+    "response": {
+      "decision": "revise",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "reviewer_notes": "Make it shorter and less salesy.",
+      "submitted_at": "2026-05-25T00:00:00.000Z"
+    },
+    "source_result": {
+      "component_id": "C4-M",
+      "event_id": "evt_approval_response_revise",
+      "event_type": "ai_email_draft",
+      "success": true
+    },
+    "error": null,
+    "next_action": "capture_approval_response"
+  },
+  "config": {
+    "decision_action_map": {
+      "approve": "continue_workflow",
+      "reject": "stop_workflow",
+      "revise": "send_back_for_revision"
+    },
+    "default_next_action": "route_approval_decision"
+  }
+}

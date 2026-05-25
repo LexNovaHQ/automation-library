@@ -1,0 +1,37 @@
+﻿{
+  "success": true,
+  "component_id": "C2-O2",
+  "component_version": "v1",
+  "event_id": "evt_approval_response_revise",
+  "event_type": "ai_email_draft",
+  "approval_response": {
+    "response_id": "approval_response_appr_evt_approval_response_revise_sample",
+    "approval_id": "appr_evt_approval_response_revise_sample",
+    "approval_type": "email_review",
+    "approval_title": "Review email draft",
+    "previous_status": "pending",
+    "decision": "revise",
+    "approval_status": "revision_requested",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "reviewer_notes": "Make it shorter and less salesy.",
+    "submitted_at": "2026-05-25T00:00:00.000Z",
+    "source_component": "C2-O",
+    "source_component_version": "v1",
+    "event_id": "evt_approval_response_revise",
+    "event_type": "ai_email_draft",
+    "context": {
+      "draft_id": "draft_email_002",
+      "draft_title": "Follow-up email for Shopify automation lead"
+    },
+    "decision_action": "send_back_for_revision"
+  },
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_approval_response_revise",
+    "event_type": "ai_email_draft",
+    "success": true,
+    "next_action": "capture_approval_response"
+  },
+  "error": null,
+  "next_action": "route_approval_decision"
+}

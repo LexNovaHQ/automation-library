@@ -1,0 +1,37 @@
+﻿{
+  "success": true,
+  "component_id": "C2-O2",
+  "component_version": "v1",
+  "event_id": "evt_approval_response_reject",
+  "event_type": "ai_blog_draft",
+  "approval_response": {
+    "response_id": "approval_response_appr_evt_approval_response_reject_sample",
+    "approval_id": "appr_evt_approval_response_reject_sample",
+    "approval_type": "content_review",
+    "approval_title": "Review blog draft",
+    "previous_status": "pending",
+    "decision": "reject",
+    "approval_status": "rejected",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "reviewer_notes": "Do not publish. Topic is not aligned.",
+    "submitted_at": "2026-05-25T00:00:00.000Z",
+    "source_component": "C2-O",
+    "source_component_version": "v1",
+    "event_id": "evt_approval_response_reject",
+    "event_type": "ai_blog_draft",
+    "context": {
+      "draft_id": "draft_blog_001",
+      "draft_title": "5 Ways Automation Improves Shopify Marketing"
+    },
+    "decision_action": "stop_workflow"
+  },
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_approval_response_reject",
+    "event_type": "ai_blog_draft",
+    "success": true,
+    "next_action": "capture_approval_response"
+  },
+  "error": null,
+  "next_action": "route_approval_decision"
+}

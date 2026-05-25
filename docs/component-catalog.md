@@ -973,3 +973,38 @@ C5-E v1 is built as the reusable manual review queue object generator. It does n
 
 **Excluded by design:**  
 Database/storage writes belong to C2-A/C5-W. Notification sending belongs to C2-I. Review/approval decision capture belongs to C2-O2. Retry execution belongs to C6-G2. Dashboard rendering belongs to C5-A/C5-B.
+
+## C2-O2 Build Record - Approval Response Capture
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-o2-approval-response-capture`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-o2-core-approval-response-capture-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-O2_CORE_Approval_Response_Capture_v1`
+- Captures approval reviewer decisions from approval response payloads
+- Validates approval object, response object, approval ID, decision, and reviewer email
+- Enforces decision against allowed approval actions
+- Maps decision to approval status and decision action
+- Returns standardized approval response object
+
+**Passed tests:**
+- Approve response
+- Reject response
+- Revise response
+- Upstream failed
+- Missing response
+- Invalid decision
+- Approval response not requested
+
+**Implementation note:**  
+C2-O2 v1 is built as the reusable approval response capture layer. It does not update storage, execute publishing/sending, or revise AI content. Those actions belong to downstream components.
+
+**Excluded by design:**  
+Approval request creation belongs to C2-O. Review queue creation belongs to C5-E. Notifications belong to C2-I. Status/storage updates belong to C2-A/C5-W. Publishing/sending belongs to C2-Q/C2-I. Error logging belongs to C6-G.

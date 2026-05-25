@@ -1,0 +1,32 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-O",
+    "component_version": "v1",
+    "event_id": "evt_approval_response_upstream_failed",
+    "event_type": "ai_email_draft",
+    "approval": {
+      "approval_id": "appr_evt_approval_response_upstream_failed_sample",
+      "status": "pending",
+      "allowed_actions": ["approve", "reject", "revise"]
+    },
+    "response": {
+      "decision": "approve",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "reviewer_notes": "Approved."
+    },
+    "error": {
+      "code": "APPROVAL_REQUEST_FAILED",
+      "message": "Could not create approval request."
+    },
+    "next_action": "capture_approval_response"
+  },
+  "config": {
+    "decision_action_map": {
+      "approve": "continue_workflow",
+      "reject": "stop_workflow",
+      "revise": "send_back_for_revision"
+    },
+    "default_next_action": "route_approval_decision"
+  }
+}

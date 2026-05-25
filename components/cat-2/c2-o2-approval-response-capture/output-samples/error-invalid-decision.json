@@ -1,0 +1,20 @@
+﻿{
+  "success": false,
+  "component_id": "C2-O2",
+  "component_version": "v1",
+  "event_id": "evt_approval_response_invalid_decision",
+  "event_type": "ai_email_draft",
+  "approval_response": null,
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_approval_response_invalid_decision",
+    "event_type": "ai_email_draft",
+    "success": true,
+    "next_action": "capture_approval_response"
+  },
+  "error": {
+    "code": "INVALID_DECISION",
+    "message": "response.decision is not included in approval.allowed_actions."
+  },
+  "next_action": "route_to_failure_log"
+}
