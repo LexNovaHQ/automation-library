@@ -1,0 +1,69 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C5-W",
+    "component_version": "v1",
+    "event_id": "evt_digest_daily_ops",
+    "event_type": "daily_digest",
+    "records": [
+      {
+        "record_type": "automation_status",
+        "event_id": "evt_lead_001",
+        "event_type": "lead_intake",
+        "current_status": "completed",
+        "current_stage": "notification_sent",
+        "owner": "sales",
+        "priority": "normal",
+        "next_action": "end"
+      },
+      {
+        "record_type": "automation_status",
+        "event_id": "evt_lead_002",
+        "event_type": "lead_intake",
+        "current_status": "pending_approval",
+        "current_stage": "approval_requested",
+        "owner": "sales",
+        "priority": "high",
+        "approval_status": "pending",
+        "next_action": "notify_reviewer"
+      },
+      {
+        "record_type": "automation_status",
+        "event_id": "evt_lead_003",
+        "event_type": "lead_intake",
+        "current_status": "failed",
+        "current_stage": "error_logged",
+        "owner": "ops",
+        "priority": "high",
+        "error_code": "VALIDATION_FAILED",
+        "retry_status": "pending_manual_review",
+        "next_action": "notify_error_owner"
+      },
+      {
+        "record_type": "automation_status",
+        "event_id": "evt_lead_004",
+        "event_type": "lead_intake",
+        "current_status": "manual_review",
+        "current_stage": "manual_review",
+        "owner": "ops",
+        "priority": "normal",
+        "next_action": "manual_review"
+      }
+    ],
+    "metadata": {
+      "origin": "scheduled_digest_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "build_digest"
+  },
+  "config": {
+    "digest_type": "daily",
+    "digest_title": "Daily Automation Digest",
+    "recipient_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "include_record_details": true,
+    "max_detail_items": 10,
+    "default_next_action": "send_digest_notification"
+  }
+}

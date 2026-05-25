@@ -1,0 +1,46 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O",
+    "component_version": "v1",
+    "event_id": "evt_digest_approvals",
+    "event_type": "approval_digest",
+    "records": [
+      {
+        "record_type": "approval",
+        "event_id": "evt_approval_001",
+        "event_type": "ai_email_draft",
+        "approval_id": "appr_001",
+        "status": "pending",
+        "approval_type": "email_review",
+        "approval_title": "Review email draft",
+        "reviewer_email": "shwetabh.singh@lexnovahq.com"
+      },
+      {
+        "record_type": "approval",
+        "event_id": "evt_approval_002",
+        "event_type": "ai_blog_draft",
+        "approval_id": "appr_002",
+        "status": "pending",
+        "approval_type": "content_review",
+        "approval_title": "Review blog draft",
+        "reviewer_email": "shwetabh.singh@lexnovahq.com"
+      }
+    ],
+    "metadata": {
+      "origin": "scheduled_digest_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "build_digest"
+  },
+  "config": {
+    "digest_type": "approval",
+    "digest_title": "Pending Approval Digest",
+    "recipient_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "content",
+    "include_record_details": true,
+    "max_detail_items": 10,
+    "default_next_action": "send_digest_notification"
+  }
+}

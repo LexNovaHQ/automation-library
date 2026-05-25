@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C2-J",
+  "component_version": "v1",
+  "event_id": "evt_digest_missing_records",
+  "event_type": "daily_digest",
+  "digest": null,
+  "notification_payload": null,
+  "source_result": {
+    "component_id": "C5-W",
+    "event_id": "evt_digest_missing_records",
+    "event_type": "daily_digest",
+    "success": true,
+    "next_action": "build_digest"
+  },
+  "error": {
+    "code": "MISSING_RECORDS_ARRAY",
+    "message": "input.records must be an array."
+  },
+  "next_action": "route_to_failure_log"
+}

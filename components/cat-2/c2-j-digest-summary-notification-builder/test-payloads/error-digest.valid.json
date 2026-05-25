@@ -1,0 +1,48 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C6-G",
+    "component_version": "v1",
+    "event_id": "evt_digest_errors_only",
+    "event_type": "error_digest",
+    "records": [
+      {
+        "record_type": "error_log",
+        "event_id": "evt_error_001",
+        "event_type": "lead_intake",
+        "status": "logged",
+        "severity": "high",
+        "source_component": "C2-A1",
+        "source_error_code": "MISSING_SPREADSHEET_ID",
+        "retry_status": "pending_manual_review",
+        "owner_email": "shwetabh.singh@lexnovahq.com"
+      },
+      {
+        "record_type": "error_log",
+        "event_id": "evt_error_002",
+        "event_type": "lead_intake",
+        "status": "logged",
+        "severity": "medium",
+        "source_component": "C2-F",
+        "source_error_code": "VALIDATION_FAILED",
+        "retry_status": "pending_manual_review",
+        "owner_email": "shwetabh.singh@lexnovahq.com"
+      }
+    ],
+    "metadata": {
+      "origin": "scheduled_digest_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "build_digest"
+  },
+  "config": {
+    "digest_type": "error",
+    "digest_title": "Error Digest",
+    "recipient_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "include_record_details": true,
+    "max_detail_items": 10,
+    "default_next_action": "send_digest_notification"
+  }
+}

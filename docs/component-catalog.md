@@ -841,3 +841,36 @@ C2-P v1 is built as the reusable suppression/opt-out decision layer. It does not
 
 **Excluded by design:**  
 Live suppression lookup belongs to C2-P2 or platform lookup adapters. Record writeback belongs to C2-A adapters. Notifications belong to C2-I / C2-M. Manual review belongs to C5-E / C5-W. Error logging belongs to C6-G.
+
+## C2-J Build Record - Digest / Summary Notification Builder
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-j-digest-summary-notification-builder`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-j-core-digest-summary-notification-builder-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-J_CORE_Digest_Summary_Notification_Builder_v1`
+- Builds daily/error/approval/custom digest objects from a records array
+- Counts records by status, event type, owner, priority, and record type
+- Extracts attention items requiring approval, retry, error handling, or manual review
+- Generates email-ready notification payload for C2-I
+
+**Passed tests:**
+- Daily digest
+- Error digest
+- Approval digest
+- Upstream failed
+- Digest not requested
+- Missing records
+
+**Implementation note:**  
+C2-J v1 is built as the reusable digest/summary builder. It does not fetch records or send notifications. Record fetching belongs to storage/query components. Notification sending belongs to C2-I.
+
+**Excluded by design:**  
+Email sending belongs to C2-I. Status record creation belongs to C5-W. Error log creation belongs to C6-G. Approval response handling belongs to C2-O2. Dashboard rendering belongs to C5-A / C5-E.

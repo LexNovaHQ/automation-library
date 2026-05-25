@@ -1,0 +1,65 @@
+﻿{
+  "success": true,
+  "component_id": "C2-J",
+  "component_version": "v1",
+  "event_id": "evt_digest_approvals",
+  "event_type": "approval_digest",
+  "digest": {
+    "digest_id": "digest_evt_digest_approvals_sample",
+    "digest_type": "approval",
+    "digest_title": "Pending Approval Digest",
+    "total_records": 2,
+    "counts": {
+      "completed": 0,
+      "failed": 0,
+      "pending_approval": 2,
+      "manual_review": 0,
+      "by_record_type": {
+        "approval": 2
+      },
+      "by_event_type": {
+        "ai_email_draft": 1,
+        "ai_blog_draft": 1
+      },
+      "by_status": {
+        "pending": 2
+      },
+      "by_owner": {
+        "shwetabh.singh@lexnovahq.com": 2
+      },
+      "by_priority": {
+        "unknown": 2
+      }
+    },
+    "attention_items": [
+      {
+        "event_id": "evt_approval_001",
+        "approval_id": "appr_001",
+        "status": "pending"
+      },
+      {
+        "event_id": "evt_approval_002",
+        "approval_id": "appr_002",
+        "status": "pending"
+      }
+    ],
+    "summary_text": "Pending Approval Digest\n\nTotal records: 2\nPending approvals: 2",
+    "owner": "content",
+    "created_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Pending Approval Digest — 2 records",
+    "text": "Pending Approval Digest\n\nTotal records: 2\nPending approvals: 2"
+  },
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_digest_approvals",
+    "event_type": "approval_digest",
+    "success": true,
+    "next_action": "build_digest"
+  },
+  "error": null,
+  "next_action": "send_digest_notification"
+}

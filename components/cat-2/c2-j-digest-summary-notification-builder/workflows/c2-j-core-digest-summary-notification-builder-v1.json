@@ -1,0 +1,218 @@
+{
+  "name": "C2-J_CORE_Digest_Summary_Notification_Builder_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -240
+      ],
+      "id": "520c0378-0820-4dfb-a46b-869cf8fc4af3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction safe(value, fallback = null) {\n  return value === undefined || value === null || value === \"\" ? fallback : value;\n}\n\nfunction countBy(records, getter) {\n  const counts = {};\n  for (const record of records) {\n    const key = safe(getter(record), \"unknown\");\n    counts[key] = (counts[key] || 0) + 1;\n  }\n  return counts;\n}\n\nfunction makeDigestId(eventId) {\n  const base = eventId || \"unknown_event\";\n  const suffix = Date.now().toString(36);\n  return `digest_${base}_${suffix}`.replace(/[^a-zA-Z0-9_]/g, \"_\");\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-J\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        digest: null,\n        notification_payload: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-J will not build digest when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"build_digest\") {\n  return fail({\n    code: \"DIGEST_NOT_REQUESTED\",\n    message: \"source.next_action is not build_digest.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!Array.isArray(source.records)) {\n  return fail({\n    code: \"MISSING_RECORDS_ARRAY\",\n    message: \"input.records must be an array.\"\n  });\n}\n\nif (!config.digest_type) {\n  return fail({\n    code: \"MISSING_DIGEST_TYPE\",\n    message: \"config.digest_type is required.\"\n  });\n}\n\nif (!config.recipient_email) {\n  return fail({\n    code: \"MISSING_RECIPIENT_EMAIL\",\n    message: \"config.recipient_email is required.\"\n  });\n}\n\nconst records = source.records;\nconst maxDetailItems = Number(config.max_detail_items ?? 10);\nconst createdAt = nowIso();\nconst digestId = makeDigestId(source.event_id);\n\nconst byRecordType = countBy(records, r => r.record_type);\nconst byEventType = countBy(records, r => r.event_type);\nconst byStatus = countBy(records, r => r.current_status || r.status);\nconst byOwner = countBy(records, r => r.owner || r.owner_email || r.reviewer_email);\nconst byPriority = countBy(records, r => r.priority || r.severity);\n\nconst failedCount = records.filter(r =>\n  r.current_status === \"failed\" ||\n  r.status === \"failed\" ||\n  r.status === \"logged\" ||\n  r.record_type === \"error_log\"\n).length;\n\nconst pendingApprovalCount = records.filter(r =>\n  r.current_status === \"pending_approval\" ||\n  r.approval_status === \"pending\" ||\n  r.status === \"pending\" ||\n  r.record_type === \"approval\"\n).length;\n\nconst manualReviewCount = records.filter(r =>\n  r.current_status === \"manual_review\" ||\n  r.next_action === \"manual_review\" ||\n  r.retry_status === \"pending_manual_review\"\n).length;\n\nconst completedCount = records.filter(r =>\n  r.current_status === \"completed\" ||\n  r.status === \"completed\"\n).length;\n\nconst attentionItems = records.filter(r =>\n  r.current_status === \"failed\" ||\n  r.current_status === \"manual_review\" ||\n  r.current_status === \"pending_approval\" ||\n  r.status === \"logged\" ||\n  r.status === \"pending\" ||\n  r.record_type === \"error_log\" ||\n  r.record_type === \"approval\" ||\n  r.next_action === \"manual_review\" ||\n  r.retry_status === \"pending_manual_review\"\n).slice(0, maxDetailItems);\n\nconst detailLines = attentionItems.map((r, index) => {\n  const label = r.event_id || r.approval_id || r.error_id || `item_${index + 1}`;\n  const status = r.current_status || r.status || \"unknown\";\n  const reason = r.error_code || r.source_error_code || r.approval_type || r.next_action || r.current_stage || \"\";\n  return `${index + 1}. ${label} | ${r.event_type || \"-\"} | ${status}${reason ? \" | \" + reason : \"\"}`;\n});\n\nconst title = config.digest_title || `${config.digest_type} digest`;\n\nconst text = [\n  `${title}`,\n  ``,\n  `Digest ID: ${digestId}`,\n  `Type: ${config.digest_type}`,\n  `Total records: ${records.length}`,\n  `Completed: ${completedCount}`,\n  `Failed/errors: ${failedCount}`,\n  `Pending approvals: ${pendingApprovalCount}`,\n  `Manual review / retry: ${manualReviewCount}`,\n  ``,\n  `Counts by status: ${JSON.stringify(byStatus)}`,\n  `Counts by event type: ${JSON.stringify(byEventType)}`,\n  ``,\n  config.include_record_details ? `Attention items:` : null,\n  config.include_record_details ? (detailLines.length ? detailLines.join(\"\\n\") : \"None\") : null\n].filter(line => line !== null).join(\"\\n\");\n\nconst digest = {\n  digest_id: digestId,\n  digest_type: config.digest_type,\n  digest_title: title,\n  total_records: records.length,\n  counts: {\n    completed: completedCount,\n    failed: failedCount,\n    pending_approval: pendingApprovalCount,\n    manual_review: manualReviewCount,\n    by_record_type: byRecordType,\n    by_event_type: byEventType,\n    by_status: byStatus,\n    by_owner: byOwner,\n    by_priority: byPriority\n  },\n  attention_items: attentionItems,\n  summary_text: text,\n  owner: config.owner || \"unassigned\",\n  created_at: createdAt\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-J\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      digest,\n      notification_payload: {\n        channel: \"email\",\n        to: config.recipient_email,\n        subject: `${title} — ${records.length} records`,\n        text\n      },\n      source_result: source,\n      error: null,\n      next_action: config.default_next_action || \"send_digest_notification\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -224
+      ],
+      "id": "e8992864-0cc0-40f1-8ec5-3167e44deba3",
+      "name": "Build Digest Summary"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b47d1834-142f-4aa9-932e-4075399af8fe",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "2cea0445-3470-4081-8e10-e57bd9849c8b",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "54c5fce6-ba55-45ea-866f-72a2f4724cf0",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "90fb9f64-f10a-4268-8bdc-ca8a6f5a7f0c",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1d8b8898-82d2-4721-a879-00237de84d2a",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "d5c20f38-e2e5-450a-a097-99278fd2ad36",
+              "name": "digest",
+              "value": "={{ $json.digest }}",
+              "type": "object"
+            },
+            {
+              "id": "3827b87c-c128-45b2-90b8-a831f844ffdf",
+              "name": "notification_payload",
+              "value": "={{ $json.notification_payload }}",
+              "type": "object"
+            },
+            {
+              "id": "f5d1005d-49fe-42d4-b026-301f30578cf5",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "1308b4fe-104e-444d-a239-748357b9076b",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "9c1442f2-c342-45ec-a553-983623a5a8ca",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -224
+      ],
+      "id": "6040727e-6a5d-4b28-97d5-876f854cb981",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C5-W",
+            "component_version": "v1",
+            "event_id": "evt_digest_daily_ops",
+            "event_type": "daily_digest",
+            "records": [
+              {
+                "record_type": "automation_status",
+                "event_id": "evt_lead_001",
+                "event_type": "lead_intake",
+                "current_status": "completed",
+                "current_stage": "notification_sent",
+                "owner": "sales",
+                "priority": "normal",
+                "next_action": "end"
+              },
+              {
+                "record_type": "automation_status",
+                "event_id": "evt_lead_002",
+                "event_type": "lead_intake",
+                "current_status": "pending_approval",
+                "current_stage": "approval_requested",
+                "owner": "sales",
+                "priority": "high",
+                "approval_status": "pending",
+                "next_action": "notify_reviewer"
+              },
+              {
+                "record_type": "automation_status",
+                "event_id": "evt_lead_003",
+                "event_type": "lead_intake",
+                "current_status": "failed",
+                "current_stage": "error_logged",
+                "owner": "ops",
+                "priority": "high",
+                "error_code": "VALIDATION_FAILED",
+                "retry_status": "pending_manual_review",
+                "next_action": "notify_error_owner"
+              },
+              {
+                "record_type": "automation_status",
+                "event_id": "evt_lead_004",
+                "event_type": "lead_intake",
+                "current_status": "manual_review",
+                "current_stage": "manual_review",
+                "owner": "ops",
+                "priority": "normal",
+                "next_action": "manual_review"
+              }
+            ],
+            "metadata": {
+              "origin": "scheduled_digest_test",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "build_digest"
+          },
+          "config": {
+            "digest_type": "daily",
+            "digest_title": "Daily Automation Digest",
+            "recipient_email": "shwetabh.singh@lexnovahq.com",
+            "owner": "ops",
+            "include_record_details": true,
+            "max_detail_items": 10,
+            "default_next_action": "send_digest_notification"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Build Digest Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Digest Summary": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1b71a5d5-ea95-4d92-8189-0fb17433e687",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "sYnVmVNkDKoLbten",
+  "tags": []
+}

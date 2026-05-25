@@ -1,0 +1,28 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C5-W",
+    "component_version": "v1",
+    "event_id": "evt_digest_upstream_failed",
+    "event_type": "daily_digest",
+    "records": [],
+    "metadata": {
+      "origin": "scheduled_digest_test",
+      "environment": "test"
+    },
+    "error": {
+      "code": "STATUS_RECORD_FETCH_FAILED",
+      "message": "Could not fetch status records."
+    },
+    "next_action": "build_digest"
+  },
+  "config": {
+    "digest_type": "daily",
+    "digest_title": "Daily Automation Digest",
+    "recipient_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "include_record_details": true,
+    "max_detail_items": 10,
+    "default_next_action": "send_digest_notification"
+  }
+}

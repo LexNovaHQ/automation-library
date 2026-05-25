@@ -1,0 +1,63 @@
+﻿{
+  "success": true,
+  "component_id": "C2-J",
+  "component_version": "v1",
+  "event_id": "evt_digest_errors_only",
+  "event_type": "error_digest",
+  "digest": {
+    "digest_id": "digest_evt_digest_errors_only_sample",
+    "digest_type": "error",
+    "digest_title": "Error Digest",
+    "total_records": 2,
+    "counts": {
+      "completed": 0,
+      "failed": 2,
+      "pending_approval": 0,
+      "manual_review": 2,
+      "by_record_type": {
+        "error_log": 2
+      },
+      "by_event_type": {
+        "lead_intake": 2
+      },
+      "by_status": {
+        "logged": 2
+      },
+      "by_owner": {
+        "shwetabh.singh@lexnovahq.com": 2
+      },
+      "by_priority": {
+        "high": 1,
+        "medium": 1
+      }
+    },
+    "attention_items": [
+      {
+        "event_id": "evt_error_001",
+        "source_error_code": "MISSING_SPREADSHEET_ID"
+      },
+      {
+        "event_id": "evt_error_002",
+        "source_error_code": "VALIDATION_FAILED"
+      }
+    ],
+    "summary_text": "Error Digest\n\nTotal records: 2\nFailed/errors: 2\nManual review / retry: 2",
+    "owner": "ops",
+    "created_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Error Digest — 2 records",
+    "text": "Error Digest\n\nTotal records: 2\nFailed/errors: 2\nManual review / retry: 2"
+  },
+  "source_result": {
+    "component_id": "C6-G",
+    "event_id": "evt_digest_errors_only",
+    "event_type": "error_digest",
+    "success": true,
+    "next_action": "build_digest"
+  },
+  "error": null,
+  "next_action": "send_digest_notification"
+}

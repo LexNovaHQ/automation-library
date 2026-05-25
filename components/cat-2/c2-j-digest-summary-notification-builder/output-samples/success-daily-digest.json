@@ -1,0 +1,72 @@
+﻿{
+  "success": true,
+  "component_id": "C2-J",
+  "component_version": "v1",
+  "event_id": "evt_digest_daily_ops",
+  "event_type": "daily_digest",
+  "digest": {
+    "digest_id": "digest_evt_digest_daily_ops_sample",
+    "digest_type": "daily",
+    "digest_title": "Daily Automation Digest",
+    "total_records": 4,
+    "counts": {
+      "completed": 1,
+      "failed": 1,
+      "pending_approval": 1,
+      "manual_review": 2,
+      "by_record_type": {
+        "automation_status": 4
+      },
+      "by_event_type": {
+        "lead_intake": 4
+      },
+      "by_status": {
+        "completed": 1,
+        "pending_approval": 1,
+        "failed": 1,
+        "manual_review": 1
+      },
+      "by_owner": {
+        "sales": 2,
+        "ops": 2
+      },
+      "by_priority": {
+        "normal": 2,
+        "high": 2
+      }
+    },
+    "attention_items": [
+      {
+        "event_id": "evt_lead_002",
+        "current_status": "pending_approval"
+      },
+      {
+        "event_id": "evt_lead_003",
+        "current_status": "failed",
+        "error_code": "VALIDATION_FAILED"
+      },
+      {
+        "event_id": "evt_lead_004",
+        "current_status": "manual_review"
+      }
+    ],
+    "summary_text": "Daily Automation Digest\n\nTotal records: 4\nCompleted: 1\nFailed/errors: 1\nPending approvals: 1\nManual review / retry: 2",
+    "owner": "ops",
+    "created_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Daily Automation Digest — 4 records",
+    "text": "Daily Automation Digest\n\nTotal records: 4\nCompleted: 1\nFailed/errors: 1\nPending approvals: 1\nManual review / retry: 2"
+  },
+  "source_result": {
+    "component_id": "C5-W",
+    "event_id": "evt_digest_daily_ops",
+    "event_type": "daily_digest",
+    "success": true,
+    "next_action": "build_digest"
+  },
+  "error": null,
+  "next_action": "send_digest_notification"
+}
