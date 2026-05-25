@@ -1,0 +1,26 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-K",
+    "component_version": "v1",
+    "event_id": "evt_c4m_missing_ai_result",
+    "event_type": "ai_blog_draft",
+    "source_result": {
+      "component_id": "C2-F",
+      "event_id": "evt_c4m_missing_ai_result",
+      "event_type": "content_draft",
+      "success": true
+    },
+    "error": null,
+    "next_action": "request_approval"
+  },
+  "config": {
+    "draft_type": "blog",
+    "draft_status": "needs_review",
+    "approval_type": "content_review",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "content",
+    "priority": "high",
+    "default_next_action": "request_approval"
+  }
+}

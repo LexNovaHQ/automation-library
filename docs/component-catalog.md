@@ -745,3 +745,35 @@ C2-K is built as a safe LLM-in-workflow adapter, not an autonomous AI agent. It 
 
 **Excluded by design:**  
 AI draft approval pipeline belongs to C4-M. Human approval belongs to C2-O. Routing belongs to C2-B. Writing belongs to C2-A. Notifications belong to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G. Autonomous agent execution belongs to a later C4 agent component.
+
+## C4-M Build Record - AI Draft Approval Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-m-ai-draft-approval-pipeline`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-m-core-ai-draft-approval-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-M_CORE_AI_Draft_Approval_Pipeline_v1`
+- Converts completed C2-K AI output into a standardized draft package
+- Creates draft metadata, status, owner, priority, and AI metadata
+- Creates C2-O-compatible approval handoff payload
+- Does not call the LLM directly and does not publish content
+
+**Passed tests:**
+- Blog draft approval
+- Email draft approval
+- AI failed
+- Missing AI result
+- Missing reviewer
+
+**Implementation note:**  
+C4-M v1 is built as the higher-level AI draft workflow layer above C2-K. It packages AI output into a review-ready draft and prepares the handoff to C2-O for human approval.
+
+**Excluded by design:**  
+Direct LLM calls belong to C2-K. Human approval creation belongs to C2-O. Approval response capture belongs to C2-O2. Reviewer notification belongs to C2-I. Draft/database storage belongs to C2-A / C5-W. Publishing belongs to C2-Q.

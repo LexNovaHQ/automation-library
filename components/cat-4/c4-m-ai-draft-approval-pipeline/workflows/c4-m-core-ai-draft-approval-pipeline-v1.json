@@ -1,0 +1,206 @@
+{
+  "name": "C4-M_CORE_AI_Draft_Approval_Pipeline_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -208,
+        -192
+      ],
+      "id": "091f39f1-04a6-428d-b02d-2008a7206ce9",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction safe(value, fallback = null) {\n  return value === undefined || value === null || value === \"\" ? fallback : value;\n}\n\nfunction makeDraftId(eventId) {\n  const base = eventId || \"unknown_event\";\n  const suffix = Date.now().toString(36);\n  return `draft_${base}_${suffix}`.replace(/[^a-zA-Z0-9_]/g, \"_\");\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C4-M\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        draft_package: null,\n        approval_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C4-M will not create draft package when upstream AI step failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (!source.ai_result || typeof source.ai_result !== \"object\") {\n  return fail({\n    code: \"MISSING_AI_RESULT\",\n    message: \"input.ai_result is required.\"\n  });\n}\n\nif (source.ai_result.status !== \"completed\" && source.ai_result.status !== \"completed_unparsed\") {\n  return fail({\n    code: \"AI_RESULT_NOT_COMPLETED\",\n    message: \"input.ai_result.status must be completed or completed_unparsed.\",\n    details: [{ ai_status: source.ai_result.status || null }]\n  });\n}\n\nif (!config.draft_type) {\n  return fail({\n    code: \"MISSING_DRAFT_TYPE\",\n    message: \"config.draft_type is required.\"\n  });\n}\n\nif (!config.approval_type) {\n  return fail({\n    code: \"MISSING_APPROVAL_TYPE\",\n    message: \"config.approval_type is required.\"\n  });\n}\n\nif (!config.reviewer_email) {\n  return fail({\n    code: \"MISSING_REVIEWER_EMAIL\",\n    message: \"config.reviewer_email is required.\"\n  });\n}\n\nconst aiJson = source.ai_result.parsed_json || {};\nconst draftId = makeDraftId(source.event_id);\nconst createdAt = nowIso();\n\nconst title =\n  aiJson.draft_title ||\n  aiJson.title ||\n  aiJson.email_subject ||\n  `${config.draft_type} draft`;\n\nconst summary =\n  aiJson.draft_summary ||\n  aiJson.summary ||\n  aiJson.description ||\n  source.ai_result.content ||\n  \"\";\n\nconst draftPackage = {\n  draft_id: draftId,\n  draft_type: config.draft_type,\n  draft_status: config.draft_status || \"needs_review\",\n  draft_title: title,\n  draft_summary: summary,\n  draft_content: {\n    raw_content: source.ai_result.content || null,\n    parsed_json: source.ai_result.parsed_json || null\n  },\n  ai_metadata: {\n    provider: source.ai_result.provider || null,\n    model: source.ai_result.model || null,\n    task_type: source.ai_result.task_type || null,\n    usage: source.ai_result.usage || null,\n    finish_reason: source.ai_result.finish_reason || null\n  },\n  owner: config.owner || \"unassigned\",\n  priority: config.priority || \"normal\",\n  created_at: createdAt,\n  updated_at: createdAt\n};\n\nconst approvalTitle = config.approval_title || `Review ${config.draft_type} draft: ${title}`;\n\nconst approvalHandoff = {\n  next_component: \"C2-O\",\n  input: {\n    success: true,\n    component_id: \"C4-M\",\n    component_version: \"v1\",\n    event_id: source.event_id || null,\n    event_type: source.event_type || null,\n    payload: {\n      draft_id: draftPackage.draft_id,\n      draft_type: draftPackage.draft_type,\n      draft_title: draftPackage.draft_title,\n      draft_summary: draftPackage.draft_summary,\n      draft_status: draftPackage.draft_status,\n      draft_content: draftPackage.draft_content,\n      owner: draftPackage.owner,\n      priority: draftPackage.priority\n    },\n    metadata: {\n      source_component: source.component_id || null,\n      source_event_type: source.event_type || null,\n      generated_at: createdAt\n    },\n    error: null,\n    next_action: \"request_approval\"\n  },\n  config: {\n    approval_type: config.approval_type,\n    approval_title: approvalTitle,\n    reviewer_email: config.reviewer_email,\n    approval_actions: config.approval_actions || [\"approve\", \"reject\", \"revise\"],\n    approval_context_fields: [\n      \"payload.draft_id\",\n      \"payload.draft_type\",\n      \"payload.draft_title\",\n      \"payload.draft_summary\",\n      \"payload.draft_status\"\n    ],\n    default_next_action: \"notify_reviewer\"\n  }\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C4-M\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      draft_package: draftPackage,\n      approval_handoff: approvalHandoff,\n      source_result: source,\n      error: null,\n      next_action: config.default_next_action || \"request_approval\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -192
+      ],
+      "id": "0bff63cc-c8c2-4cb3-b69e-205599bd3dd0",
+      "name": "Create Draft Approval Package"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "663399e9-426b-4026-a077-7a7919e64f07",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "a537ff18-b260-4584-8e52-3b9230241fda",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "808e42c1-c544-46a6-b051-315591287a08",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "3c600319-c196-4b98-99fb-a8b8bb2e1c03",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "0e986f28-3e86-40c1-88ef-cd78ddc4244b",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "128d95f2-bcdd-4103-87b6-1e8162866d08",
+              "name": "draft_package",
+              "value": "={{ $json.draft_package }}",
+              "type": "object"
+            },
+            {
+              "id": "cba46c7e-097b-4e40-acd3-d24fdd566a1f",
+              "name": "approval_handoff",
+              "value": "={{ $json.approval_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "8d0d18ca-17bf-4d09-81f7-cd88821afe80",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "aa51d35f-8ec2-40b9-b58d-9a6acaba0f1c",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "7b278747-b251-424f-95cb-14631c7b94d8",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -192
+      ],
+      "id": "a6ce97c7-ab96-422f-99de-d9d5d3d5c460",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-K",
+            "component_version": "v1",
+            "event_id": "evt_c4m_blog_draft",
+            "event_type": "ai_blog_draft",
+            "ai_result": {
+              "provider": "groq",
+              "model": "llama-3.3-70b-versatile",
+              "task_type": "content_classification",
+              "status": "completed",
+              "content": "{\"draft_title\":\"5 Ways Automation Improves Shopify Marketing\",\"draft_summary\":\"A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.\",\"topic\":\"Shopify marketing automation\",\"audience\":\"Shopify brands and ecommerce operators\",\"publish_readiness\":\"draft_ready_for_review\",\"human_approval_required\":true}",
+              "parsed_json": {
+                "draft_title": "5 Ways Automation Improves Shopify Marketing",
+                "draft_summary": "A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.",
+                "topic": "Shopify marketing automation",
+                "audience": "Shopify brands and ecommerce operators",
+                "publish_readiness": "draft_ready_for_review",
+                "human_approval_required": true
+              },
+              "usage": {
+                "prompt_tokens": 100,
+                "completion_tokens": 80,
+                "total_tokens": 180
+              },
+              "finish_reason": "stop"
+            },
+            "source_result": {
+              "component_id": "C2-F",
+              "event_id": "evt_c4m_blog_draft",
+              "event_type": "content_draft",
+              "payload": {
+                "content_type": "blog",
+                "campaign": "Shopify automation education",
+                "topic": "Automation for Shopify marketing"
+              },
+              "metadata": {
+                "origin": "manual_test",
+                "environment": "test"
+              },
+              "success": true,
+              "next_action": "run_ai"
+            },
+            "error": null,
+            "next_action": "request_approval"
+          },
+          "config": {
+            "draft_type": "blog",
+            "draft_status": "needs_review",
+            "approval_type": "content_review",
+            "reviewer_email": "shwetabh.singh@lexnovahq.com",
+            "owner": "content",
+            "priority": "high",
+            "default_next_action": "request_approval"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Draft Approval Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Draft Approval Package": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "bbf8c1d3-6e1e-425d-bfed-29e8d53a03a4",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "tGWMXyFVUi9JCff5",
+  "tags": []
+}

@@ -1,0 +1,86 @@
+﻿{
+  "success": true,
+  "component_id": "C4-M",
+  "component_version": "v1",
+  "event_id": "evt_c4m_email_draft",
+  "event_type": "ai_email_draft",
+  "draft_package": {
+    "draft_id": "draft_evt_c4m_email_draft_sample",
+    "draft_type": "email",
+    "draft_status": "needs_review",
+    "draft_title": "Follow-up email for Shopify automation lead",
+    "draft_summary": "Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.",
+    "draft_content": {
+      "raw_content": "{\"draft_title\":\"Follow-up email for Shopify automation lead\",\"draft_summary\":\"Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.\",\"email_subject\":\"Automating your Shopify lead workflow\",\"email_body\":\"Hi Riya, based on your message, the fastest win is a clean workflow that captures leads, validates the payload, updates your CRM, and alerts your team. Happy to map this into a small implementation plan.\",\"human_approval_required\":true}",
+      "parsed_json": {
+        "draft_title": "Follow-up email for Shopify automation lead",
+        "draft_summary": "Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.",
+        "email_subject": "Automating your Shopify lead workflow",
+        "email_body": "Hi Riya, based on your message, the fastest win is a clean workflow that captures leads, validates the payload, updates your CRM, and alerts your team. Happy to map this into a small implementation plan.",
+        "human_approval_required": true
+      }
+    },
+    "ai_metadata": {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "task_type": "email_draft",
+      "usage": {
+        "prompt_tokens": 120,
+        "completion_tokens": 90,
+        "total_tokens": 210
+      },
+      "finish_reason": "stop"
+    },
+    "owner": "sales",
+    "priority": "normal",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "approval_handoff": {
+    "next_component": "C2-O",
+    "input": {
+      "success": true,
+      "component_id": "C4-M",
+      "component_version": "v1",
+      "event_id": "evt_c4m_email_draft",
+      "event_type": "ai_email_draft",
+      "payload": {
+        "draft_id": "draft_evt_c4m_email_draft_sample",
+        "draft_type": "email",
+        "draft_title": "Follow-up email for Shopify automation lead",
+        "draft_summary": "Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.",
+        "draft_status": "needs_review"
+      },
+      "metadata": {
+        "source_component": "C2-K",
+        "source_event_type": "ai_email_draft",
+        "generated_at": "2026-05-25T00:00:00.000Z"
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "approval_type": "email_review",
+      "approval_title": "Review email draft: Follow-up email for Shopify automation lead",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "approval_actions": ["approve", "reject", "revise"],
+      "approval_context_fields": [
+        "payload.draft_id",
+        "payload.draft_type",
+        "payload.draft_title",
+        "payload.draft_summary",
+        "payload.draft_status"
+      ],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-K",
+    "event_id": "evt_c4m_email_draft",
+    "event_type": "ai_email_draft",
+    "success": true,
+    "next_action": "request_approval"
+  },
+  "error": null,
+  "next_action": "request_approval"
+}

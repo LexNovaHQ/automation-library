@@ -1,0 +1,87 @@
+﻿{
+  "success": true,
+  "component_id": "C4-M",
+  "component_version": "v1",
+  "event_id": "evt_c4m_blog_draft",
+  "event_type": "ai_blog_draft",
+  "draft_package": {
+    "draft_id": "draft_evt_c4m_blog_draft_sample",
+    "draft_type": "blog",
+    "draft_status": "needs_review",
+    "draft_title": "5 Ways Automation Improves Shopify Marketing",
+    "draft_summary": "A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.",
+    "draft_content": {
+      "raw_content": "{\"draft_title\":\"5 Ways Automation Improves Shopify Marketing\",\"draft_summary\":\"A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.\",\"topic\":\"Shopify marketing automation\",\"audience\":\"Shopify brands and ecommerce operators\",\"publish_readiness\":\"draft_ready_for_review\",\"human_approval_required\":true}",
+      "parsed_json": {
+        "draft_title": "5 Ways Automation Improves Shopify Marketing",
+        "draft_summary": "A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.",
+        "topic": "Shopify marketing automation",
+        "audience": "Shopify brands and ecommerce operators",
+        "publish_readiness": "draft_ready_for_review",
+        "human_approval_required": true
+      }
+    },
+    "ai_metadata": {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "task_type": "content_classification",
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 80,
+        "total_tokens": 180
+      },
+      "finish_reason": "stop"
+    },
+    "owner": "content",
+    "priority": "high",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "approval_handoff": {
+    "next_component": "C2-O",
+    "input": {
+      "success": true,
+      "component_id": "C4-M",
+      "component_version": "v1",
+      "event_id": "evt_c4m_blog_draft",
+      "event_type": "ai_blog_draft",
+      "payload": {
+        "draft_id": "draft_evt_c4m_blog_draft_sample",
+        "draft_type": "blog",
+        "draft_title": "5 Ways Automation Improves Shopify Marketing",
+        "draft_summary": "A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.",
+        "draft_status": "needs_review"
+      },
+      "metadata": {
+        "source_component": "C2-K",
+        "source_event_type": "ai_blog_draft",
+        "generated_at": "2026-05-25T00:00:00.000Z"
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "approval_type": "content_review",
+      "approval_title": "Review blog draft: 5 Ways Automation Improves Shopify Marketing",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "approval_actions": ["approve", "reject", "revise"],
+      "approval_context_fields": [
+        "payload.draft_id",
+        "payload.draft_type",
+        "payload.draft_title",
+        "payload.draft_summary",
+        "payload.draft_status"
+      ],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-K",
+    "event_id": "evt_c4m_blog_draft",
+    "event_type": "ai_blog_draft",
+    "success": true,
+    "next_action": "request_approval"
+  },
+  "error": null,
+  "next_action": "request_approval"
+}

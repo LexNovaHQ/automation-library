@@ -1,0 +1,38 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-K",
+    "component_version": "v1",
+    "event_id": "evt_c4m_missing_reviewer",
+    "event_type": "ai_blog_draft",
+    "ai_result": {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "task_type": "content_classification",
+      "status": "completed",
+      "content": "{\"draft_title\":\"Draft title\",\"human_approval_required\":true}",
+      "parsed_json": {
+        "draft_title": "Draft title",
+        "human_approval_required": true
+      },
+      "usage": null,
+      "finish_reason": "stop"
+    },
+    "source_result": {
+      "component_id": "C2-F",
+      "event_id": "evt_c4m_missing_reviewer",
+      "event_type": "content_draft",
+      "success": true
+    },
+    "error": null,
+    "next_action": "request_approval"
+  },
+  "config": {
+    "draft_type": "blog",
+    "draft_status": "needs_review",
+    "approval_type": "content_review",
+    "owner": "content",
+    "priority": "high",
+    "default_next_action": "request_approval"
+  }
+}

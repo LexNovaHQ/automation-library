@@ -1,0 +1,57 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-K",
+    "component_version": "v1",
+    "event_id": "evt_c4m_email_draft",
+    "event_type": "ai_email_draft",
+    "ai_result": {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "task_type": "email_draft",
+      "status": "completed",
+      "content": "{\"draft_title\":\"Follow-up email for Shopify automation lead\",\"draft_summary\":\"Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.\",\"email_subject\":\"Automating your Shopify lead workflow\",\"email_body\":\"Hi Riya, based on your message, the fastest win is a clean workflow that captures leads, validates the payload, updates your CRM, and alerts your team. Happy to map this into a small implementation plan.\",\"human_approval_required\":true}",
+      "parsed_json": {
+        "draft_title": "Follow-up email for Shopify automation lead",
+        "draft_summary": "Short sales follow-up email for a Shopify agency lead interested in automating lead intake and CRM updates.",
+        "email_subject": "Automating your Shopify lead workflow",
+        "email_body": "Hi Riya, based on your message, the fastest win is a clean workflow that captures leads, validates the payload, updates your CRM, and alerts your team. Happy to map this into a small implementation plan.",
+        "human_approval_required": true
+      },
+      "usage": {
+        "prompt_tokens": 120,
+        "completion_tokens": 90,
+        "total_tokens": 210
+      },
+      "finish_reason": "stop"
+    },
+    "source_result": {
+      "component_id": "C2-F",
+      "event_id": "evt_c4m_email_draft",
+      "event_type": "lead_intake",
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio",
+        "message": "We need help automating lead intake and CRM updates."
+      },
+      "metadata": {
+        "origin": "manual_test",
+        "environment": "test"
+      },
+      "success": true,
+      "next_action": "run_ai"
+    },
+    "error": null,
+    "next_action": "request_approval"
+  },
+  "config": {
+    "draft_type": "email",
+    "draft_status": "needs_review",
+    "approval_type": "email_review",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "sales",
+    "priority": "normal",
+    "default_next_action": "request_approval"
+  }
+}

@@ -1,0 +1,57 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-K",
+    "component_version": "v1",
+    "event_id": "evt_c4m_blog_draft",
+    "event_type": "ai_blog_draft",
+    "ai_result": {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "task_type": "content_classification",
+      "status": "completed",
+      "content": "{\"draft_title\":\"5 Ways Automation Improves Shopify Marketing\",\"draft_summary\":\"A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.\",\"topic\":\"Shopify marketing automation\",\"audience\":\"Shopify brands and ecommerce operators\",\"publish_readiness\":\"draft_ready_for_review\",\"human_approval_required\":true}",
+      "parsed_json": {
+        "draft_title": "5 Ways Automation Improves Shopify Marketing",
+        "draft_summary": "A practical blog draft for Shopify brands explaining how automation improves lead capture, abandoned cart follow-up, campaign alerts, and content workflows.",
+        "topic": "Shopify marketing automation",
+        "audience": "Shopify brands and ecommerce operators",
+        "publish_readiness": "draft_ready_for_review",
+        "human_approval_required": true
+      },
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 80,
+        "total_tokens": 180
+      },
+      "finish_reason": "stop"
+    },
+    "source_result": {
+      "component_id": "C2-F",
+      "event_id": "evt_c4m_blog_draft",
+      "event_type": "content_draft",
+      "payload": {
+        "content_type": "blog",
+        "campaign": "Shopify automation education",
+        "topic": "Automation for Shopify marketing"
+      },
+      "metadata": {
+        "origin": "manual_test",
+        "environment": "test"
+      },
+      "success": true,
+      "next_action": "run_ai"
+    },
+    "error": null,
+    "next_action": "request_approval"
+  },
+  "config": {
+    "draft_type": "blog",
+    "draft_status": "needs_review",
+    "approval_type": "content_review",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "content",
+    "priority": "high",
+    "default_next_action": "request_approval"
+  }
+}

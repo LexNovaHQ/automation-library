@@ -1,0 +1,20 @@
+﻿{
+  "success": false,
+  "component_id": "C4-M",
+  "component_version": "v1",
+  "event_id": "evt_c4m_missing_ai_result",
+  "event_type": "ai_blog_draft",
+  "draft_package": null,
+  "approval_handoff": null,
+  "source_result": {
+    "component_id": "C2-K",
+    "event_id": "evt_c4m_missing_ai_result",
+    "event_type": "ai_blog_draft",
+    "success": true
+  },
+  "error": {
+    "code": "MISSING_AI_RESULT",
+    "message": "input.ai_result is required."
+  },
+  "next_action": "route_to_failure_log"
+}
