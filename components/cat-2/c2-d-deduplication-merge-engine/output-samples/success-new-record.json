@@ -1,0 +1,30 @@
+﻿{
+  "success": true,
+  "component_id": "C2-D",
+  "component_version": "v1",
+  "event_id": "evt_dedupe_new_lead",
+  "event_type": "lead_intake",
+  "dedupe": {
+    "status": "clear",
+    "decision": "new_record",
+    "recommended_action": "create_record",
+    "best_match": null,
+    "best_score": 0,
+    "checked_candidates": 0,
+    "match_reasons": [],
+    "candidate_results": [],
+    "thresholds": {
+      "duplicate_threshold": 90,
+      "possible_duplicate_threshold": 60
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_dedupe_new_lead",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "dedupe_check"
+  },
+  "error": null,
+  "next_action": "write_record"
+}

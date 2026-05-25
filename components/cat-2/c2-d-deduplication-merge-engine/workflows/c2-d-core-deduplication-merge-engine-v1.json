@@ -1,0 +1,179 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -272
+      ],
+      "id": "f7abcd33-69e5-4be5-8698-15b18ae0f060",
+      "name": "C2-D_CORE_Deduplication_Merge_Engine_v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction normalize(value) {\n  return value === undefined || value === null\n    ? \"\"\n    : String(value).trim().toLowerCase();\n}\n\nfunction normalizePhone(value) {\n  return normalize(value).replace(/[^0-9]/g, \"\");\n}\n\nfunction domainFromWebsite(value) {\n  const raw = normalize(value);\n  if (!raw) return \"\";\n\n  try {\n    const withProtocol = raw.startsWith(\"http\") ? raw : `https://${raw}`;\n    return new URL(withProtocol).hostname.replace(/^www\\./, \"\");\n  } catch (error) {\n    return raw.replace(/^https?:\\/\\//, \"\").replace(/^www\\./, \"\").split(\"/\")[0];\n  }\n}\n\nfunction emailDomain(value) {\n  const email = normalize(value);\n  if (!email.includes(\"@\")) return \"\";\n  return email.split(\"@\")[1];\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-D\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        dedupe: {\n          status: \"failed\",\n          decision: null,\n          recommended_action: null,\n          best_match: null,\n          best_score: null,\n          checked_candidates: 0,\n          match_reasons: []\n        },\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\nconst rules = config.rules || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-D will not run dedupe when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"dedupe_check\") {\n  return fail({\n    code: \"DEDUPE_NOT_REQUESTED\",\n    message: \"source.next_action is not dedupe_check.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nconst candidates = Array.isArray(config.candidate_records)\n  ? config.candidate_records\n  : [];\n\nconst scores = {\n  exact_email_score: Number(rules.exact_email_score ?? 100),\n  exact_phone_score: Number(rules.exact_phone_score ?? 90),\n  exact_domain_score: Number(rules.exact_domain_score ?? 70),\n  exact_company_score: Number(rules.exact_company_score ?? 50),\n  exact_name_score: Number(rules.exact_name_score ?? 30),\n  duplicate_threshold: Number(rules.duplicate_threshold ?? 90),\n  possible_duplicate_threshold: Number(rules.possible_duplicate_threshold ?? 60)\n};\n\nconst incoming = {\n  name: normalize(payload.name || [payload.firstname, payload.lastname].filter(Boolean).join(\" \")),\n  email: normalize(payload.email),\n  phone: normalizePhone(payload.phone),\n  company: normalize(payload.company),\n  website_domain: domainFromWebsite(payload.website),\n  email_domain: emailDomain(payload.email)\n};\n\nlet bestMatch = null;\nlet bestScore = 0;\nlet bestReasons = [];\nconst candidateResults = [];\n\nfor (const candidate of candidates) {\n  let score = 0;\n  const reasons = [];\n\n  const candidateNormalized = {\n    record_id: candidate.record_id || null,\n    name: normalize(candidate.name || [candidate.firstname, candidate.lastname].filter(Boolean).join(\" \")),\n    email: normalize(candidate.email),\n    phone: normalizePhone(candidate.phone),\n    company: normalize(candidate.company),\n    website_domain: domainFromWebsite(candidate.website),\n    email_domain: emailDomain(candidate.email),\n    source: candidate.source || null\n  };\n\n  if (incoming.email && candidateNormalized.email && incoming.email === candidateNormalized.email) {\n    score += scores.exact_email_score;\n    reasons.push(\"exact_email_match\");\n  }\n\n  if (incoming.phone && candidateNormalized.phone && incoming.phone === candidateNormalized.phone) {\n    score += scores.exact_phone_score;\n    reasons.push(\"exact_phone_match\");\n  }\n\n  const incomingDomain = incoming.website_domain || incoming.email_domain;\n  const candidateDomain = candidateNormalized.website_domain || candidateNormalized.email_domain;\n\n  if (incomingDomain && candidateDomain && incomingDomain === candidateDomain) {\n    score += scores.exact_domain_score;\n    reasons.push(\"exact_domain_match\");\n  }\n\n  if (incoming.company && candidateNormalized.company && incoming.company === candidateNormalized.company) {\n    score += scores.exact_company_score;\n    reasons.push(\"exact_company_match\");\n  }\n\n  if (incoming.name && candidateNormalized.name && incoming.name === candidateNormalized.name) {\n    score += scores.exact_name_score;\n    reasons.push(\"exact_name_match\");\n  }\n\n  const result = {\n    record_id: candidate.record_id || null,\n    source: candidate.source || null,\n    score,\n    match_reasons: reasons\n  };\n\n  candidateResults.push(result);\n\n  if (score > bestScore) {\n    bestScore = score;\n    bestMatch = {\n      record_id: candidate.record_id || null,\n      source: candidate.source || null,\n      candidate_snapshot: candidate\n    };\n    bestReasons = reasons;\n  }\n}\n\nlet decision = \"new_record\";\nlet recommendedAction = \"create_record\";\nlet status = \"clear\";\n\nif (bestScore >= scores.duplicate_threshold) {\n  decision = \"duplicate\";\n  recommendedAction = \"update_existing_record\";\n  status = \"duplicate_found\";\n} else if (bestScore >= scores.possible_duplicate_threshold) {\n  decision = \"possible_duplicate\";\n  recommendedAction = \"manual_review\";\n  status = \"possible_duplicate_found\";\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-D\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      dedupe: {\n        status,\n        decision,\n        recommended_action: recommendedAction,\n        best_match: bestMatch,\n        best_score: bestScore,\n        checked_candidates: candidates.length,\n        match_reasons: bestReasons,\n        candidate_results: candidateResults,\n        thresholds: {\n          duplicate_threshold: scores.duplicate_threshold,\n          possible_duplicate_threshold: scores.possible_duplicate_threshold\n        }\n      },\n      source_result: source,\n      error: null,\n      next_action:\n        recommendedAction === \"create_record\"\n          ? (config.default_next_action || \"write_record\")\n          : recommendedAction\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -272
+      ],
+      "id": "3b5255eb-6f3f-4209-b29f-e272b7b33d7c",
+      "name": "Evaluate Duplicate Candidates"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2af19487-72a7-4b8a-bf60-e956b3a341a7",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "bdd0d116-c9d0-46bf-a926-9da6a23f62d9",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d8e79997-ac4d-4ce1-9c27-f31104cd1fb7",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "33db15cd-71fe-4b7a-b826-9d817ee3974e",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "27330e83-4fec-41e5-83e0-4178aec7d87b",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "392a08f2-fdb7-4353-a075-cb523d2524f6",
+              "name": "dedupe",
+              "value": "={{ $json.dedupe }}",
+              "type": "object"
+            },
+            {
+              "id": "d392c5ae-507f-4d15-b7a6-a37bf0cd0f37",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "2e9cd45f-f3f8-489e-acbd-c3f4a1010a54",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "f1a0e6c8-c402-44d7-9d66-e292bf286cd2",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        -272
+      ],
+      "id": "bac75212-d451-4afb-8056-3f65a3eb4c80",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "C2-D_CORE_Deduplication_Merge_Engine_v1": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-F",
+            "component_version": "v1",
+            "event_id": "evt_dedupe_new_lead",
+            "event_type": "lead_intake",
+            "payload": {
+              "name": "Riya Sharma",
+              "email": "riya@example.com",
+              "phone": "+919999999999",
+              "company": "GrowthOps Studio",
+              "website": "https://growthops.example",
+              "message": "Need automation help."
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "dedupe_check"
+          },
+          "config": {
+            "candidate_records": [],
+            "rules": {
+              "exact_email_score": 100,
+              "exact_phone_score": 90,
+              "exact_domain_score": 70,
+              "exact_company_score": 50,
+              "exact_name_score": 30,
+              "duplicate_threshold": 90,
+              "possible_duplicate_threshold": 60
+            },
+            "default_next_action": "write_record"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "C2-D_CORE_Deduplication_Merge_Engine_v1": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Duplicate Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Duplicate Candidates": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "62e860df-1036-4ba7-8e54-98c1d50eb62a",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "ARCFRElFs4wkp4eg",
+  "tags": []
+}

@@ -1,0 +1,46 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_dedupe_exact_email",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "phone": "+919999999999",
+      "company": "GrowthOps Studio",
+      "website": "https://growthops.example",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "dedupe_check"
+  },
+  "config": {
+    "candidate_records": [
+      {
+        "record_id": "rec_existing_001",
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "phone": "+919888888888",
+        "company": "GrowthOps Studio",
+        "website": "https://growthops.example",
+        "source": "airtable"
+      }
+    ],
+    "rules": {
+      "exact_email_score": 100,
+      "exact_phone_score": 90,
+      "exact_domain_score": 70,
+      "exact_company_score": 50,
+      "exact_name_score": 30,
+      "duplicate_threshold": 90,
+      "possible_duplicate_threshold": 60
+    },
+    "default_next_action": "write_record"
+  }
+}

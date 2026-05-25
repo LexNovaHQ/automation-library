@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_dedupe_upstream_failed",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "dedupe_check"
+  },
+  "config": {
+    "candidate_records": [],
+    "rules": {
+      "duplicate_threshold": 90,
+      "possible_duplicate_threshold": 60
+    },
+    "default_next_action": "write_record"
+  }
+}

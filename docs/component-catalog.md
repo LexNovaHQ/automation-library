@@ -777,3 +777,35 @@ C4-M v1 is built as the higher-level AI draft workflow layer above C2-K. It pack
 
 **Excluded by design:**  
 Direct LLM calls belong to C2-K. Human approval creation belongs to C2-O. Approval response capture belongs to C2-O2. Reviewer notification belongs to C2-I. Draft/database storage belongs to C2-A / C5-W. Publishing belongs to C2-Q.
+
+## C2-D Build Record - Deduplication & Merge Engine
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-d-deduplication-merge-engine`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-d-core-deduplication-merge-engine-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-D_CORE_Deduplication_Merge_Engine_v1`
+- Evaluates incoming validated records against provided candidate records
+- Scores exact email, phone, domain, company, and name matches
+- Returns dedupe decision: `new_record`, `possible_duplicate`, or `duplicate`
+- Returns downstream recommended action: `create_record`, `manual_review`, or `update_existing_record`
+
+**Passed tests:**
+- New record
+- Exact email duplicate
+- Possible duplicate
+- Upstream failed
+- Dedupe not requested
+
+**Implementation note:**  
+C2-D v1 is built as the reusable dedupe decision layer. It does not perform live lookup and does not mutate records. Candidate lookup and actual write/update/merge actions belong to downstream or platform-specific components.
+
+**Excluded by design:**  
+Live Airtable/Sheets/HubSpot lookup belongs to C2-D2 or platform lookup adapters. Record creation/update/merge belongs to C2-A adapters. Manual review belongs to C5-E / C5-W. Error logging belongs to C6-G.

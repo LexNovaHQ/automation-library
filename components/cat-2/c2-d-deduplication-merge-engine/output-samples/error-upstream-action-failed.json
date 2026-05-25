@@ -1,0 +1,31 @@
+﻿{
+  "success": false,
+  "component_id": "C2-D",
+  "component_version": "v1",
+  "event_id": "evt_dedupe_upstream_failed",
+  "event_type": "lead_intake",
+  "dedupe": {
+    "status": "failed",
+    "decision": null,
+    "recommended_action": null,
+    "best_match": null,
+    "best_score": null,
+    "checked_candidates": 0,
+    "match_reasons": []
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_dedupe_upstream_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-D will not run dedupe when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}
