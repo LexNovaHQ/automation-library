@@ -1043,3 +1043,39 @@ C4-E v1 is built as a client-configurable AI email draft processor, not a generi
 
 **Excluded by design:**  
 Generic LLM call belongs to C2-K. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Email sending belongs to C2-I/future sender adapters. Status tracking belongs to C5-W. Error logging belongs to C6-G.
+
+## C4-L Build Record - Lead Qualification Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-l-lead-qualification-pipeline`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-l-core-lead-qualification-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-L_CORE_Lead_Qualification_Pipeline_v1`
+- Qualifies leads using client profile, audience profile, qualification rules, risk rules, and lead/source payload
+- Calls Groq through OpenAI-compatible chat completions
+- Returns structured `lead_qualification`
+- Creates C4-E handoff for qualified leads
+- Creates C5-E handoff for manual review leads
+- Does not email leads, update CRM records, or act autonomously
+
+**Passed tests:**
+- Qualified lead
+- Possible fit lead
+- Unqualified lead
+- Manual review duplicate
+- Upstream failed
+- Qualification not requested
+- Missing client profile
+
+**Implementation note:**  
+C4-L v1 is built as a client-configurable lead qualification processor, not an autonomous sales agent. It produces structured qualification decisions and handoff objects only. Email drafting, approval, writing, notification, and status tracking belong to downstream components.
+
+**Excluded by design:**  
+Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Manual review queue creation belongs to C5-E. CRM/database writes belong to C2-A. Email sending belongs to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G.

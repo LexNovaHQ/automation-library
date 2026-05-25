@@ -1,0 +1,68 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-P",
+    "component_version": "v1",
+    "event_id": "evt_c4l_qualified_lead",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help for lead intake and CRM updates. We are missing leads and want this set up soon.",
+      "source": "website_form",
+      "consent_status": "opted_in"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "suppression": {
+      "decision": "allowed",
+      "allowed_to_contact": true
+    },
+    "error": null,
+    "next_action": "qualify_lead"
+  },
+  "config": {
+    "qualification_mode": "rules_plus_ai",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency",
+        "primary_customer_type": "Shopify store owners and ecommerce operators"
+      },
+      "audience_profile": {
+        "ideal_customer": "Shopify brand with growing lead/customer volume and manual follow-up problems.",
+        "bad_fit_customers": ["No active ecommerce store", "No budget", "Only wants free advice"],
+        "urgency_signals": ["mentions missed leads", "mentions manual CRM updates", "mentions abandoned cart", "mentions urgent setup"],
+        "pain_points": ["missed leads", "slow follow-up", "manual CRM updates", "campaign tracking gaps"]
+      },
+      "lead_qualification_rules": {
+        "qualified_criteria": ["business context present", "clear automation need", "valid contact details"],
+        "unqualified_criteria": ["no business context", "student/free advice", "no clear need"],
+        "high_score_signals": ["urgent timeline", "CRM automation need", "missed leads", "specific workflow request"],
+        "medium_score_signals": ["general automation interest", "asks about automation"],
+        "low_score_signals": ["vague message", "no company", "no email"],
+        "automatic_disqualifiers": ["spam", "invalid email", "do not contact"],
+        "manual_review_triggers": ["unknown consent", "possible duplicate", "unclear request"]
+      },
+      "risk_boundaries": {
+        "manual_review_triggers": ["unclear consent", "possible duplicate", "pricing claim required"]
+      }
+    },
+    "score_thresholds": {
+      "qualified": 75,
+      "possible_fit": 45,
+      "manual_review": 40
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.1,
+      "max_tokens": 700
+    },
+    "default_next_action": "generate_email_draft"
+  }
+}

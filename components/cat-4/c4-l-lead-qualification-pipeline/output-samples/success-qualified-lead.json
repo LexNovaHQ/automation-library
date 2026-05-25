@@ -1,0 +1,69 @@
+﻿{
+  "success": true,
+  "component_id": "C4-L",
+  "component_version": "v1",
+  "event_id": "evt_c4l_qualified_lead",
+  "event_type": "lead_intake",
+  "lead_qualification": {
+    "status": "qualified",
+    "score": 86,
+    "priority": "high",
+    "fit": "good_fit",
+    "reasons": [
+      "Lead has business context",
+      "Lead has clear CRM automation need",
+      "Lead mentions missed leads and urgency"
+    ],
+    "disqualifiers": [],
+    "manual_review_required": false,
+    "confidence": "high",
+    "recommended_next_action": "generate_email_draft",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4e_handoff": {
+    "next_component": "C4-E",
+    "input": {
+      "success": true,
+      "component_id": "C4-L",
+      "component_version": "v1",
+      "event_id": "evt_c4l_qualified_lead",
+      "event_type": "lead_intake",
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio",
+        "message": "We need automation help for lead intake and CRM updates. We are missing leads and want this set up soon."
+      },
+      "lead_qualification": {
+        "status": "qualified",
+        "score": 86,
+        "priority": "high"
+      },
+      "error": null,
+      "next_action": "generate_email_draft"
+    },
+    "config": {
+      "email_type": "first_response",
+      "email_goal": "Respond to a qualified lead and offer the most relevant next step.",
+      "recipient_context": "Qualified inbound lead.",
+      "default_next_action": "package_draft_for_approval"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-P",
+    "event_id": "evt_c4l_qualified_lead",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": null,
+  "next_action": "generate_email_draft"
+}

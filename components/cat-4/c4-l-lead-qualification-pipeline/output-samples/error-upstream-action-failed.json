@@ -1,0 +1,25 @@
+﻿{
+  "success": false,
+  "component_id": "C4-L",
+  "component_version": "v1",
+  "event_id": "evt_c4l_upstream_failed",
+  "event_type": "lead_intake",
+  "lead_qualification": null,
+  "c4e_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-P",
+    "event_id": "evt_c4l_upstream_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "SUPPRESSION_NOT_REQUESTED",
+      "message": "source.next_action is not suppression_check."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C4-L will not qualify lead when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

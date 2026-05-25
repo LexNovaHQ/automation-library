@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C4-L",
+  "component_version": "v1",
+  "event_id": "evt_c4l_missing_profile",
+  "event_type": "lead_intake",
+  "lead_qualification": null,
+  "c4e_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-P",
+    "event_id": "evt_c4l_missing_profile",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": {
+    "code": "MISSING_CLIENT_AI_PROFILE",
+    "message": "config.client_ai_profile is required."
+  },
+  "next_action": "route_to_failure_log"
+}

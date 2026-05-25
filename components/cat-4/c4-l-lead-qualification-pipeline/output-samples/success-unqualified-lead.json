@@ -1,0 +1,43 @@
+﻿{
+  "success": true,
+  "component_id": "C4-L",
+  "component_version": "v1",
+  "event_id": "evt_c4l_unqualified_lead",
+  "event_type": "lead_intake",
+  "lead_qualification": {
+    "status": "unqualified",
+    "score": 18,
+    "priority": "low",
+    "fit": "bad_fit",
+    "reasons": [
+      "Lead lacks business context",
+      "Lead asks for free advice"
+    ],
+    "disqualifiers": [
+      "student/free advice",
+      "no company context"
+    ],
+    "manual_review_required": false,
+    "confidence": "high",
+    "recommended_next_action": "do_not_contact",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4e_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-P",
+    "event_id": "evt_c4l_unqualified_lead",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": null,
+  "next_action": "do_not_contact"
+}

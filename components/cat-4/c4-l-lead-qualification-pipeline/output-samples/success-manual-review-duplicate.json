@@ -1,0 +1,65 @@
+﻿{
+  "success": true,
+  "component_id": "C4-L",
+  "component_version": "v1",
+  "event_id": "evt_c4l_manual_review_duplicate",
+  "event_type": "lead_intake",
+  "lead_qualification": {
+    "status": "manual_review",
+    "score": 52,
+    "priority": "medium",
+    "fit": "needs_review",
+    "reasons": [
+      "Lead may be relevant",
+      "Possible duplicate requires review"
+    ],
+    "disqualifiers": [],
+    "manual_review_required": true,
+    "confidence": "medium",
+    "recommended_next_action": "manual_review",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4e_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C4-L",
+      "component_version": "v1",
+      "event_id": "evt_c4l_manual_review_duplicate",
+      "event_type": "lead_intake",
+      "lead_qualification": {
+        "status": "manual_review",
+        "score": 52,
+        "priority": "medium"
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "lead_qualification_review",
+      "review_reason": "Lead qualification requires manual review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "sales",
+      "priority": "medium",
+      "allowed_actions": ["mark_qualified", "mark_unqualified", "request_more_info", "nurture"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_c4l_manual_review_duplicate",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

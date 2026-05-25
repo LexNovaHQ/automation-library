@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-P",
+    "component_version": "v1",
+    "event_id": "evt_c4l_missing_profile",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "qualify_lead"
+  },
+  "config": {
+    "qualification_mode": "rules_plus_ai",
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "generate_email_draft"
+  }
+}
