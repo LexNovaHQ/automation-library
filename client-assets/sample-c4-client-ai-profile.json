@@ -1,0 +1,165 @@
+﻿{
+  "schema_name": "c4_client_ai_profile",
+  "schema_version": "v1",
+  "client_profile": {
+    "client_name": "GrowthOps Studio",
+    "website": "https://growthops.example",
+    "industry": "Ecommerce automation",
+    "business_type": "Shopify automation agency",
+    "location": "Remote",
+    "target_geography": "US, UK, Canada, Australia",
+    "primary_customer_type": "Shopify store owners and ecommerce operators",
+    "sales_motion": ["inbound", "referral", "marketplace"],
+    "one_line_description": "GrowthOps Studio helps Shopify brands automate lead intake, CRM updates, abandoned cart follow-up, and team notifications."
+  },
+  "audience_profile": {
+    "ideal_customer": "Shopify brand with growing lead/customer volume and manual follow-up problems.",
+    "buyer_roles": ["Founder", "Marketing Manager", "Operations Manager", "Ecommerce Manager"],
+    "best_fit_industries": ["Shopify ecommerce", "DTC", "small ecommerce agencies"],
+    "best_fit_company_size": "Small to mid-sized ecommerce teams",
+    "best_fit_regions": ["US", "UK", "Canada", "Australia"],
+    "bad_fit_customers": ["No active ecommerce store", "No budget", "Only wants free advice"],
+    "urgency_signals": ["mentions missed leads", "mentions manual CRM updates", "mentions abandoned cart", "mentions urgent setup"],
+    "pain_points": ["missed leads", "slow follow-up", "manual CRM updates", "campaign tracking gaps"],
+    "common_objections": ["cost", "timeline", "tool complexity", "existing manual process"]
+  },
+  "voice_profile": {
+    "tone": ["clear", "helpful", "direct"],
+    "style": "short paragraphs, no hype, no aggressive sales language",
+    "reading_level": "simple business English",
+    "sentence_length": "short",
+    "paragraph_style": "short paragraphs",
+    "use_humor": false,
+    "use_emojis": false,
+    "use_contractions": true,
+    "person_or_brand_voice": "person",
+    "phrases_to_use": ["workflow map", "clean setup", "review before build"],
+    "phrases_to_avoid": ["game-changing", "revolutionary", "guaranteed ROI"],
+    "banned_claims_or_phrases": ["guaranteed revenue", "instant growth", "100% automated success"]
+  },
+  "offer_profile": {
+    "primary_offer_name": "Lead Intake + CRM Automation System",
+    "primary_offer_description": "A workflow that captures leads, validates payloads, removes duplicates, updates CRM records, and alerts the team.",
+    "secondary_offers": ["abandoned cart follow-up", "campaign alerting", "daily automation digest"],
+    "who_it_is_for": "Shopify teams that want faster, cleaner lead and customer follow-up.",
+    "included": ["lead capture workflow", "payload validation", "dedupe check", "CRM write", "team notification"],
+    "not_included": ["paid ads management", "full website rebuild", "guaranteed revenue outcome"],
+    "main_outcome": "fewer missed leads and faster follow-up",
+    "usual_timeline": "small workflow map first, implementation timeline depends on scope",
+    "pricing_model": "fixed milestone or scoped project",
+    "proof_points_allowed": [],
+    "proof_points_disallowed": ["fake case studies", "unverified client logos"],
+    "offer_objections": ["budget", "tool access", "unclear process"]
+  },
+  "email_rules": {
+    "enabled_email_types": ["first_response", "follow_up", "proposal_follow_up"],
+    "default_max_words": 130,
+    "default_cta": "ask if they want a workflow map first",
+    "include_question_at_end": true,
+    "pricing_allowed": false,
+    "scheduling_link_allowed": true,
+    "case_study_allowed": false,
+    "urgency_allowed": false,
+    "format": "plain_text",
+    "signoff_style": "Best,",
+    "personalization_allowed_fields": ["lead name", "company name", "form message", "pain point", "source"],
+    "never_pretend_to_know": ["their revenue", "their tech stack unless provided", "their results", "their team size"],
+    "must_include": ["acknowledge the specific request", "mention the relevant workflow", "offer a small next step"],
+    "must_avoid": ["hard selling", "guaranteed results", "fake urgency", "overly technical jargon"]
+  },
+  "content_rules": {
+    "enabled_content_types": ["blog_draft", "linkedin_post", "newsletter"],
+    "preferred_tone": ["clear", "educational", "practical"],
+    "preferred_length": "short to medium",
+    "preferred_structure": "clear sections with practical takeaways",
+    "topics_allowed": ["Shopify automation", "lead intake", "CRM workflows", "abandoned cart workflows"],
+    "topics_avoided": ["guaranteed growth hacks", "fake case studies", "legal or financial advice"],
+    "cta_style": "soft CTA to review workflow or ask for audit",
+    "external_claims_allowed": false,
+    "approval_required": true,
+    "platform_rules": {
+      "linkedin": "short, practical, founder/operator tone",
+      "facebook": "simple and direct",
+      "tiktok": "script-style if needed",
+      "blog": "educational and structured",
+      "ad_copy": "no hard guarantees"
+    }
+  },
+  "classification_rules": {
+    "categories": ["qualified_lead", "possible_fit", "bad_fit", "support_request", "manual_review"],
+    "priority_rules": {
+      "high": ["mentions urgent implementation", "mentions CRM update problem", "mentions missed leads"],
+      "medium": ["general automation interest", "asks for information"],
+      "low": ["unclear need", "no business context"]
+    },
+    "routing_rules": {
+      "qualified_lead": "draft_follow_up_email",
+      "possible_fit": "manual_review",
+      "bad_fit": "do_not_contact",
+      "support_request": "route_to_support"
+    },
+    "manual_review_triggers": ["unclear budget", "unclear consent", "ambiguous request"]
+  },
+  "extraction_rules": {
+    "required_fields": ["name", "email", "company", "message"],
+    "optional_fields": ["phone", "website", "budget", "timeline", "tool_stack"],
+    "missing_required_field_action": "manual_review",
+    "allow_inference": false,
+    "never_infer_fields": ["email", "phone", "budget", "consent"],
+    "low_confidence_action": "manual_review",
+    "manual_review_confidence_threshold": 0.75
+  },
+  "lead_qualification_rules": {
+    "qualified_criteria": ["business context present", "clear automation need", "valid contact details"],
+    "unqualified_criteria": ["no business context", "student/free advice", "no clear need"],
+    "high_score_signals": ["urgent timeline", "CRM automation need", "missed leads", "specific workflow request"],
+    "medium_score_signals": ["general interest", "asks about automation"],
+    "low_score_signals": ["vague message", "no company", "no email"],
+    "automatic_disqualifiers": ["spam", "invalid email", "do not contact"],
+    "manual_review_triggers": ["unknown consent", "possible duplicate", "unclear request"]
+  },
+  "examples": {
+    "good_examples": [
+      {
+        "label": "first_response_good",
+        "text": "Hi Riya, thanks for reaching out. Based on your message, the first useful step would be to map a simple workflow for capturing leads, validating the payload, updating your CRM, and notifying your team when action is needed. I can outline the workflow and tools first so you can review the setup before anything is built."
+      }
+    ],
+    "bad_examples": [
+      {
+        "label": "too_salesy",
+        "text": "We can revolutionize your Shopify growth and guarantee better revenue with fully automated systems."
+      }
+    ],
+    "preferred_phrases": ["workflow map", "review before build", "clean setup"],
+    "disliked_phrases": ["revolutionary", "guaranteed ROI", "instant growth"]
+  },
+  "risk_boundaries": {
+    "forbidden_claims": ["guaranteed revenue", "guaranteed ROI", "instant growth"],
+    "regulated_topics": [],
+    "legal_financial_health_claims_allowed": false,
+    "guarantees_allowed": false,
+    "roi_or_performance_claims_allowed": false,
+    "testimonials_allowed": false,
+    "competitor_comparisons_allowed": false,
+    "discounts_allowed": false,
+    "urgency_claims_allowed": false,
+    "manual_review_triggers": ["pricing claim", "performance claim", "uncertain fact", "missing context"]
+  },
+  "approval_rules": {
+    "default_policy": "approval_required_before_external_action",
+    "primary_reviewer_name": "Client Reviewer",
+    "primary_reviewer_email": "reviewer@example.com",
+    "backup_reviewer_name": "",
+    "backup_reviewer_email": "",
+    "approval_sla": "1 business day",
+    "delayed_approval_action": "manual_followup",
+    "allowed_actions": ["approve", "reject", "revise", "request_clarification", "escalate"]
+  },
+  "metadata": {
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z",
+    "created_by": "automation-library",
+    "notes": "Sample profile for testing C4 configurable AI components."
+  }
+}

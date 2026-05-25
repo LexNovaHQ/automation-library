@@ -1,0 +1,151 @@
+﻿{
+  "schema_name": "c4_client_ai_profile_schema",
+  "schema_version": "v1",
+  "purpose": "Standard configuration schema for C4 AI workflow components.",
+  "client_profile": {
+    "client_name": "",
+    "website": "",
+    "industry": "",
+    "business_type": "",
+    "location": "",
+    "target_geography": "",
+    "primary_customer_type": "",
+    "sales_motion": [],
+    "one_line_description": ""
+  },
+  "audience_profile": {
+    "ideal_customer": "",
+    "buyer_roles": [],
+    "best_fit_industries": [],
+    "best_fit_company_size": "",
+    "best_fit_regions": [],
+    "bad_fit_customers": [],
+    "urgency_signals": [],
+    "pain_points": [],
+    "common_objections": []
+  },
+  "voice_profile": {
+    "tone": [],
+    "style": "",
+    "reading_level": "",
+    "sentence_length": "",
+    "paragraph_style": "",
+    "use_humor": false,
+    "use_emojis": false,
+    "use_contractions": true,
+    "person_or_brand_voice": "",
+    "phrases_to_use": [],
+    "phrases_to_avoid": [],
+    "banned_claims_or_phrases": []
+  },
+  "offer_profile": {
+    "primary_offer_name": "",
+    "primary_offer_description": "",
+    "secondary_offers": [],
+    "who_it_is_for": "",
+    "included": [],
+    "not_included": [],
+    "main_outcome": "",
+    "usual_timeline": "",
+    "pricing_model": "",
+    "proof_points_allowed": [],
+    "proof_points_disallowed": [],
+    "offer_objections": []
+  },
+  "email_rules": {
+    "enabled_email_types": [],
+    "default_max_words": 130,
+    "default_cta": "",
+    "include_question_at_end": true,
+    "pricing_allowed": false,
+    "scheduling_link_allowed": true,
+    "case_study_allowed": false,
+    "urgency_allowed": false,
+    "format": "plain_text",
+    "signoff_style": "",
+    "personalization_allowed_fields": [],
+    "never_pretend_to_know": [],
+    "must_include": [],
+    "must_avoid": []
+  },
+  "content_rules": {
+    "enabled_content_types": [],
+    "preferred_tone": [],
+    "preferred_length": "",
+    "preferred_structure": "",
+    "topics_allowed": [],
+    "topics_avoided": [],
+    "cta_style": "",
+    "external_claims_allowed": false,
+    "approval_required": true,
+    "platform_rules": {
+      "linkedin": "",
+      "facebook": "",
+      "tiktok": "",
+      "blog": "",
+      "ad_copy": ""
+    }
+  },
+  "classification_rules": {
+    "categories": [],
+    "priority_rules": {
+      "high": [],
+      "medium": [],
+      "low": []
+    },
+    "routing_rules": {},
+    "manual_review_triggers": []
+  },
+  "extraction_rules": {
+    "required_fields": [],
+    "optional_fields": [],
+    "missing_required_field_action": "manual_review",
+    "allow_inference": false,
+    "never_infer_fields": [],
+    "low_confidence_action": "manual_review",
+    "manual_review_confidence_threshold": 0.75
+  },
+  "lead_qualification_rules": {
+    "qualified_criteria": [],
+    "unqualified_criteria": [],
+    "high_score_signals": [],
+    "medium_score_signals": [],
+    "low_score_signals": [],
+    "automatic_disqualifiers": [],
+    "manual_review_triggers": []
+  },
+  "examples": {
+    "good_examples": [],
+    "bad_examples": [],
+    "preferred_phrases": [],
+    "disliked_phrases": []
+  },
+  "risk_boundaries": {
+    "forbidden_claims": [],
+    "regulated_topics": [],
+    "legal_financial_health_claims_allowed": false,
+    "guarantees_allowed": false,
+    "roi_or_performance_claims_allowed": false,
+    "testimonials_allowed": false,
+    "competitor_comparisons_allowed": false,
+    "discounts_allowed": false,
+    "urgency_claims_allowed": false,
+    "manual_review_triggers": []
+  },
+  "approval_rules": {
+    "default_policy": "approval_required_before_external_action",
+    "primary_reviewer_name": "",
+    "primary_reviewer_email": "",
+    "backup_reviewer_name": "",
+    "backup_reviewer_email": "",
+    "approval_sla": "",
+    "delayed_approval_action": "manual_followup",
+    "allowed_actions": ["approve", "reject", "revise", "request_clarification", "escalate"]
+  },
+  "metadata": {
+    "created_at": "",
+    "updated_at": "",
+    "created_by": "",
+    "notes": ""
+  }
+}
