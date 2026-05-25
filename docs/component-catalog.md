@@ -242,6 +242,35 @@ C2-F is built as a reusable validation layer for normalized C2-C events. It acce
 **Excluded by design:**  
 External webhook receiving belongs to C2-C. Database writes belong to C2-A. Conditional routing belongs to C2-B. Alerts belong to C2-I. AI classification belongs to C2-K / C4-A.
 
+## C2-I1 Build Record - Email Notification Adapter
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-i-notification-alert-engine`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-i1-core-email-notification-adapter-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-I1_CORE_Email_Notification_Adapter_v1`
+- Uses Send Email node with SMTP credential
+- Microsoft 365 SMTP tested using STARTTLS on port 587
+
+**Passed tests:**
+- Valid email notification
+- Email received
+- Upstream write failed
+- Missing recipient
+- Failure cases did not send email
+
+**Implementation note:**  
+C2-I1 is built as the first adapter in the C2-I Notification & Alert Engine family. It accepts standardized upstream component output, sends an email alert only when notification is requested, and returns a standard notification result object.
+
+**Excluded by design:**  
+Slack notifications belong to C2-I2. WhatsApp/SMS notifications belong to C2-I3 / C2-M. Digest summaries belong to C2-J. Approval workflows belong to C2-O. Error retry queues belong to C6-G.
 ---
 
 # Category 3 — Client Onboarding System (GHL + Make.com)

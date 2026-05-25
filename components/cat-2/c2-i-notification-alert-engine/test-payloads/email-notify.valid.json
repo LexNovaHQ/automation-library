@@ -1,0 +1,38 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-A1",
+    "component_version": "v1",
+    "event_id": "evt_test_lead_valid",
+    "event_type": "lead_intake",
+    "destination": {
+      "type": "google_sheets",
+      "spreadsheet_id": "sample_sheet_id",
+      "sheet_name": "Leads",
+      "record_id": "Leads!A2:K2"
+    },
+    "write": {
+      "status": "created",
+      "fields_written": ["Event ID", "Event Type", "Name", "Email", "Company", "Message"]
+    },
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "notify_team"
+  },
+  "config": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "from": "shwetabh.singh@lexnovahq.com",
+    "subject_template": "New {{event_type}} record created",
+    "default_next_action": "end"
+  }
+}

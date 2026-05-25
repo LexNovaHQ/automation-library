@@ -1,0 +1,42 @@
+﻿{
+  "success": false,
+  "component_id": "C2-I1",
+  "component_version": "v1",
+  "event_id": "evt_test_airtable_lead_valid",
+  "event_type": "lead_intake",
+  "notification": {
+    "channel": "email",
+    "status": "failed",
+    "to": null,
+    "subject": null,
+    "provider_message_id": null
+  },
+  "source_result": {
+    "component_id": "C2-A2",
+    "destination": {
+      "type": "airtable",
+      "base_id": "sample_base_id",
+      "table_name": "Leads",
+      "record_id": "rec_sample_success"
+    },
+    "write": {
+      "status": "created",
+      "fields_written": ["Event ID", "Event Type", "Name", "Email", "Company", "Message"]
+    }
+  },
+  "payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "company": "GrowthOps Studio",
+    "message": "We need Airtable automation help."
+  },
+  "metadata": {
+    "origin": "manual_test",
+    "environment": "test"
+  },
+  "error": {
+    "code": "MISSING_RECIPIENT",
+    "message": "config.to is required."
+  },
+  "next_action": "route_to_failure_log"
+}

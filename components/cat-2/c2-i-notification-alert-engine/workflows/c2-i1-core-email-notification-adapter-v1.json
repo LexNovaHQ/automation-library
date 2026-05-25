@@ -1,0 +1,229 @@
+{
+  "name": "C2-I1_CORE_Email_Notification_Adapter_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -256
+      ],
+      "id": "d98c4c1d-fb56-4967-93c3-c1ca3bc7b36a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prepared = $input.first().json || {};\n\nreturn [\n  {\n    json: {\n      success: prepared.success,\n      component_id: prepared.component_id,\n      component_version: prepared.component_version,\n      event_id: prepared.event_id,\n      event_type: prepared.event_type,\n      notification: prepared.notification,\n      source_result: prepared.source_result,\n      payload: prepared.payload,\n      metadata: prepared.metadata,\n      error: prepared.error,\n      next_action: prepared.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        176
+      ],
+      "id": "cb28c672-a82d-45b8-b001-1cd37668e290",
+      "name": "Pass Failure Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction fail({ code, message, details = [], inputSnapshot = {} }) {\n  return [\n    {\n      json: {\n        stop_before_send: true,\n        success: false,\n        component_id: \"C2-I1\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        notification: {\n          channel: \"email\",\n          status: \"failed\",\n          to: input.config?.to || null,\n          subject: null,\n          provider_message_id: null\n        },\n        source_result: {\n          component_id: input.input?.component_id || null,\n          destination: input.input?.destination || null,\n          write: input.input?.write || null\n        },\n        payload: input.input?.payload || {},\n        metadata: input.input?.metadata || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\",\n        input_snapshot: inputSnapshot\n      }\n    }\n  ];\n}\n\nfunction renderTemplate(template, values) {\n  return String(template || \"\").replace(/\\{\\{(.*?)\\}\\}/g, (_, key) => {\n    const cleanKey = key.trim();\n    return values[cleanKey] ?? \"\";\n  });\n}\n\nfunction safe(value) {\n  return value === undefined || value === null || value === \"\" ? \"-\" : String(value);\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\",\n    inputSnapshot: input\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\",\n    inputSnapshot: input\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-I1 will not send success notification when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ],\n    inputSnapshot: input\n  });\n}\n\nif (source.next_action !== \"notify_team\") {\n  return fail({\n    code: \"NOTIFICATION_NOT_REQUESTED\",\n    message: \"source.next_action is not notify_team.\",\n    details: [{ next_action: source.next_action || null }],\n    inputSnapshot: input\n  });\n}\n\nif (!config.to) {\n  return fail({\n    code: \"MISSING_RECIPIENT\",\n    message: \"config.to is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.from) {\n  return fail({\n    code: \"MISSING_FROM_EMAIL\",\n    message: \"config.from is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (config.channel && config.channel !== \"email\") {\n  return fail({\n    code: \"UNSUPPORTED_CHANNEL\",\n    message: \"C2-I1 v1 only supports email notifications.\",\n    details: [{ channel: config.channel }],\n    inputSnapshot: input\n  });\n}\n\nconst subject = renderTemplate(\n  config.subject_template || \"New {{event_type}} automation event\",\n  {\n    event_type: source.event_type || \"\",\n    event_id: source.event_id || \"\",\n    destination_type: source.destination?.type || \"\"\n  }\n);\n\nconst payload = source.payload || {};\nconst destination = source.destination || {};\nconst write = source.write || {};\nconst metadata = source.metadata || {};\n\nconst textBody = [\n  `Automation notification`,\n  ``,\n  `Event ID: ${safe(source.event_id)}`,\n  `Event Type: ${safe(source.event_type)}`,\n  `Source Component: ${safe(source.component_id)}`,\n  `Destination: ${safe(destination.type)}`,\n  `Record ID: ${safe(destination.record_id)}`,\n  `Write Status: ${safe(write.status)}`,\n  ``,\n  `Payload`,\n  `Name: ${safe(payload.name || [payload.firstname, payload.lastname].filter(Boolean).join(\" \"))}`,\n  `Email: ${safe(payload.email)}`,\n  `Company: ${safe(payload.company)}`,\n  `Message: ${safe(payload.message)}`,\n  ``,\n  `Metadata`,\n  `Origin: ${safe(metadata.origin)}`,\n  `Environment: ${safe(metadata.environment)}`,\n  ``,\n  `Next Action: ${safe(config.default_next_action || \"end\")}`\n].join(\"\\n\");\n\nreturn [\n  {\n    json: {\n      stop_before_send: false,\n      email: {\n        from: config.from,\n        to: config.to,\n        subject,\n        text: textBody\n      },\n      context: {\n        component_id: \"C2-I1\",\n        component_version: \"v1\",\n        event_id: source.event_id || null,\n        event_type: source.event_type || null,\n        notification: {\n          channel: \"email\",\n          status: \"prepared\",\n          to: config.to,\n          subject,\n          provider_message_id: null\n        },\n        source_result: {\n          component_id: source.component_id || null,\n          destination: source.destination || null,\n          write: source.write || null\n        },\n        payload: source.payload || {},\n        metadata: source.metadata || {},\n        next_action: config.default_next_action || \"end\"\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "a431bceb-a79e-4f7d-ae30-7977d9e25c41",
+      "name": "Prepare Email Notification"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "60f62717-c01b-4aa2-b0ed-983603ac766b",
+              "leftValue": "={{ $json.stop_before_send }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        16
+      ],
+      "id": "a419bed6-778d-42a7-b061-ab4a290fcfd6",
+      "name": "Should Send?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const emailOutput = $input.first().json || {};\nconst prepared = $(\"Prepare Email Notification\").first().json;\nconst context = prepared.context;\n\nconst providerMessageId =\n  emailOutput.messageId ||\n  emailOutput.message_id ||\n  emailOutput.id ||\n  null;\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: context.component_id,\n      component_version: context.component_version,\n      event_id: context.event_id,\n      event_type: context.event_type,\n      notification: {\n        ...context.notification,\n        status: \"sent\",\n        provider_message_id: providerMessageId\n      },\n      source_result: context.source_result,\n      payload: context.payload,\n      metadata: context.metadata,\n      error: null,\n      next_action: context.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -176
+      ],
+      "id": "8ccd07bd-a238-4aea-b321-fee18e29f82b",
+      "name": "Normalize Notification Result"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.email.from }}",
+        "toEmail": "={{ $json.email.to }}",
+        "subject": "={{ $json.email.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.email.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        144,
+        16
+      ],
+      "id": "44bfe6d0-a243-4ad8-ad4d-31f2d94b4ee2",
+      "name": "Send Email",
+      "webhookId": "d27d1f9b-2b9f-4b16-9b13-d2c944901b8c",
+      "credentials": {
+        "smtp": {
+          "id": "sI8NSbA9eU3yGIC3",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": false,
+            "component_id": "C2-A1",
+            "component_version": "v1",
+            "event_id": "evt_test_missing_config",
+            "event_type": "lead_intake",
+            "destination": {
+              "type": "google_sheets",
+              "spreadsheet_id": null,
+              "sheet_name": "Leads",
+              "record_id": null
+            },
+            "write": {
+              "status": "failed",
+              "fields_written": []
+            },
+            "payload": {
+              "name": "Riya Sharma",
+              "email": "riya@example.com",
+              "company": "GrowthOps Studio",
+              "message": "We need automation help."
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "error": {
+              "code": "MISSING_SPREADSHEET_ID",
+              "message": "config.spreadsheet_id is required."
+            },
+            "next_action": "route_to_failure_log"
+          },
+          "config": {
+            "channel": "email",
+            "to": "shwetabh.singh@lexnovahq.com",
+            "from": "shwetabh.singh@lexnovahq.com",
+            "subject_template": "New {{event_type}} record created",
+            "default_next_action": "end"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Notification": {
+      "main": [
+        [
+          {
+            "node": "Should Send?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Send?": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pass Failure Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Normalize Notification Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e078f438-934a-4c12-a878-13c2f3904d27",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "oVif8UpFvgrBRFW1",
+  "tags": []
+}
