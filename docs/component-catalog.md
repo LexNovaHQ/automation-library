@@ -1079,3 +1079,38 @@ C4-L v1 is built as a client-configurable lead qualification processor, not an a
 
 **Excluded by design:**  
 Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Manual review queue creation belongs to C5-E. CRM/database writes belong to C2-A. Email sending belongs to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G.
+
+## C2-E Build Record - Form Intake Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-e-form-intake-pipeline`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-e-core-form-intake-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-E_CORE_Form_Intake_Pipeline_v1`
+- Normalizes form submissions into standard lead/contact payloads
+- Supports website/custom form payloads, Tally-style nested payloads, Typeform field-ref answers, and Google Forms response rows via parent workflow
+- Supports configurable field maps
+- Normalizes consent status
+- Creates C2-F-compatible validation handoff
+- Does not validate, dedupe, qualify, write, or notify directly
+
+**Passed tests:**
+- Website form
+- Tally form
+- Typeform ref form
+- Upstream failed
+- Form intake not requested
+- Missing field map
+
+**Implementation note:**  
+C2-E v1 is built as the reusable form intake normalization layer. Form platform connection happens before C2-E through C2-C webhook, platform trigger, or parent workflow. C2-E standardizes the payload for downstream validation and automation.
+
+**Excluded by design:**  
+Webhook/front-door receiving belongs to C2-C. Validation belongs to C2-F. Dedupe belongs to C2-D. Suppression belongs to C2-P. Lead qualification belongs to C4-L. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.

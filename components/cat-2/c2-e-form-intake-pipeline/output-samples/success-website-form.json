@@ -1,0 +1,56 @@
+﻿{
+  "success": true,
+  "component_id": "C2-E",
+  "component_version": "v1",
+  "event_id": "evt_c2e_website_form",
+  "event_type": "form_submission",
+  "normalized_payload": {
+    "name": "Riya Sharma",
+    "email": "riya@example.com",
+    "phone": "+919999999999",
+    "company": "GrowthOps Studio",
+    "website": "https://growthops.example",
+    "message": "We need automation help for lead intake and CRM updates.",
+    "source": "website_contact_form",
+    "consent_status": "opted_in",
+    "submitted_at": "2026-05-25T00:00:00.000Z"
+  },
+  "c2f_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-E",
+      "component_version": "v1",
+      "event_id": "evt_c2e_website_form",
+      "event_type": "normalized_form_intake",
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "message": "We need automation help for lead intake and CRM updates."
+      },
+      "metadata": {
+        "source_component": "C2-C",
+        "form_source": "website_contact_form",
+        "empty_fields": []
+      },
+      "error": null,
+      "next_action": "validate_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email", "message"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2e_website_form",
+    "event_type": "form_submission",
+    "success": true,
+    "next_action": "normalize_form_intake"
+  },
+  "error": null,
+  "next_action": "validate_payload"
+}

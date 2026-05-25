@@ -1,0 +1,199 @@
+{
+  "name": "C2-E_CORE_Form_Intake_Pipeline_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -272
+      ],
+      "id": "8656b6e7-0583-40d5-91bf-20a5763b70b6",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction getByPath(obj, path) {\n  if (!obj || !path) return undefined;\n  return String(path).split(\".\").reduce((acc, key) => {\n    if (acc === undefined || acc === null) return undefined;\n    return acc[key];\n  }, obj);\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction normalizeEmail(value) {\n  return normalizeString(value).toLowerCase();\n}\n\nfunction normalizeConsent(value, defaultConsentStatus = \"not_provided\") {\n  if (value === true) return \"opted_in\";\n  if (value === false) return \"not_provided\";\n\n  const normalized = normalizeString(value).toLowerCase();\n  if (!normalized) return defaultConsentStatus;\n\n  const optedIn = [\"yes\", \"true\", \"opted_in\", \"consented\", \"subscribed\", \"i agree\", \"agree\"];\n  const optedOut = [\"no\", \"false\", \"opted_out\", \"unsubscribed\", \"do_not_contact\"];\n\n  if (optedIn.includes(normalized)) return \"opted_in\";\n  if (optedOut.includes(normalized)) return \"opted_out\";\n\n  return normalized;\n}\n\nfunction extractTypeformAnswer(payload, ref) {\n  const answers = payload?.form_response?.answers;\n  if (!Array.isArray(answers)) return undefined;\n\n  const answer = answers.find(item => item?.field?.ref === ref);\n  if (!answer) return undefined;\n\n  if (answer.text !== undefined) return answer.text;\n  if (answer.email !== undefined) return answer.email;\n  if (answer.phone_number !== undefined) return answer.phone_number;\n  if (answer.url !== undefined) return answer.url;\n  if (answer.boolean !== undefined) return answer.boolean;\n  if (answer.choice?.label !== undefined) return answer.choice.label;\n  if (answer.number !== undefined) return answer.number;\n\n  return undefined;\n}\n\nfunction valueFromMap(payload, sourcePath, typeformRefMode = false) {\n  if (!sourcePath) return undefined;\n\n  if (typeformRefMode) {\n    return extractTypeformAnswer(payload, sourcePath);\n  }\n\n  return getByPath(payload, sourcePath);\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-E\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        normalized_payload: null,\n        c2f_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-E will not normalize form intake when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"normalize_form_intake\") {\n  return fail({\n    code: \"FORM_INTAKE_NOT_REQUESTED\",\n    message: \"source.next_action is not normalize_form_intake.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.field_map || typeof config.field_map !== \"object\") {\n  return fail({\n    code: \"MISSING_FIELD_MAP\",\n    message: \"config.field_map is required.\"\n  });\n}\n\nconst fieldMap = config.field_map;\nconst typeformRefMode = config.typeform_ref_mode === true;\n\nconst rawConsent =\n  valueFromMap(payload, fieldMap.consent_status, typeformRefMode) ??\n  valueFromMap(payload, fieldMap.consent, typeformRefMode);\n\nconst normalizedPayload = {\n  name: normalizeString(valueFromMap(payload, fieldMap.name, typeformRefMode)),\n  email: normalizeEmail(valueFromMap(payload, fieldMap.email, typeformRefMode)),\n  phone: normalizeString(valueFromMap(payload, fieldMap.phone, typeformRefMode)),\n  company: normalizeString(valueFromMap(payload, fieldMap.company, typeformRefMode)),\n  website: normalizeString(valueFromMap(payload, fieldMap.website, typeformRefMode)),\n  message: normalizeString(valueFromMap(payload, fieldMap.message, typeformRefMode)),\n  source: config.form_source || source.metadata?.origin || \"form_submission\",\n  consent_status: normalizeConsent(rawConsent, config.default_consent_status || \"not_provided\"),\n  submitted_at: source.metadata?.submitted_at || nowIso()\n};\n\nconst emptyFields = Object.entries(normalizedPayload)\n  .filter(([key, value]) => [\"name\", \"email\", \"phone\", \"company\", \"website\", \"message\"].includes(key) && !value)\n  .map(([key]) => key);\n\nconst c2fHandoff = {\n  next_component: \"C2-F\",\n  input: {\n    success: true,\n    component_id: \"C2-E\",\n    component_version: \"v1\",\n    event_id: source.event_id || null,\n    event_type: \"normalized_form_intake\",\n    payload: normalizedPayload,\n    metadata: {\n      source_component: source.component_id || null,\n      original_event_type: source.event_type || null,\n      form_source: config.form_source || null,\n      empty_fields: emptyFields,\n      normalized_at: nowIso()\n    },\n    error: null,\n    next_action: \"validate_payload\"\n  },\n  config: {\n    validation_rules: config.validation_rules || {\n      required_fields: [\"name\", \"email\", \"message\"],\n      email_fields: [\"email\"]\n    },\n    default_next_action: \"dedupe_check\"\n  }\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-E\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      normalized_payload: normalizedPayload,\n      c2f_handoff: c2fHandoff,\n      source_result: source,\n      error: null,\n      next_action: config.default_next_action || \"validate_payload\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -272
+      ],
+      "id": "61e4c83c-44ec-4e39-81af-b024903e723e",
+      "name": "Normalize Form Intake"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66e9799c-6371-40dd-88e3-bb112aba8b3d",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "aadacee6-f808-4fde-9cac-3b68f8b85a1d",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7cac7a26-13ae-49fd-a6eb-556df6dc12c1",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "7d162308-854a-4b68-9cdf-2e538ec29843",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "069582ef-76d6-46f2-9636-03bfbc10031a",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "b1cad990-b633-41e5-9157-1b99325392a5",
+              "name": "normalized_payload",
+              "value": "={{ $json.normalized_payload }}",
+              "type": "object"
+            },
+            {
+              "id": "beecd9b4-807b-4fc1-b618-839ea0979b90",
+              "name": "c2f_handoff",
+              "value": "={{ $json.c2f_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "3c4e130f-1e74-406f-a9f9-e314bbd9968d",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "f57a2e3e-367a-492f-bb69-d06ce3e28f92",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "0b24e1e5-3edf-46a9-9870-a25eceeb0ec5",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -272
+      ],
+      "id": "b5ef21fc-27d4-473f-ac6f-172362b033d9",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-C",
+            "component_version": "v1",
+            "event_id": "evt_c2e_website_form",
+            "event_type": "form_submission",
+            "payload": {
+              "full_name": "Riya Sharma",
+              "email_address": "riya@example.com",
+              "phone_number": "+919999999999",
+              "company_name": "GrowthOps Studio",
+              "website_url": "https://growthops.example",
+              "message": "We need automation help for lead intake and CRM updates.",
+              "consent": true,
+              "form_name": "Website Contact Form"
+            },
+            "metadata": {
+              "origin": "website_form",
+              "environment": "test",
+              "submitted_at": "2026-05-25T00:00:00.000Z"
+            },
+            "error": null,
+            "next_action": "normalize_form_intake"
+          },
+          "config": {
+            "form_source": "website_contact_form",
+            "field_map": {
+              "name": "full_name",
+              "email": "email_address",
+              "phone": "phone_number",
+              "company": "company_name",
+              "website": "website_url",
+              "message": "message",
+              "consent": "consent"
+            },
+            "default_consent_status": "not_provided",
+            "validation_rules": {
+              "required_fields": [
+                "name",
+                "email",
+                "message"
+              ],
+              "email_fields": [
+                "email"
+              ]
+            },
+            "default_next_action": "validate_payload"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Normalize Form Intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Form Intake": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9a3ee50e-6edd-4d6e-8791-f0cf4238f772",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "TlqtdO1818JG1fsl",
+  "tags": []
+}

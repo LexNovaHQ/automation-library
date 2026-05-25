@@ -1,0 +1,48 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2e_tally_form",
+    "event_type": "form_submission",
+    "payload": {
+      "respondent": {
+        "name": "Aman Mehta",
+        "email": "aman@example.com"
+      },
+      "answers": {
+        "company": "CartLift",
+        "need": "We want abandoned cart follow-up and lead alerts.",
+        "website": "https://cartlift.example",
+        "consent_status": "opted_in"
+      },
+      "form": {
+        "name": "Automation Inquiry"
+      }
+    },
+    "metadata": {
+      "origin": "tally",
+      "environment": "test",
+      "submitted_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "normalize_form_intake"
+  },
+  "config": {
+    "form_source": "tally_automation_inquiry",
+    "field_map": {
+      "name": "respondent.name",
+      "email": "respondent.email",
+      "company": "answers.company",
+      "website": "answers.website",
+      "message": "answers.need",
+      "consent_status": "answers.consent_status"
+    },
+    "default_consent_status": "not_provided",
+    "validation_rules": {
+      "required_fields": ["name", "email", "message"],
+      "email_fields": ["email"]
+    },
+    "default_next_action": "validate_payload"
+  }
+}

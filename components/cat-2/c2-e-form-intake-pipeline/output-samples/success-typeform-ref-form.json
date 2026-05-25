@@ -1,0 +1,57 @@
+﻿{
+  "success": true,
+  "component_id": "C2-E",
+  "component_version": "v1",
+  "event_id": "evt_c2e_typeform",
+  "event_type": "form_submission",
+  "normalized_payload": {
+    "name": "Neha Kapoor",
+    "email": "neha@example.com",
+    "phone": "",
+    "company": "OpsFlow",
+    "website": "",
+    "message": "Need CRM automation and daily reporting.",
+    "source": "typeform_contact",
+    "consent_status": "opted_in",
+    "submitted_at": "2026-05-25T00:00:00.000Z"
+  },
+  "c2f_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-E",
+      "component_version": "v1",
+      "event_id": "evt_c2e_typeform",
+      "event_type": "normalized_form_intake",
+      "payload": {
+        "name": "Neha Kapoor",
+        "email": "neha@example.com",
+        "company": "OpsFlow",
+        "message": "Need CRM automation and daily reporting."
+      },
+      "metadata": {
+        "source_component": "C2-C",
+        "form_source": "typeform_contact",
+        "empty_fields": ["phone", "website"]
+      },
+      "error": null,
+      "next_action": "validate_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email", "message"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2e_typeform",
+    "event_type": "form_submission",
+    "success": true,
+    "next_action": "normalize_form_intake"
+  },
+  "error": null,
+  "next_action": "validate_payload"
+}

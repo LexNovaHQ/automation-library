@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2e_not_requested",
+    "event_type": "form_submission",
+    "payload": {
+      "full_name": "Riya Sharma",
+      "email_address": "riya@example.com",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "validate_payload"
+  },
+  "config": {
+    "form_source": "website_contact_form",
+    "field_map": {
+      "name": "full_name",
+      "email": "email_address",
+      "message": "message"
+    },
+    "default_next_action": "validate_payload"
+  }
+}

@@ -1,0 +1,28 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2e_upstream_failed",
+    "event_type": "form_submission",
+    "payload": {},
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": {
+      "code": "WEBHOOK_PARSE_FAILED",
+      "message": "Webhook payload could not be parsed."
+    },
+    "next_action": "normalize_form_intake"
+  },
+  "config": {
+    "form_source": "website_contact_form",
+    "field_map": {
+      "name": "full_name",
+      "email": "email_address",
+      "message": "message"
+    },
+    "default_next_action": "validate_payload"
+  }
+}

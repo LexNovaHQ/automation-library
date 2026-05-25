@@ -1,0 +1,57 @@
+﻿{
+  "success": true,
+  "component_id": "C2-E",
+  "component_version": "v1",
+  "event_id": "evt_c2e_tally_form",
+  "event_type": "form_submission",
+  "normalized_payload": {
+    "name": "Aman Mehta",
+    "email": "aman@example.com",
+    "phone": "",
+    "company": "CartLift",
+    "website": "https://cartlift.example",
+    "message": "We want abandoned cart follow-up and lead alerts.",
+    "source": "tally_automation_inquiry",
+    "consent_status": "opted_in",
+    "submitted_at": "2026-05-25T00:00:00.000Z"
+  },
+  "c2f_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C2-E",
+      "component_version": "v1",
+      "event_id": "evt_c2e_tally_form",
+      "event_type": "normalized_form_intake",
+      "payload": {
+        "name": "Aman Mehta",
+        "email": "aman@example.com",
+        "company": "CartLift",
+        "message": "We want abandoned cart follow-up and lead alerts."
+      },
+      "metadata": {
+        "source_component": "C2-C",
+        "form_source": "tally_automation_inquiry",
+        "empty_fields": ["phone"]
+      },
+      "error": null,
+      "next_action": "validate_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email", "message"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2e_tally_form",
+    "event_type": "form_submission",
+    "success": true,
+    "next_action": "normalize_form_intake"
+  },
+  "error": null,
+  "next_action": "validate_payload"
+}

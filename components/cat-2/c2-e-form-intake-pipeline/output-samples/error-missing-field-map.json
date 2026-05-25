@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C2-E",
+  "component_version": "v1",
+  "event_id": "evt_c2e_missing_field_map",
+  "event_type": "form_submission",
+  "normalized_payload": null,
+  "c2f_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2e_missing_field_map",
+    "event_type": "form_submission",
+    "success": true,
+    "next_action": "normalize_form_intake"
+  },
+  "error": {
+    "code": "MISSING_FIELD_MAP",
+    "message": "config.field_map is required."
+  },
+  "next_action": "route_to_failure_log"
+}

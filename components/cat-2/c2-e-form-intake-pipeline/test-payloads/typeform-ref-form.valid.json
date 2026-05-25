@@ -1,0 +1,59 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2e_typeform",
+    "event_type": "form_submission",
+    "payload": {
+      "form_response": {
+        "answers": [
+          {
+            "field": { "ref": "name" },
+            "text": "Neha Kapoor"
+          },
+          {
+            "field": { "ref": "email" },
+            "email": "neha@example.com"
+          },
+          {
+            "field": { "ref": "company" },
+            "text": "OpsFlow"
+          },
+          {
+            "field": { "ref": "message" },
+            "text": "Need CRM automation and daily reporting."
+          },
+          {
+            "field": { "ref": "consent" },
+            "boolean": true
+          }
+        ]
+      }
+    },
+    "metadata": {
+      "origin": "typeform",
+      "environment": "test",
+      "submitted_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "normalize_form_intake"
+  },
+  "config": {
+    "form_source": "typeform_contact",
+    "typeform_ref_mode": true,
+    "field_map": {
+      "name": "name",
+      "email": "email",
+      "company": "company",
+      "message": "message",
+      "consent": "consent"
+    },
+    "default_consent_status": "not_provided",
+    "validation_rules": {
+      "required_fields": ["name", "email", "message"],
+      "email_fields": ["email"]
+    },
+    "default_next_action": "validate_payload"
+  }
+}
