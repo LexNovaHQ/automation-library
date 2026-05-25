@@ -1,0 +1,31 @@
+﻿{
+  "success": false,
+  "component_id": "C2-K",
+  "component_version": "v1",
+  "event_id": "evt_ai_upstream_failed",
+  "event_type": "lead_intake",
+  "ai_result": {
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "lead_summary",
+    "status": "failed",
+    "content": null,
+    "parsed_json": null,
+    "usage": null
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_ai_upstream_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-K will not run LLM when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

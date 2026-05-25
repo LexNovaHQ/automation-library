@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_ai_not_requested",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "notify_team"
+  },
+  "config": {
+    "provider": "groq",
+    "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "lead_summary",
+    "system_instruction": "You are an automation workflow assistant.",
+    "user_instruction": "Summarize the lead.",
+    "response_format": "json_object",
+    "default_next_action": "route_ai_result"
+  }
+}

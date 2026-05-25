@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_ai_content_classification",
+    "event_type": "content_draft",
+    "payload": {
+      "title": "5 Ways Automation Improves Shopify Marketing",
+      "draft": "This article explains how Shopify brands can use automation for lead capture, abandoned cart follow-up, campaign alerts, and content workflows."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "run_ai"
+  },
+  "config": {
+    "provider": "groq",
+    "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "content_classification",
+    "system_instruction": "You are an editorial workflow assistant. Return concise valid JSON only.",
+    "user_instruction": "Classify this draft by topic, audience, publish readiness, and whether human approval is required.",
+    "response_format": "json_object",
+    "default_next_action": "request_approval"
+  }
+}

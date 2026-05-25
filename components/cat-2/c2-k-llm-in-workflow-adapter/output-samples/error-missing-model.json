@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-K",
+  "component_version": "v1",
+  "event_id": "evt_ai_missing_model",
+  "event_type": "lead_intake",
+  "ai_result": {
+    "provider": "groq",
+    "model": null,
+    "task_type": "lead_summary",
+    "status": "failed",
+    "content": null,
+    "parsed_json": null,
+    "usage": null
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_ai_missing_model",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "run_ai"
+  },
+  "error": {
+    "code": "MISSING_MODEL",
+    "message": "config.model is required."
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -711,3 +711,37 @@ C5-W v1 is built as the reusable automation control-record generator. It does no
 
 **Excluded by design:**  
 Database writes belong to C2-A1/C2-A2 or later storage adapters. Error log creation belongs to C6-G. Human approval creation belongs to C2-O. Notifications belong to C2-I. KPI monitoring belongs to C5-X.
+
+## C2-K Build Record - Groq/OpenAI-Compatible LLM Adapter
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-k-llm-in-workflow-adapter`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-k-core-groq-openai-compatible-llm-adapter-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-K_CORE_Groq_OpenAI_Compatible_LLM_Adapter_v1`
+- Uses Groq through OpenAI-compatible chat completions endpoint
+- Demo model: `llama-3.3-70b-versatile`
+- Prepares LLM request from standardized upstream input
+- Parses JSON response content into `ai_result.parsed_json`
+- Preserves raw LLM output in `ai_result.content`
+- Blocks failed upstream inputs and non-AI-requested inputs
+
+**Passed tests:**
+- Lead summary
+- Content classification
+- Upstream failed
+- Missing model
+- AI not requested
+
+**Implementation note:**  
+C2-K is built as a safe LLM-in-workflow adapter, not an autonomous AI agent. It calls a configured LLM provider, returns a standardized AI result object, and leaves routing, approval, writing, notifications, and execution to other components.
+
+**Excluded by design:**  
+AI draft approval pipeline belongs to C4-M. Human approval belongs to C2-O. Routing belongs to C2-B. Writing belongs to C2-A. Notifications belong to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G. Autonomous agent execution belongs to a later C4 agent component.

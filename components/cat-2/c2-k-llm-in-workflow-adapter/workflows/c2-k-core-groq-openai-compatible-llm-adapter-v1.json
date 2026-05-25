@@ -1,0 +1,320 @@
+{
+  "name": "C2-K_CORE_Groq_OpenAI_Compatible_LLM_Adapter_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        -176
+      ],
+      "id": "de906e59-4ff2-4bf9-8f14-3c88e953615e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction fail({ code, message, details = [], inputSnapshot = {} }) {\n  return [\n    {\n      json: {\n        stop_before_http: true,\n        success: false,\n        component_id: \"C2-K\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        ai_result: {\n          provider: input.config?.provider || null,\n          model: input.config?.model || null,\n          task_type: input.config?.task_type || null,\n          status: \"failed\",\n          content: null,\n          parsed_json: null,\n          usage: null\n        },\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\",\n        input_snapshot: inputSnapshot\n      }\n    }\n  ];\n}\n\nfunction compactJson(value) {\n  try {\n    return JSON.stringify(value, null, 2);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\",\n    inputSnapshot: input\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\",\n    inputSnapshot: input\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-K will not run LLM when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ],\n    inputSnapshot: input\n  });\n}\n\nif (source.next_action !== \"run_ai\") {\n  return fail({\n    code: \"AI_NOT_REQUESTED\",\n    message: \"source.next_action is not run_ai.\",\n    details: [{ next_action: source.next_action || null }],\n    inputSnapshot: input\n  });\n}\n\nif (!config.provider) {\n  return fail({\n    code: \"MISSING_PROVIDER\",\n    message: \"config.provider is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (config.provider !== \"groq\") {\n  return fail({\n    code: \"UNSUPPORTED_PROVIDER\",\n    message: \"C2-K v1 demo supports provider = groq.\",\n    details: [{ provider: config.provider }],\n    inputSnapshot: input\n  });\n}\n\nif (!config.endpoint) {\n  return fail({\n    code: \"MISSING_ENDPOINT\",\n    message: \"config.endpoint is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.model) {\n  return fail({\n    code: \"MISSING_MODEL\",\n    message: \"config.model is required.\",\n    inputSnapshot: input\n  });\n}\n\nif (!config.task_type) {\n  return fail({\n    code: \"MISSING_TASK_TYPE\",\n    message: \"config.task_type is required.\",\n    inputSnapshot: input\n  });\n}\n\nconst systemInstruction = config.system_instruction || \"Return concise valid JSON only.\";\nconst userInstruction = config.user_instruction || \"Analyze the payload and return a concise result.\";\n\nconst userContent = [\n  userInstruction,\n  \"\",\n  \"Event context:\",\n  compactJson({\n    event_id: source.event_id || null,\n    event_type: source.event_type || null,\n    payload: source.payload || {},\n    metadata: source.metadata || {}\n  }),\n  \"\",\n  \"Return JSON only. Do not include markdown fences.\"\n].join(\"\\n\");\n\nconst body = {\n  model: config.model,\n  messages: [\n    {\n      role: \"system\",\n      content: systemInstruction\n    },\n    {\n      role: \"user\",\n      content: userContent\n    }\n  ],\n  temperature: config.temperature ?? 0.2,\n  max_tokens: config.max_tokens ?? 600\n};\n\nif (config.response_format === \"json_object\") {\n  body.response_format = { type: \"json_object\" };\n}\n\nreturn [\n  {\n    json: {\n      stop_before_http: false,\n      request: {\n        provider: config.provider,\n        endpoint: config.endpoint,\n        body\n      },\n      context: {\n        component_id: \"C2-K\",\n        component_version: \"v1\",\n        event_id: source.event_id || null,\n        event_type: source.event_type || null,\n        ai_result: {\n          provider: config.provider,\n          model: config.model,\n          task_type: config.task_type,\n          status: \"prepared\",\n          content: null,\n          parsed_json: null,\n          usage: null\n        },\n        source_result: source,\n        next_action: config.default_next_action || \"route_ai_result\"\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -176
+      ],
+      "id": "c39fb7d7-53f3-40b2-9871-d669a7b2aaf3",
+      "name": "Prepare LLM Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0570f7bd-4d17-4f18-9416-84aec5d8d43c",
+              "leftValue": "={{ $json.stop_before_http }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -272,
+        176
+      ],
+      "id": "bbbbf4d1-336b-4f5e-aeb8-9f857319c5cb",
+      "name": "Should Call LLM?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.request.endpoint }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.request.body) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -112,
+        16
+      ],
+      "id": "8847a415-4c85-4b99-8856-dc956b0f52b8",
+      "name": "Call Groq LLM",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "s5BMtEDIxac2Q1Qb",
+          "name": "Groq API Key - Test"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const llmOutput = $input.first().json || {};\nconst prepared = $(\"Prepare LLM Request\").first().json;\nconst context = prepared.context;\n\nconst content =\n  llmOutput.choices?.[0]?.message?.content ??\n  llmOutput.choices?.[0]?.text ??\n  null;\n\nlet parsedJson = null;\nlet parseError = null;\n\nif (content) {\n  try {\n    parsedJson = JSON.parse(content);\n  } catch (error) {\n    parseError = error.message;\n  }\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: context.component_id,\n      component_version: context.component_version,\n      event_id: context.event_id,\n      event_type: context.event_type,\n      ai_result: {\n        ...context.ai_result,\n        status: parseError ? \"completed_unparsed\" : \"completed\",\n        content,\n        parsed_json: parsedJson,\n        usage: llmOutput.usage || null,\n        finish_reason: llmOutput.choices?.[0]?.finish_reason || null\n      },\n      source_result: context.source_result,\n      error: parseError\n        ? {\n            code: \"AI_RESPONSE_PARSE_WARNING\",\n            message: \"LLM response was returned but could not be parsed as JSON.\",\n            details: [{ parse_error: parseError }]\n          }\n        : null,\n      next_action: context.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        16
+      ],
+      "id": "d23c1308-adf8-4639-be4f-8a53e28d34c8",
+      "name": "Parse LLM Result"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prepared = $input.first().json || {};\n\nreturn [\n  {\n    json: {\n      success: prepared.success,\n      component_id: prepared.component_id,\n      component_version: prepared.component_version,\n      event_id: prepared.event_id,\n      event_type: prepared.event_type,\n      ai_result: prepared.ai_result,\n      source_result: prepared.source_result,\n      error: prepared.error,\n      next_action: prepared.next_action\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        272
+      ],
+      "id": "6f1331cd-51f4-4eea-b101-53cacd93d274",
+      "name": "Pass Failure Output"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce9079f0-6fad-4462-be6e-b3f61c6afe46",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "dee5fb70-4793-46e4-9605-634f62dba152",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "78c05bb9-2d2b-4ac9-8dc4-4b4766f6e9c3",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "e09b5b43-1e59-453c-82b8-351c37fdc6f9",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "faa321fd-f5c9-402f-97f0-a3d09457af1e",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "d59bef57-cdb0-43d9-9789-62518b45e6fa",
+              "name": "ai_result",
+              "value": "={{ $json.ai_result }}",
+              "type": "object"
+            },
+            {
+              "id": "741e2ed7-6f4d-4e09-bc4a-d1cf0691bfcb",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "4007dc9b-3fee-4953-9b5d-ab8223a777fb",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "951557b6-a894-4c5c-8a34-f55d920d8f6f",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        16
+      ],
+      "id": "88a95eb9-9208-42d7-bcfa-02983bb2f036",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": false,
+            "component_id": "C2-F",
+            "component_version": "v1",
+            "event_id": "evt_ai_upstream_failed",
+            "event_type": "lead_intake",
+            "payload": {
+              "name": "Riya Sharma"
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "error": {
+              "code": "VALIDATION_FAILED",
+              "message": "Payload failed validation."
+            },
+            "next_action": "run_ai"
+          },
+          "config": {
+            "provider": "groq",
+            "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+            "model": "llama-3.3-70b-versatile",
+            "task_type": "lead_summary",
+            "system_instruction": "You are an automation workflow assistant.",
+            "user_instruction": "Summarize the lead.",
+            "response_format": "json_object",
+            "default_next_action": "route_ai_result"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare LLM Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare LLM Request": {
+      "main": [
+        [
+          {
+            "node": "Should Call LLM?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Call LLM?": {
+      "main": [
+        [
+          {
+            "node": "Call Groq LLM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pass Failure Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Groq LLM": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM Result": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pass Failure Output": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "16ddac07-a39d-4b8b-bcb3-2ea2fd34a514",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "rfYTV0OPsxYnUvFR",
+  "tags": []
+}

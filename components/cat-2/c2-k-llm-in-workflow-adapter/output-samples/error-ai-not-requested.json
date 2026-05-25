@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-K",
+  "component_version": "v1",
+  "event_id": "evt_ai_not_requested",
+  "event_type": "lead_intake",
+  "ai_result": {
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "lead_summary",
+    "status": "failed",
+    "content": null,
+    "parsed_json": null,
+    "usage": null
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_ai_not_requested",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "notify_team"
+  },
+  "error": {
+    "code": "AI_NOT_REQUESTED",
+    "message": "source.next_action is not run_ai."
+  },
+  "next_action": "route_to_failure_log"
+}

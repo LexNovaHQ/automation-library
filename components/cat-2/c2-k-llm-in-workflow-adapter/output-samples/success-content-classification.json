@@ -1,0 +1,35 @@
+﻿{
+  "success": true,
+  "component_id": "C2-K",
+  "component_version": "v1",
+  "event_id": "evt_ai_content_classification",
+  "event_type": "content_draft",
+  "ai_result": {
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "content_classification",
+    "status": "completed",
+    "content": "{\"topic\":\"Shopify marketing automation\",\"audience\":\"Shopify brands and ecommerce operators\",\"publish_readiness\":\"draft_ready_for_review\",\"human_approval_required\":true}",
+    "parsed_json": {
+      "topic": "Shopify marketing automation",
+      "audience": "Shopify brands and ecommerce operators",
+      "publish_readiness": "draft_ready_for_review",
+      "human_approval_required": true
+    },
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_ai_content_classification",
+    "event_type": "content_draft",
+    "success": true,
+    "next_action": "run_ai"
+  },
+  "error": null,
+  "next_action": "request_approval"
+}

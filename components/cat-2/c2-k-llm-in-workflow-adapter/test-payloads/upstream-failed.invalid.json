@@ -1,0 +1,31 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_ai_upstream_failed",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "run_ai"
+  },
+  "config": {
+    "provider": "groq",
+    "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+    "model": "llama-3.3-70b-versatile",
+    "task_type": "lead_summary",
+    "system_instruction": "You are an automation workflow assistant.",
+    "user_instruction": "Summarize the lead.",
+    "response_format": "json_object",
+    "default_next_action": "route_ai_result"
+  }
+}
