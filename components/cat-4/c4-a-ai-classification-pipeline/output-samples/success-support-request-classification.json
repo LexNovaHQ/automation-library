@@ -1,0 +1,73 @@
+﻿{
+  "success": true,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_support_request",
+  "event_type": "inbound_message",
+  "classification": {
+    "category": "support_request",
+    "priority": "high",
+    "confidence": "high",
+    "confidence_score": 91,
+    "reasons": [
+      "Sender reports an existing automation problem",
+      "Message mentions daily alert email not sending",
+      "Request asks someone to check the issue"
+    ],
+    "risk_flags": [],
+    "manual_review_required": false,
+    "recommended_next_action": "route_to_support",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2b_handoff": {
+    "next_component": "C2-B",
+    "input": {
+      "success": true,
+      "component_id": "C4-A",
+      "component_version": "v1",
+      "event_id": "evt_c4a_support_request",
+      "event_type": "inbound_message",
+      "classification": {
+        "category": "support_request",
+        "priority": "high",
+        "recommended_next_action": "route_to_support"
+      },
+      "payload": {
+        "name": "Aman Mehta",
+        "email": "aman@example.com",
+        "company": "CartLift",
+        "message": "The automation you built is not sending the daily alert email. Can someone check?"
+      },
+      "metadata": {
+        "source_component": "C2-F",
+        "classification_category": "support_request",
+        "classification_priority": "high",
+        "recommended_next_action": "route_to_support"
+      },
+      "error": null,
+      "next_action": "route_by_condition"
+    },
+    "config": {
+      "route_key": "classification.recommended_next_action",
+      "route_value": "route_to_support",
+      "default_next_action": "route_to_support"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_support_request",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "classify_input"
+  },
+  "error": null,
+  "next_action": "route_classification"
+}

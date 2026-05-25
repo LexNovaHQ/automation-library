@@ -1,0 +1,73 @@
+﻿{
+  "success": true,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_lead_classification",
+  "event_type": "inbound_message",
+  "classification": {
+    "category": "qualified_lead",
+    "priority": "high",
+    "confidence": "high",
+    "confidence_score": 92,
+    "reasons": [
+      "Message asks for automation help",
+      "Mentions lead intake and CRM updates",
+      "Asks if the service can help set it up"
+    ],
+    "risk_flags": [],
+    "manual_review_required": false,
+    "recommended_next_action": "qualify_lead",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2b_handoff": {
+    "next_component": "C2-B",
+    "input": {
+      "success": true,
+      "component_id": "C4-A",
+      "component_version": "v1",
+      "event_id": "evt_c4a_lead_classification",
+      "event_type": "inbound_message",
+      "classification": {
+        "category": "qualified_lead",
+        "priority": "high",
+        "recommended_next_action": "qualify_lead"
+      },
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio",
+        "message": "We need automation help for lead intake and CRM updates. Can you help us set this up?"
+      },
+      "metadata": {
+        "source_component": "C2-F",
+        "classification_category": "qualified_lead",
+        "classification_priority": "high",
+        "recommended_next_action": "qualify_lead"
+      },
+      "error": null,
+      "next_action": "route_by_condition"
+    },
+    "config": {
+      "route_key": "classification.recommended_next_action",
+      "route_value": "qualify_lead",
+      "default_next_action": "qualify_lead"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_lead_classification",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "classify_input"
+  },
+  "error": null,
+  "next_action": "route_classification"
+}

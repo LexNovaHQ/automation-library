@@ -1,0 +1,25 @@
+﻿{
+  "success": false,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_upstream_failed",
+  "event_type": "inbound_message",
+  "classification": null,
+  "c2b_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_upstream_failed",
+    "event_type": "inbound_message",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C4-A will not classify input when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

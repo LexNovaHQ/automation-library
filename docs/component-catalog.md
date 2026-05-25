@@ -1151,3 +1151,40 @@ C2-N v1 is built as the reusable spreadsheet row parser. File upload/reading hap
 
 **Excluded by design:**  
 File upload/storage belongs to C2-G. Validation belongs to C2-F. Dedupe belongs to C2-D. Suppression belongs to C2-P. Lead qualification belongs to C4-L. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.
+
+## C4-A Build Record - AI Classification Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-a-ai-classification-pipeline`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-a-core-ai-classification-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-A_CORE_AI_Classification_Pipeline_v1`
+- Classifies incoming records/messages using client profile, category list, priority rules, routing rules, and manual-review triggers
+- Calls Groq through OpenAI-compatible chat completions
+- Enforces allowed classification categories
+- Returns structured `classification`
+- Creates C2-B handoff for routable classifications
+- Creates C5-E handoff for manual review classifications
+- Does not extract full records, draft messages, execute routes, or act autonomously
+
+**Passed tests:**
+- Qualified lead classification
+- Support request classification
+- Spam classification
+- Manual review classification
+- Upstream failed
+- Classification not requested
+- Missing client profile
+
+**Implementation note:**  
+C4-A v1 is built as a client-configurable classification processor, not an autonomous agent and not an extraction parser. It produces structured classification decisions and handoff objects only. Routing, review, writes, and notifications belong to downstream components.
+
+**Excluded by design:**  
+Generic LLM call belongs to C2-K. Field extraction belongs to C4-B. Lead qualification belongs to C4-L. Conditional routing belongs to C2-B. Manual review queue creation belongs to C5-E. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.

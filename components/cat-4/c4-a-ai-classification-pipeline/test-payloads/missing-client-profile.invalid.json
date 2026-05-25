@@ -1,0 +1,30 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4a_missing_profile",
+    "event_type": "inbound_message",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "message": "Need automation help."
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "classify_input"
+  },
+  "config": {
+    "classification_mode": "rules_plus_ai",
+    "classification_goal": "Classify inbound messages for routing.",
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "route_classification"
+  }
+}

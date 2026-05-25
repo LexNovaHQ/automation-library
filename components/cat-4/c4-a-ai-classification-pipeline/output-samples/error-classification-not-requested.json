@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_not_requested",
+  "event_type": "inbound_message",
+  "classification": null,
+  "c2b_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_not_requested",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": {
+    "code": "CLASSIFICATION_NOT_REQUESTED",
+    "message": "source.next_action is not classify_input."
+  },
+  "next_action": "route_to_failure_log"
+}

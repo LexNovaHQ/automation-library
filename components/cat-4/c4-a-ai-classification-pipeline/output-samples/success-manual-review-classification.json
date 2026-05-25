@@ -1,0 +1,70 @@
+﻿{
+  "success": true,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_manual_review",
+  "event_type": "inbound_message",
+  "classification": {
+    "category": "manual_review",
+    "priority": "medium",
+    "confidence": "medium",
+    "confidence_score": 55,
+    "reasons": [
+      "Message is urgent but vague",
+      "Business context is missing",
+      "Intent is unclear"
+    ],
+    "risk_flags": ["missing_context", "unclear_intent"],
+    "manual_review_required": true,
+    "recommended_next_action": "manual_review",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2b_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C4-A",
+      "component_version": "v1",
+      "event_id": "evt_c4a_manual_review",
+      "event_type": "inbound_message",
+      "classification": {
+        "category": "manual_review",
+        "priority": "medium",
+        "recommended_next_action": "manual_review"
+      },
+      "source_result": {
+        "component_id": "C2-F",
+        "event_id": "evt_c4a_manual_review",
+        "success": true
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "classification_review",
+      "review_reason": "Classification requires manual review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "ops",
+      "priority": "medium",
+      "allowed_actions": ["confirm_category", "change_category", "mark_spam", "route_to_lead", "route_to_support"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_manual_review",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "classify_input"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

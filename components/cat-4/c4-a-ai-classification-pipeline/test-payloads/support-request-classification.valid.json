@@ -1,0 +1,66 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4a_support_request",
+    "event_type": "inbound_message",
+    "payload": {
+      "name": "Aman Mehta",
+      "email": "aman@example.com",
+      "company": "CartLift",
+      "message": "The automation you built is not sending the daily alert email. Can someone check?",
+      "source": "support_form"
+    },
+    "metadata": {
+      "origin": "support_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "classify_input"
+  },
+  "config": {
+    "classification_mode": "rules_plus_ai",
+    "classification_goal": "Classify inbound messages for routing.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency"
+      },
+      "classification_rules": {
+        "categories": [
+          "qualified_lead",
+          "possible_lead",
+          "support_request",
+          "spam",
+          "partnership",
+          "manual_review",
+          "other"
+        ],
+        "priority_rules": {
+          "high": ["existing workflow broken", "failed alert", "client support issue"],
+          "medium": ["asks for information"],
+          "low": ["vague request"]
+        },
+        "routing_rules": {
+          "qualified_lead": "qualify_lead",
+          "possible_lead": "qualify_lead",
+          "support_request": "route_to_support",
+          "spam": "do_not_contact",
+          "partnership": "manual_review",
+          "manual_review": "manual_review",
+          "other": "manual_review"
+        },
+        "manual_review_triggers": ["unclear intent", "sensitive claim"]
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.1,
+      "max_tokens": 700
+    },
+    "default_next_action": "route_classification"
+  }
+}

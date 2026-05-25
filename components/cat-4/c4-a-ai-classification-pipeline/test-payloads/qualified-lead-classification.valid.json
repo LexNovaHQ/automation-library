@@ -1,0 +1,70 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4a_lead_classification",
+    "event_type": "inbound_message",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help for lead intake and CRM updates. Can you help us set this up?",
+      "source": "website_form"
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "classify_input"
+  },
+  "config": {
+    "classification_mode": "rules_plus_ai",
+    "classification_goal": "Classify inbound messages for routing into lead, support, spam, partnership, manual review, or other workflow paths.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency",
+        "primary_customer_type": "Shopify store owners and ecommerce operators"
+      },
+      "classification_rules": {
+        "categories": [
+          "qualified_lead",
+          "possible_lead",
+          "support_request",
+          "spam",
+          "partnership",
+          "manual_review",
+          "other"
+        ],
+        "priority_rules": {
+          "high": ["asks for implementation", "mentions urgent setup", "mentions CRM automation", "mentions missed leads"],
+          "medium": ["asks for information", "general automation interest"],
+          "low": ["vague request", "no business context", "free advice"]
+        },
+        "routing_rules": {
+          "qualified_lead": "qualify_lead",
+          "possible_lead": "qualify_lead",
+          "support_request": "route_to_support",
+          "spam": "do_not_contact",
+          "partnership": "manual_review",
+          "manual_review": "manual_review",
+          "other": "manual_review"
+        },
+        "manual_review_triggers": ["unclear intent", "possible duplicate", "sensitive claim", "missing context"]
+      },
+      "risk_boundaries": {
+        "manual_review_triggers": ["uncertain category", "low confidence", "sensitive request"]
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.1,
+      "max_tokens": 700
+    },
+    "default_next_action": "route_classification"
+  }
+}

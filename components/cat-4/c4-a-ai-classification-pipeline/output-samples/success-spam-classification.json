@@ -1,0 +1,72 @@
+﻿{
+  "success": true,
+  "component_id": "C4-A",
+  "component_version": "v1",
+  "event_id": "evt_c4a_spam",
+  "event_type": "inbound_message",
+  "classification": {
+    "category": "spam",
+    "priority": "low",
+    "confidence": "high",
+    "confidence_score": 95,
+    "reasons": [
+      "Message is promotional",
+      "Mentions guaranteed SEO ranking",
+      "Mentions cheap backlinks"
+    ],
+    "risk_flags": ["spam_or_promotional"],
+    "manual_review_required": false,
+    "recommended_next_action": "do_not_contact",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2b_handoff": {
+    "next_component": "C2-B",
+    "input": {
+      "success": true,
+      "component_id": "C4-A",
+      "component_version": "v1",
+      "event_id": "evt_c4a_spam",
+      "event_type": "inbound_message",
+      "classification": {
+        "category": "spam",
+        "priority": "low",
+        "recommended_next_action": "do_not_contact"
+      },
+      "payload": {
+        "name": "SEO Expert",
+        "email": "spam@example.com",
+        "message": "HELLO DEAR, I can rank your website #1 guaranteed. Buy cheap backlinks now."
+      },
+      "metadata": {
+        "source_component": "C2-F",
+        "classification_category": "spam",
+        "classification_priority": "low",
+        "recommended_next_action": "do_not_contact"
+      },
+      "error": null,
+      "next_action": "route_by_condition"
+    },
+    "config": {
+      "route_key": "classification.recommended_next_action",
+      "route_value": "do_not_contact",
+      "default_next_action": "do_not_contact"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4a_spam",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "classify_input"
+  },
+  "error": null,
+  "next_action": "route_classification"
+}
