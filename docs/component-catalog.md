@@ -874,3 +874,102 @@ C2-J v1 is built as the reusable digest/summary builder. It does not fetch recor
 
 **Excluded by design:**  
 Email sending belongs to C2-I. Status record creation belongs to C5-W. Error log creation belongs to C6-G. Approval response handling belongs to C2-O2. Dashboard rendering belongs to C5-A / C5-E.
+
+## C5-E Build Record - Manual Review Queue
+
+**Status:** Built v1.0  
+**Location:** `components/cat-5/c5-e-manual-review-queue`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c5-e-core-manual-review-queue-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C5-E_CORE_Manual_Review_Queue_v1`
+- Creates standardized manual review queue items from workflow outputs
+- Supports review items for dedupe, suppression/consent, approval, routing fallback, and error/retry workflows
+- Creates reviewer notification payload for C2-I
+- Does not store queue item directly
+
+**Passed tests:**
+- Possible duplicate review
+- Consent review
+- Approval review
+- Error retry review
+- Upstream failed
+- Review not requested
+
+**Implementation note:**  
+C5-E v1 is built as the reusable manual review queue object generator. It does not write queue items or capture decisions. Storage belongs to C2-A/C5-W. Review decision capture belongs to C2-O2 or a future C5-E2.
+
+**Excluded by design:**  
+Database/storage writes belong to C2-A/C5-W. Notification sending belongs to C2-I. Review/approval decision capture belongs to C2-O2. Retry execution belongs to C6-G2. Dashboard rendering belongs to C5-A/C5-B.
+
+## C5-E Build Record - Manual Review Queue
+
+**Status:** Built v1.0  
+**Location:** `components/cat-5/c5-e-manual-review-queue`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c5-e-core-manual-review-queue-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C5-E_CORE_Manual_Review_Queue_v1`
+- Creates standardized manual review queue items from workflow outputs
+- Supports review items for dedupe, suppression/consent, approval, routing fallback, and error/retry workflows
+- Creates reviewer notification payload for C2-I
+- Does not store queue item directly
+
+**Passed tests:**
+- Possible duplicate review
+- Consent review
+- Approval review
+- Error retry review
+- Upstream failed
+- Review not requested
+
+**Implementation note:**  
+C5-E v1 is built as the reusable manual review queue object generator. It does not write queue items or capture decisions. Storage belongs to C2-A/C5-W. Review decision capture belongs to C2-O2 or a future C5-E2.
+
+**Excluded by design:**  
+Database/storage writes belong to C2-A/C5-W. Notification sending belongs to C2-I. Review/approval decision capture belongs to C2-O2. Retry execution belongs to C6-G2. Dashboard rendering belongs to C5-A/C5-B.
+
+## C5-E Build Record - Manual Review Queue
+
+**Status:** Built v1.0  
+**Location:** `components/cat-5/c5-e-manual-review-queue`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c5-e-core-manual-review-queue-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C5-E_CORE_Manual_Review_Queue_v1`
+- Creates standardized manual review queue items from workflow outputs
+- Supports review items for dedupe, suppression/consent, approval, routing fallback, and error/retry workflows
+- Creates reviewer notification payload for C2-I
+- Does not store queue item directly
+
+**Passed tests:**
+- Possible duplicate review
+- Consent review
+- Approval review
+- Error retry review
+- Upstream failed
+- Review not requested
+
+**Implementation note:**  
+C5-E v1 is built as the reusable manual review queue object generator. It does not write queue items or capture decisions. Storage belongs to C2-A/C5-W. Review decision capture belongs to C2-O2 or a future C5-E2.
+
+**Excluded by design:**  
+Database/storage writes belong to C2-A/C5-W. Notification sending belongs to C2-I. Review/approval decision capture belongs to C2-O2. Retry execution belongs to C6-G2. Dashboard rendering belongs to C5-A/C5-B.

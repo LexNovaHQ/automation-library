@@ -1,0 +1,195 @@
+{
+  "name": "C5-E_CORE_Manual_Review_Queue_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -224
+      ],
+      "id": "2af33be2-e673-475e-8411-d7e7e565487d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction safe(value, fallback = null) {\n  return value === undefined || value === null || value === \"\" ? fallback : value;\n}\n\nfunction makeReviewId(eventId) {\n  const base = eventId || \"unknown_event\";\n  const suffix = Date.now().toString(36);\n  return `review_${base}_${suffix}`.replace(/[^a-zA-Z0-9_]/g, \"_\");\n}\n\nfunction inferReviewReason(source, config) {\n  if (config.review_reason) return config.review_reason;\n  if (source.dedupe?.decision === \"possible_duplicate\") return \"Possible duplicate detected\";\n  if (source.suppression?.decision === \"manual_review\") return \"Suppression or consent requires manual review\";\n  if (source.approval?.status === \"pending\") return \"Approval pending\";\n  if (source.error_log?.status === \"logged\") return \"Workflow error requires review\";\n  if (source.routing?.status === \"fallback\") return \"Fallback route requires manual review\";\n  return \"Manual review required\";\n}\n\nfunction inferQueueType(source, config) {\n  if (config.queue_type) return config.queue_type;\n  if (source.dedupe?.decision === \"possible_duplicate\") return \"dedupe_review\";\n  if (source.suppression?.decision === \"manual_review\") return \"consent_review\";\n  if (source.approval?.status === \"pending\") return \"approval_review\";\n  if (source.error_log?.status === \"logged\") return \"error_retry_review\";\n  if (source.routing?.status === \"fallback\") return \"routing_review\";\n  return \"manual_review\";\n}\n\nfunction inferPriority(source, config) {\n  return config.priority || source.error_log?.severity || source.priority || \"normal\";\n}\n\nfunction inferAllowedActions(source, config) {\n  if (Array.isArray(config.allowed_actions) && config.allowed_actions.length > 0) {\n    return config.allowed_actions;\n  }\n  if (Array.isArray(source.approval?.allowed_actions)) return source.approval.allowed_actions;\n  if (source.dedupe?.decision === \"possible_duplicate\") return [\"approve_create\", \"merge_update\", \"reject\"];\n  if (source.suppression?.decision === \"manual_review\") return [\"mark_consented\", \"mark_do_not_contact\", \"request_clarification\"];\n  if (source.error_log?.status === \"logged\") return [\"retry_ready\", \"resolved\", \"ignore\"];\n  return [\"approve\", \"reject\", \"revise\"];\n}\n\nfunction extractContext(source) {\n  return {\n    dedupe: source.dedupe || null,\n    suppression: source.suppression || null,\n    approval: source.approval || null,\n    error_log: source.error_log || null,\n    routing: source.routing || null,\n    payload: source.payload || source.source_result?.payload || null\n  };\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C5-E\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        review_queue_item: null,\n        notification_payload: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C5-E will not create manual review item when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nconst reviewTriggers = [\"manual_review\", \"notify_reviewer\", \"notify_error_owner\"];\nif (!reviewTriggers.includes(source.next_action)) {\n  return fail({\n    code: \"REVIEW_NOT_REQUESTED\",\n    message: \"source.next_action does not require manual review.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.reviewer_email && !source.approval?.reviewer_email && !source.error_log?.owner_email) {\n  return fail({\n    code: \"MISSING_REVIEWER_EMAIL\",\n    message: \"reviewer email is required from config, approval, or error owner.\"\n  });\n}\n\nconst createdAt = nowIso();\nconst reviewId = makeReviewId(source.event_id);\nconst queueType = inferQueueType(source, config);\nconst reviewReason = inferReviewReason(source, config);\nconst reviewerEmail = config.reviewer_email || source.approval?.reviewer_email || source.error_log?.owner_email;\nconst allowedActions = inferAllowedActions(source, config);\n\nconst reviewQueueItem = {\n  review_id: reviewId,\n  queue_type: queueType,\n  review_status: \"open\",\n  review_reason: reviewReason,\n  event_id: source.event_id || null,\n  event_type: source.event_type || null,\n  source_component: source.component_id || null,\n  source_component_version: source.component_version || null,\n  owner: config.owner || source.owner || \"unassigned\",\n  reviewer_email: reviewerEmail,\n  priority: inferPriority(source, config),\n  allowed_actions: allowedActions,\n  context: extractContext(source),\n  decision: null,\n  reviewer_notes: \"\",\n  created_at: createdAt,\n  updated_at: createdAt\n};\n\nconst text = [\n  `Manual review required`,\n  ``,\n  `Review ID: ${reviewId}`,\n  `Queue Type: ${queueType}`,\n  `Reason: ${reviewReason}`,\n  `Event ID: ${safe(source.event_id, \"-\")}`,\n  `Event Type: ${safe(source.event_type, \"-\")}`,\n  `Source Component: ${safe(source.component_id, \"-\")}`,\n  `Priority: ${reviewQueueItem.priority}`,\n  `Allowed Actions: ${allowedActions.join(\", \")}`\n].join(\"\\n\");\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C5-E\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      review_queue_item: reviewQueueItem,\n      notification_payload: {\n        channel: \"email\",\n        to: reviewerEmail,\n        subject: `Manual review required: ${reviewReason}`,\n        text\n      },\n      source_result: source,\n      error: null,\n      next_action: config.default_next_action || \"notify_reviewer\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -224
+      ],
+      "id": "fb3f69d4-6322-4f3c-86e7-34d8ad769cdc",
+      "name": "Create Review Queue Item"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f58b57b1-e09d-4741-864a-b846a265d1cf",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "e70704a8-1c3d-4a30-9641-b6eb3e8df969",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "0a9f1930-2aac-40ff-843e-a5f4e691b763",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "6415ae5d-4a89-428d-8e25-5083cd8686c9",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b41b98ab-b5c9-4771-a492-f8106d9aec6b",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "6cd373f7-7481-4598-b9ce-5a42a6688690",
+              "name": "review_queue_item",
+              "value": "={{ $json.review_queue_item }}",
+              "type": "object"
+            },
+            {
+              "id": "87b7e33b-c647-48e7-866e-712c77025adc",
+              "name": "notification_payload",
+              "value": "={{ $json.notification_payload }}",
+              "type": "object"
+            },
+            {
+              "id": "8f5f236f-74b8-468f-bd65-8d73480cc6f1",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "f137de29-0a08-474a-a0cf-e3a120f8dbe5",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "a2aa3244-31a9-4a7f-839b-a4a1afa9121f",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -224
+      ],
+      "id": "4cb588ce-e6b8-4d1f-a102-5edd62182578",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-D",
+            "component_version": "v1",
+            "event_id": "evt_review_possible_duplicate",
+            "event_type": "lead_intake",
+            "dedupe": {
+              "status": "possible_duplicate_found",
+              "decision": "possible_duplicate",
+              "recommended_action": "manual_review",
+              "best_match": {
+                "record_id": "rec_existing_002",
+                "source": "hubspot"
+              },
+              "best_score": 120,
+              "match_reasons": [
+                "exact_domain_match",
+                "exact_company_match"
+              ]
+            },
+            "source_result": {
+              "payload": {
+                "name": "Riya S.",
+                "email": "riya@agency-mail.com",
+                "company": "GrowthOps Studio",
+                "message": "Looking for CRM automation."
+              }
+            },
+            "error": null,
+            "next_action": "manual_review"
+          },
+          "config": {
+            "queue_type": "dedupe_review",
+            "review_reason": "Possible duplicate detected",
+            "reviewer_email": "shwetabh.singh@lexnovahq.com",
+            "owner": "ops",
+            "priority": "high",
+            "allowed_actions": [
+              "approve_create",
+              "merge_update",
+              "reject"
+            ],
+            "default_next_action": "notify_reviewer"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Review Queue Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Review Queue Item": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "55c90612-fdf2-4562-aa97-a9db8b1f800b",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "kSSc6kasxoYPlcfB",
+  "tags": []
+}

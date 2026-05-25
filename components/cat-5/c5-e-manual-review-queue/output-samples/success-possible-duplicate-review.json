@@ -1,0 +1,49 @@
+﻿{
+  "success": true,
+  "component_id": "C5-E",
+  "component_version": "v1",
+  "event_id": "evt_review_possible_duplicate",
+  "event_type": "lead_intake",
+  "review_queue_item": {
+    "review_id": "review_evt_review_possible_duplicate_sample",
+    "queue_type": "dedupe_review",
+    "review_status": "open",
+    "review_reason": "Possible duplicate detected",
+    "event_id": "evt_review_possible_duplicate",
+    "event_type": "lead_intake",
+    "source_component": "C2-D",
+    "source_component_version": "v1",
+    "owner": "ops",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "priority": "high",
+    "allowed_actions": ["approve_create", "merge_update", "reject"],
+    "context": {
+      "dedupe": {
+        "decision": "possible_duplicate",
+        "best_match": {
+          "record_id": "rec_existing_002",
+          "source": "hubspot"
+        },
+        "best_score": 120
+      }
+    },
+    "decision": null,
+    "reviewer_notes": "",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Manual review required: Possible duplicate detected",
+    "text": "Manual review required\n\nQueue Type: dedupe_review\nReason: Possible duplicate detected"
+  },
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_review_possible_duplicate",
+    "success": true,
+    "next_action": "manual_review"
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

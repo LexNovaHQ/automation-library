@@ -1,0 +1,46 @@
+﻿{
+  "success": true,
+  "component_id": "C5-E",
+  "component_version": "v1",
+  "event_id": "evt_review_error_retry",
+  "event_type": "lead_intake",
+  "review_queue_item": {
+    "review_id": "review_evt_review_error_retry_sample",
+    "queue_type": "error_retry_review",
+    "review_status": "open",
+    "review_reason": "Workflow error requires review before retry",
+    "event_id": "evt_review_error_retry",
+    "event_type": "lead_intake",
+    "source_component": "C6-G",
+    "source_component_version": "v1",
+    "owner": "ops",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "priority": "high",
+    "allowed_actions": ["retry_ready", "resolved", "ignore"],
+    "context": {
+      "error_log": {
+        "error_id": "err_C2_F_evt_review_error_retry_sample",
+        "retry_status": "pending_manual_review",
+        "source_error_code": "VALIDATION_FAILED"
+      }
+    },
+    "decision": null,
+    "reviewer_notes": "",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Manual review required: Workflow error requires review before retry",
+    "text": "Manual review required\n\nQueue Type: error_retry_review\nReason: Workflow error requires review before retry"
+  },
+  "source_result": {
+    "component_id": "C6-G",
+    "event_id": "evt_review_error_retry",
+    "success": true,
+    "next_action": "notify_error_owner"
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

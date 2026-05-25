@@ -1,0 +1,46 @@
+﻿{
+  "success": true,
+  "component_id": "C5-E",
+  "component_version": "v1",
+  "event_id": "evt_review_unknown_consent",
+  "event_type": "lead_intake",
+  "review_queue_item": {
+    "review_id": "review_evt_review_unknown_consent_sample",
+    "queue_type": "consent_review",
+    "review_status": "open",
+    "review_reason": "Consent status requires manual review",
+    "event_id": "evt_review_unknown_consent",
+    "event_type": "lead_intake",
+    "source_component": "C2-P",
+    "source_component_version": "v1",
+    "owner": "ops",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "priority": "high",
+    "allowed_actions": ["mark_consented", "mark_do_not_contact", "request_clarification"],
+    "context": {
+      "suppression": {
+        "decision": "manual_review",
+        "consent_status": "unknown",
+        "reasons": ["uncertain_consent_status"]
+      }
+    },
+    "decision": null,
+    "reviewer_notes": "",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Manual review required: Consent status requires manual review",
+    "text": "Manual review required\n\nQueue Type: consent_review\nReason: Consent status requires manual review"
+  },
+  "source_result": {
+    "component_id": "C2-P",
+    "event_id": "evt_review_unknown_consent",
+    "success": true,
+    "next_action": "manual_review"
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

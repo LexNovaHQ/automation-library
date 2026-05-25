@@ -1,0 +1,46 @@
+﻿{
+  "success": true,
+  "component_id": "C5-E",
+  "component_version": "v1",
+  "event_id": "evt_review_pending_approval",
+  "event_type": "ai_email_draft",
+  "review_queue_item": {
+    "review_id": "review_evt_review_pending_approval_sample",
+    "queue_type": "approval_review",
+    "review_status": "open",
+    "review_reason": "Approval pending",
+    "event_id": "evt_review_pending_approval",
+    "event_type": "ai_email_draft",
+    "source_component": "C2-O",
+    "source_component_version": "v1",
+    "owner": "content",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "priority": "normal",
+    "allowed_actions": ["approve", "reject", "revise"],
+    "context": {
+      "approval": {
+        "approval_id": "appr_evt_review_pending_approval_sample",
+        "status": "pending",
+        "approval_type": "email_review"
+      }
+    },
+    "decision": null,
+    "reviewer_notes": "",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "updated_at": "2026-05-25T00:00:00.000Z"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Manual review required: Approval pending",
+    "text": "Manual review required\n\nQueue Type: approval_review\nReason: Approval pending"
+  },
+  "source_result": {
+    "component_id": "C2-O",
+    "event_id": "evt_review_pending_approval",
+    "success": true,
+    "next_action": "notify_reviewer"
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

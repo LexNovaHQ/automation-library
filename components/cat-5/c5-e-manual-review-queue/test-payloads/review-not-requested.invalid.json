@@ -1,0 +1,24 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-D",
+    "component_version": "v1",
+    "event_id": "evt_review_not_requested",
+    "event_type": "lead_intake",
+    "dedupe": {
+      "decision": "new_record",
+      "recommended_action": "create_record"
+    },
+    "error": null,
+    "next_action": "write_record"
+  },
+  "config": {
+    "queue_type": "dedupe_review",
+    "review_reason": "Possible duplicate detected",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "priority": "normal",
+    "allowed_actions": ["approve_create", "merge_update", "reject"],
+    "default_next_action": "notify_reviewer"
+  }
+}

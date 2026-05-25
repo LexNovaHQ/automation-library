@@ -1,0 +1,39 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-D",
+    "component_version": "v1",
+    "event_id": "evt_review_possible_duplicate",
+    "event_type": "lead_intake",
+    "dedupe": {
+      "status": "possible_duplicate_found",
+      "decision": "possible_duplicate",
+      "recommended_action": "manual_review",
+      "best_match": {
+        "record_id": "rec_existing_002",
+        "source": "hubspot"
+      },
+      "best_score": 120,
+      "match_reasons": ["exact_domain_match", "exact_company_match"]
+    },
+    "source_result": {
+      "payload": {
+        "name": "Riya S.",
+        "email": "riya@agency-mail.com",
+        "company": "GrowthOps Studio",
+        "message": "Looking for CRM automation."
+      }
+    },
+    "error": null,
+    "next_action": "manual_review"
+  },
+  "config": {
+    "queue_type": "dedupe_review",
+    "review_reason": "Possible duplicate detected",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "priority": "high",
+    "allowed_actions": ["approve_create", "merge_update", "reject"],
+    "default_next_action": "notify_reviewer"
+  }
+}

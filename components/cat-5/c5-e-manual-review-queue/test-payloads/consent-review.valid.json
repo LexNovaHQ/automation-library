@@ -1,0 +1,35 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-P",
+    "component_version": "v1",
+    "event_id": "evt_review_unknown_consent",
+    "event_type": "lead_intake",
+    "suppression": {
+      "status": "consent_review_required",
+      "decision": "manual_review",
+      "allowed_to_contact": false,
+      "recommended_action": "manual_review",
+      "reasons": ["uncertain_consent_status"],
+      "consent_status": "unknown"
+    },
+    "source_result": {
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio"
+      }
+    },
+    "error": null,
+    "next_action": "manual_review"
+  },
+  "config": {
+    "queue_type": "consent_review",
+    "review_reason": "Consent status requires manual review",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "priority": "high",
+    "allowed_actions": ["mark_consented", "mark_do_not_contact", "request_clarification"],
+    "default_next_action": "notify_reviewer"
+  }
+}

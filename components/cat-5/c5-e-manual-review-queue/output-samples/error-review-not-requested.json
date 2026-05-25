@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C5-E",
+  "component_version": "v1",
+  "event_id": "evt_review_not_requested",
+  "event_type": "lead_intake",
+  "review_queue_item": null,
+  "notification_payload": null,
+  "source_result": {
+    "component_id": "C2-D",
+    "event_id": "evt_review_not_requested",
+    "event_type": "lead_intake",
+    "success": true,
+    "next_action": "write_record"
+  },
+  "error": {
+    "code": "REVIEW_NOT_REQUESTED",
+    "message": "source.next_action does not require manual review."
+  },
+  "next_action": "route_to_failure_log"
+}

@@ -1,0 +1,34 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O",
+    "component_version": "v1",
+    "event_id": "evt_review_pending_approval",
+    "event_type": "ai_email_draft",
+    "approval": {
+      "approval_id": "appr_evt_review_pending_approval_sample",
+      "status": "pending",
+      "approval_type": "email_review",
+      "approval_title": "Review email draft",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "allowed_actions": ["approve", "reject", "revise"]
+    },
+    "source_result": {
+      "payload": {
+        "draft_title": "Follow-up email for Shopify automation lead",
+        "draft_summary": "Short sales follow-up email for a Shopify agency lead."
+      }
+    },
+    "error": null,
+    "next_action": "notify_reviewer"
+  },
+  "config": {
+    "queue_type": "approval_review",
+    "review_reason": "Approval pending",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "content",
+    "priority": "normal",
+    "allowed_actions": ["approve", "reject", "revise"],
+    "default_next_action": "notify_reviewer"
+  }
+}

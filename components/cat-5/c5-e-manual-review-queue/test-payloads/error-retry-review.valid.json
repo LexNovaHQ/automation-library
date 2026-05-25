@@ -1,0 +1,37 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C6-G",
+    "component_version": "v1",
+    "event_id": "evt_review_error_retry",
+    "event_type": "lead_intake",
+    "error_log": {
+      "error_id": "err_C2_F_evt_review_error_retry_sample",
+      "status": "logged",
+      "severity": "medium",
+      "retry_status": "pending_manual_review",
+      "source_component": "C2-F",
+      "source_error_code": "VALIDATION_FAILED",
+      "source_error_message": "Payload failed validation.",
+      "resolution_status": "open",
+      "retry_attempts": 0
+    },
+    "source_result": {
+      "component_id": "C2-F",
+      "event_id": "evt_review_error_retry",
+      "event_type": "lead_intake",
+      "success": false
+    },
+    "error": null,
+    "next_action": "notify_error_owner"
+  },
+  "config": {
+    "queue_type": "error_retry_review",
+    "review_reason": "Workflow error requires review before retry",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "owner": "ops",
+    "priority": "high",
+    "allowed_actions": ["retry_ready", "resolved", "ignore"],
+    "default_next_action": "notify_reviewer"
+  }
+}
