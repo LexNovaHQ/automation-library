@@ -1,0 +1,26 @@
+﻿{
+  "success": false,
+  "component_id": "C2-B",
+  "component_version": "v1",
+  "event_id": "evt_missing_rules",
+  "event_type": "lead_intake",
+  "routing": {
+    "status": "failed",
+    "matched": false,
+    "matched_rule_id": null,
+    "route_key": null,
+    "target_component": null,
+    "evaluated_rules": [],
+    "failed_reason": "MISSING_ROUTE_RULES"
+  },
+  "source_result": {
+    "component_id": "C2-A1",
+    "event_id": "evt_missing_rules",
+    "event_type": "lead_intake"
+  },
+  "error": {
+    "code": "MISSING_ROUTE_RULES",
+    "message": "config.rules must be a non-empty array."
+  },
+  "next_action": "route_to_failure_log"
+}

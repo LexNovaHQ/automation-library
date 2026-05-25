@@ -1,0 +1,64 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-A1",
+    "component_version": "v1",
+    "event_id": "evt_route_write_success",
+    "event_type": "lead_intake",
+    "destination": {
+      "type": "google_sheets",
+      "record_id": "Leads!A2:K2"
+    },
+    "write": {
+      "status": "created",
+      "fields_written": ["Name", "Email", "Company", "Message"]
+    },
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "message": "We need automation help."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "notify_team"
+  },
+  "config": {
+    "rules": [
+      {
+        "rule_id": "write_success_notify_team",
+        "priority": 10,
+        "conditions": [
+          { "path": "success", "operator": "equals", "value": true },
+          { "path": "write.status", "operator": "equals", "value": "created" },
+          { "path": "next_action", "operator": "equals", "value": "notify_team" }
+        ],
+        "route": {
+          "route_key": "notify_team",
+          "target_component": "C2-I1",
+          "next_action": "send_email_notification"
+        }
+      },
+      {
+        "rule_id": "failed_to_error_queue",
+        "priority": 20,
+        "conditions": [
+          { "path": "success", "operator": "equals", "value": false }
+        ],
+        "route": {
+          "route_key": "error_queue",
+          "target_component": "C6-G",
+          "next_action": "log_error"
+        }
+      }
+    ],
+    "fallback_route": {
+      "route_key": "manual_review",
+      "target_component": "C5-W",
+      "next_action": "manual_review"
+    }
+  }
+}

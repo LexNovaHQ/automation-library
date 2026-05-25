@@ -94,7 +94,35 @@ Every component is recorded with:
 | **C2-N** | **Spreadsheet/CSV Parser** *(NEW per D-PHASE2-005)* | In-workflow CSV/Excel parsing for line items, bulk lists, bank statements (distinct from C5-S which is dashboard UI upload) | 🟡 Partial |
 
 **Borrowed from other categories:** C4-A (classification), C4-B (extraction), C4-D (content gen), C4-E (multi-agent), C5-A (auth for protected webhooks)
+## C2-B Build Record - Conditional Routing Engine
 
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-b-conditional-routing-engine`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-b-core-conditional-routing-engine-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-B_CORE_Conditional_Routing_Engine_v1`
+- Evaluates configurable route rules in priority order
+- Returns matched route, fallback route, or config failure
+
+**Passed tests:**
+- Write success notify route
+- Validation failed to error queue route
+- HubSpot contact to sales follow-up route
+- Fallback manual review route
+- Missing route rules failure
+
+**Implementation note:**  
+C2-B is built as the reusable conditional routing layer for standardized automation outputs. It does not execute downstream workflows; it returns route metadata for parent orchestration workflows to use.
+
+**Excluded by design:**  
+Execution of downstream workflows belongs to parent orchestration workflows. Notifications belong to C2-I. Human approvals belong to C2-O. Error logging/retry belongs to C6-G.
 ## C2-C Build Record — Webhook Trigger System
 
 **Status:** Built v1.0  

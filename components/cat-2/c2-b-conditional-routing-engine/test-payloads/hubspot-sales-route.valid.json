@@ -1,0 +1,53 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-A3",
+    "component_version": "v1",
+    "event_id": "evt_route_hubspot_created",
+    "event_type": "lead_intake",
+    "destination": {
+      "type": "hubspot",
+      "object_type": "contacts",
+      "record_id": "123456789"
+    },
+    "write": {
+      "status": "created",
+      "fields_written": ["firstname", "lastname", "email", "company"]
+    },
+    "payload": {
+      "firstname": "Riya",
+      "lastname": "Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "sales_followup"
+  },
+  "config": {
+    "rules": [
+      {
+        "rule_id": "hubspot_contact_sales_followup",
+        "priority": 10,
+        "conditions": [
+          { "path": "success", "operator": "equals", "value": true },
+          { "path": "destination.type", "operator": "equals", "value": "hubspot" },
+          { "path": "next_action", "operator": "equals", "value": "sales_followup" }
+        ],
+        "route": {
+          "route_key": "sales_followup",
+          "target_component": "C2-I1",
+          "next_action": "notify_sales"
+        }
+      }
+    ],
+    "fallback_route": {
+      "route_key": "manual_review",
+      "target_component": "C5-W",
+      "next_action": "manual_review"
+    }
+  }
+}

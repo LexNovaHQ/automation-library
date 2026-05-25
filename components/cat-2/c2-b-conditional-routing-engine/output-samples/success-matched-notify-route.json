@@ -1,0 +1,27 @@
+﻿{
+  "success": true,
+  "component_id": "C2-B",
+  "component_version": "v1",
+  "event_id": "evt_route_write_success",
+  "event_type": "lead_intake",
+  "routing": {
+    "status": "matched",
+    "matched": true,
+    "matched_rule_id": "write_success_notify_team",
+    "route_key": "notify_team",
+    "target_component": "C2-I1"
+  },
+  "source_result": {
+    "component_id": "C2-A1",
+    "destination": {
+      "type": "google_sheets",
+      "record_id": "Leads!A2:K2"
+    },
+    "write": {
+      "status": "created"
+    },
+    "next_action": "notify_team"
+  },
+  "error": null,
+  "next_action": "send_email_notification"
+}

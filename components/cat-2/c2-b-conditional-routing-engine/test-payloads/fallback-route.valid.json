@@ -1,0 +1,46 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-A2",
+    "component_version": "v1",
+    "event_id": "evt_route_no_match",
+    "event_type": "content_draft",
+    "destination": {
+      "type": "airtable",
+      "record_id": "rec_sample"
+    },
+    "write": {
+      "status": "created"
+    },
+    "payload": {
+      "title": "Draft title"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "unknown_action"
+  },
+  "config": {
+    "rules": [
+      {
+        "rule_id": "notify_only_leads",
+        "priority": 10,
+        "conditions": [
+          { "path": "event_type", "operator": "equals", "value": "lead_intake" }
+        ],
+        "route": {
+          "route_key": "notify_team",
+          "target_component": "C2-I1",
+          "next_action": "send_email_notification"
+        }
+      }
+    ],
+    "fallback_route": {
+      "route_key": "manual_review",
+      "target_component": "C5-W",
+      "next_action": "manual_review"
+    }
+  }
+}

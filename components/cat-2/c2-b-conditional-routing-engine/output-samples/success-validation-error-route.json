@@ -1,0 +1,23 @@
+﻿{
+  "success": true,
+  "component_id": "C2-B",
+  "component_version": "v1",
+  "event_id": "evt_route_validation_failed",
+  "event_type": "lead_intake",
+  "routing": {
+    "status": "matched",
+    "matched": true,
+    "matched_rule_id": "validation_failed_to_error_queue",
+    "route_key": "validation_error_queue",
+    "target_component": "C6-G"
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED"
+    }
+  },
+  "error": null,
+  "next_action": "log_validation_error"
+}

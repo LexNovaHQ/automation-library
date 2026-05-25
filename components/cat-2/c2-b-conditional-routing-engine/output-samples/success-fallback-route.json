@@ -1,0 +1,27 @@
+﻿{
+  "success": true,
+  "component_id": "C2-B",
+  "component_version": "v1",
+  "event_id": "evt_route_no_match",
+  "event_type": "content_draft",
+  "routing": {
+    "status": "fallback",
+    "matched": false,
+    "matched_rule_id": null,
+    "route_key": "manual_review",
+    "target_component": "C5-W"
+  },
+  "source_result": {
+    "component_id": "C2-A2",
+    "destination": {
+      "type": "airtable",
+      "record_id": "rec_sample"
+    },
+    "write": {
+      "status": "created"
+    },
+    "next_action": "unknown_action"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

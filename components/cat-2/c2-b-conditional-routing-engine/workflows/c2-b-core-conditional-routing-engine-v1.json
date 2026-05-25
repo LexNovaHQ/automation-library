@@ -1,0 +1,212 @@
+{
+  "name": "C2-B_CORE_Conditional_Routing_Engine_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        -192
+      ],
+      "id": "fd17b84f-6492-4dc6-9330-04b01115a575",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction getByPath(obj, path) {\n  if (!path) return undefined;\n  return path.split(\".\").reduce((acc, key) => {\n    if (acc && Object.prototype.hasOwnProperty.call(acc, key)) {\n      return acc[key];\n    }\n    return undefined;\n  }, obj);\n}\n\nfunction exists(value) {\n  return value !== undefined && value !== null && value !== \"\";\n}\n\nfunction evaluateCondition(source, condition) {\n  const actual = getByPath(source, condition.path);\n  const operator = condition.operator;\n  const expected = condition.value;\n\n  if (operator === \"equals\") {\n    return actual === expected;\n  }\n\n  if (operator === \"not_equals\") {\n    return actual !== expected;\n  }\n\n  if (operator === \"exists\") {\n    return exists(actual);\n  }\n\n  if (operator === \"not_exists\") {\n    return !exists(actual);\n  }\n\n  if (operator === \"in\") {\n    if (!Array.isArray(expected)) return false;\n    return expected.includes(actual);\n  }\n\n  if (operator === \"contains\") {\n    if (Array.isArray(actual)) return actual.includes(expected);\n    if (typeof actual === \"string\") return actual.includes(String(expected));\n    return false;\n  }\n\n  return false;\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-B\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        routing: {\n          status: \"failed\",\n          matched: false,\n          matched_rule_id: null,\n          route_key: null,\n          target_component: null,\n          evaluated_rules: [],\n          failed_reason: code\n        },\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst rules = config.rules;\n\nif (!Array.isArray(rules) || rules.length === 0) {\n  return fail({\n    code: \"MISSING_ROUTE_RULES\",\n    message: \"config.rules must be a non-empty array.\"\n  });\n}\n\nconst fallbackRoute = config.fallback_route || {\n  route_key: \"manual_review\",\n  target_component: \"C5-W\",\n  next_action: \"manual_review\"\n};\n\nconst sortedRules = [...rules].sort((a, b) => {\n  const ap = Number(a.priority ?? 9999);\n  const bp = Number(b.priority ?? 9999);\n  return ap - bp;\n});\n\nconst evaluatedRules = [];\n\nfor (const rule of sortedRules) {\n  const conditions = Array.isArray(rule.conditions) ? rule.conditions : [];\n\n  const conditionResults = conditions.map(condition => {\n    const actual = getByPath(source, condition.path);\n    return {\n      path: condition.path,\n      operator: condition.operator,\n      expected: condition.value ?? null,\n      actual: actual ?? null,\n      passed: evaluateCondition(source, condition)\n    };\n  });\n\n  const matched = conditionResults.length > 0 && conditionResults.every(result => result.passed === true);\n\n  evaluatedRules.push({\n    rule_id: rule.rule_id || null,\n    priority: rule.priority ?? null,\n    matched,\n    condition_results: conditionResults\n  });\n\n  if (matched) {\n    const route = rule.route || {};\n\n    return [\n      {\n        json: {\n          success: true,\n          component_id: \"C2-B\",\n          component_version: \"v1\",\n          event_id: source.event_id || null,\n          event_type: source.event_type || null,\n          routing: {\n            status: \"matched\",\n            matched: true,\n            matched_rule_id: rule.rule_id || null,\n            route_key: route.route_key || null,\n            target_component: route.target_component || null,\n            evaluated_rules: evaluatedRules\n          },\n          source_result: source,\n          error: null,\n          next_action: route.next_action || route.route_key || \"continue\"\n        }\n      }\n    ];\n  }\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-B\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      routing: {\n        status: \"fallback\",\n        matched: false,\n        matched_rule_id: null,\n        route_key: fallbackRoute.route_key || \"manual_review\",\n        target_component: fallbackRoute.target_component || \"C5-W\",\n        evaluated_rules: evaluatedRules\n      },\n      source_result: source,\n      error: null,\n      next_action: fallbackRoute.next_action || fallbackRoute.route_key || \"manual_review\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -192
+      ],
+      "id": "c974caea-c310-4d9a-bbdc-11bf1c7b5ec8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f777b196-b68c-441b-9d05-41fbc2752ace",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "1c0d9ddc-7231-405e-8878-939a6329d048",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "4b1e891e-f765-43df-9c5e-62f502b98e08",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "acd856db-98eb-4367-bfa6-b357ef1b427e",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7bfe1229-6784-4c51-9a18-70fdc5bac143",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "12444055-2d33-438e-bda5-81b72e300b87",
+              "name": "routing",
+              "value": "={{ $json.routing }}",
+              "type": "object"
+            },
+            {
+              "id": "b2dbd3b6-34ca-4cb9-bc81-14ee3ebbf711",
+              "name": "routing",
+              "value": "={{ $json.routing }}",
+              "type": "object"
+            },
+            {
+              "id": "e6016a48-51cb-49bc-960a-02c55b94e99b",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "13ce6aae-332d-4d59-8d19-82a5ed4d12c8",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "string"
+            },
+            {
+              "id": "a7378ec1-3b7b-4945-8d6d-1c4a60f40de8",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        -176
+      ],
+      "id": "5534fcad-1795-4f43-9f15-8e470bd82f57",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": false,
+            "component_id": "C2-F",
+            "component_version": "v1",
+            "event_id": "evt_route_validation_failed",
+            "event_type": "lead_intake",
+            "payload": {
+              "name": "Riya Sharma"
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "validation": {
+              "status": "failed",
+              "checked_fields": [
+                "name",
+                "email",
+                "message"
+              ],
+              "failed_fields": [
+                "email",
+                "message"
+              ]
+            },
+            "error": {
+              "code": "VALIDATION_FAILED",
+              "message": "Payload failed validation."
+            },
+            "next_action": "route_to_failure_log"
+          },
+          "config": {
+            "rules": [
+              {
+                "rule_id": "validation_failed_to_error_queue",
+                "priority": 5,
+                "conditions": [
+                  {
+                    "path": "success",
+                    "operator": "equals",
+                    "value": false
+                  },
+                  {
+                    "path": "error.code",
+                    "operator": "equals",
+                    "value": "VALIDATION_FAILED"
+                  }
+                ],
+                "route": {
+                  "route_key": "validation_error_queue",
+                  "target_component": "C6-G",
+                  "next_action": "log_validation_error"
+                }
+              }
+            ],
+            "fallback_route": {
+              "route_key": "manual_review",
+              "target_component": "C5-W",
+              "next_action": "manual_review"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f2312d9d-79cf-4b56-bc72-a014107a65cc",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "qLYH1A5ko9cqRUQX",
+  "tags": []
+}

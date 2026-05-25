@@ -1,0 +1,16 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-A1",
+    "event_id": "evt_missing_rules",
+    "event_type": "lead_intake",
+    "next_action": "notify_team"
+  },
+  "config": {
+    "fallback_route": {
+      "route_key": "manual_review",
+      "target_component": "C5-W",
+      "next_action": "manual_review"
+    }
+  }
+}

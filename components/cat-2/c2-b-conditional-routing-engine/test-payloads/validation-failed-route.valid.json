@@ -1,0 +1,48 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_route_validation_failed",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "failed",
+      "checked_fields": ["name", "email", "message"],
+      "failed_fields": ["email", "message"]
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "rules": [
+      {
+        "rule_id": "validation_failed_to_error_queue",
+        "priority": 5,
+        "conditions": [
+          { "path": "success", "operator": "equals", "value": false },
+          { "path": "error.code", "operator": "equals", "value": "VALIDATION_FAILED" }
+        ],
+        "route": {
+          "route_key": "validation_error_queue",
+          "target_component": "C6-G",
+          "next_action": "log_validation_error"
+        }
+      }
+    ],
+    "fallback_route": {
+      "route_key": "manual_review",
+      "target_component": "C5-W",
+      "next_action": "manual_review"
+    }
+  }
+}
