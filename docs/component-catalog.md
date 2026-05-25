@@ -94,6 +94,38 @@ Every component is recorded with:
 | **C2-N** | **Spreadsheet/CSV Parser** *(NEW per D-PHASE2-005)* | In-workflow CSV/Excel parsing for line items, bulk lists, bank statements (distinct from C5-S which is dashboard UI upload) | 🟡 Partial |
 
 **Borrowed from other categories:** C4-A (classification), C4-B (extraction), C4-D (content gen), C4-E (multi-agent), C5-A (auth for protected webhooks)
+
+## C2-O Build Record - Human Approval Gate
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-o-human-approval-gate`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-o-core-human-approval-gate-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-O_CORE_Human_Approval_Gate_v1`
+- Creates approval request object
+- Extracts configured approval context
+- Generates notification payload for downstream notification adapter
+
+**Passed tests:**
+- Content approval request
+- Campaign approval request
+- Upstream failed
+- Missing reviewer
+- Approval not requested
+
+**Implementation note:**  
+C2-O v1 is built as the reusable approval-object generator for high-risk workflow actions. It creates pending approval requests and notification payloads but does not capture approval responses yet.
+
+**Excluded by design:**  
+Approval response capture belongs to C2-O2. Reviewer notification belongs to C2-I. Approval status storage belongs to C5-W / C2-A. Publishing belongs to C2-Q.
+
 ## C2-B Build Record - Conditional Routing Engine
 
 **Status:** Built v1.0  

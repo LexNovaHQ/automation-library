@@ -1,0 +1,180 @@
+{
+  "name": "C2-O_CORE_Human_Approval_Gate_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -160
+      ],
+      "id": "d07a6e29-aa79-4bc2-b9d2-1cd386239457",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction getByPath(obj, path) {\n  if (!path) return undefined;\n  return path.split(\".\").reduce((acc, key) => {\n    if (acc && Object.prototype.hasOwnProperty.call(acc, key)) {\n      return acc[key];\n    }\n    return undefined;\n  }, obj);\n}\n\nfunction safe(value) {\n  return value === undefined || value === null || value === \"\" ? \"-\" : String(value);\n}\n\nfunction makeApprovalId(eventId) {\n  const base = eventId || \"unknown_event\";\n  const suffix = Date.now().toString(36);\n  return `appr_${base}_${suffix}`;\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-O\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        approval: {\n          approval_id: null,\n          status: \"failed\",\n          approval_type: input.config?.approval_type || null,\n          approval_title: input.config?.approval_title || null,\n          reviewer_email: input.config?.reviewer_email || null,\n          allowed_actions: input.config?.approval_actions || [],\n          context: {}\n        },\n        source_result: input.input || {},\n        notification_payload: null,\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-O will not create approval request when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"request_approval\") {\n  return fail({\n    code: \"APPROVAL_NOT_REQUESTED\",\n    message: \"source.next_action is not request_approval.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.approval_type) {\n  return fail({\n    code: \"MISSING_APPROVAL_TYPE\",\n    message: \"config.approval_type is required.\"\n  });\n}\n\nif (!config.approval_title) {\n  return fail({\n    code: \"MISSING_APPROVAL_TITLE\",\n    message: \"config.approval_title is required.\"\n  });\n}\n\nif (!config.reviewer_email) {\n  return fail({\n    code: \"MISSING_REVIEWER_EMAIL\",\n    message: \"config.reviewer_email is required.\"\n  });\n}\n\nconst actions = Array.isArray(config.approval_actions) && config.approval_actions.length > 0\n  ? config.approval_actions\n  : [\"approve\", \"reject\"];\n\nconst contextFields = Array.isArray(config.approval_context_fields)\n  ? config.approval_context_fields\n  : [];\n\nconst approvalContext = {};\n\nfor (const path of contextFields) {\n  approvalContext[path] = getByPath(source, path) ?? null;\n}\n\nconst approvalId = makeApprovalId(source.event_id);\n\nconst approvalText = [\n  `Approval request`,\n  ``,\n  `Approval ID: ${approvalId}`,\n  `Title: ${safe(config.approval_title)}`,\n  `Type: ${safe(config.approval_type)}`,\n  `Reviewer: ${safe(config.reviewer_email)}`,\n  `Event ID: ${safe(source.event_id)}`,\n  `Event Type: ${safe(source.event_type)}`,\n  `Source Component: ${safe(source.component_id)}`,\n  ``,\n  `Context`,\n  ...Object.entries(approvalContext).map(([key, value]) => `${key}: ${safe(value)}`),\n  ``,\n  `Allowed Actions: ${actions.join(\", \")}`,\n  ``,\n  `Approval response capture is not implemented in C2-O v1. Use C2-O2 or a manual control table for live approval capture.`\n].join(\"\\n\");\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-O\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      approval: {\n        approval_id: approvalId,\n        status: \"pending\",\n        approval_type: config.approval_type,\n        approval_title: config.approval_title,\n        reviewer_email: config.reviewer_email,\n        allowed_actions: actions,\n        context: approvalContext,\n        requested_at: new Date().toISOString()\n      },\n      source_result: source,\n      notification_payload: {\n        channel: \"email\",\n        to: config.reviewer_email,\n        subject: `Approval required: ${config.approval_title}`,\n        text: approvalText\n      },\n      error: null,\n      next_action: config.default_next_action || \"notify_reviewer\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -112
+      ],
+      "id": "55effdf9-a628-4ba7-88a9-202627cdf6bd",
+      "name": "Create Approval Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0c157cd5-5292-4b96-b405-61166c56075b",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c821bc8b-d9a5-4941-9cf0-3b0cbed7393b",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ca0dd272-c2d1-4d0c-8a1b-e06fa2b9d886",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "14865847-1e85-43f9-9f3e-7832e19f7ea6",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "fd684c8c-b8bf-4e6a-9333-e1032f0edf38",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "7ef75ce5-0600-4ebd-9ac9-a0a780bfb8b5",
+              "name": "approval",
+              "value": "={{ $json.approval }}",
+              "type": "object"
+            },
+            {
+              "id": "f1661b40-e192-469a-a282-a88550ebe7e4",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "ebb0c755-6cbf-4b07-ae71-2a7ba0d2d38a",
+              "name": "notification_payload",
+              "value": "={{ $json.notification_payload }}",
+              "type": "object"
+            },
+            {
+              "id": "989ea46d-b540-4875-a428-7bbceff81592",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "string"
+            },
+            {
+              "id": "a68d0e82-e02d-4fdf-b5f2-07ce7568366a",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        -112
+      ],
+      "id": "259f8b31-1204-4d2e-b14f-b5cea13f27dc",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C4-M",
+            "component_version": "v1",
+            "event_id": "evt_approval_missing_reviewer",
+            "event_type": "ai_blog_draft",
+            "payload": {
+              "title": "5 Ways Automation Improves Shopify Marketing"
+            },
+            "metadata": {
+              "origin": "ai_content_workflow",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "request_approval"
+          },
+          "config": {
+            "approval_type": "content_review",
+            "approval_title": "Review AI blog draft",
+            "approval_actions": [
+              "approve",
+              "reject",
+              "revise"
+            ],
+            "approval_context_fields": [
+              "payload.title"
+            ],
+            "default_next_action": "notify_reviewer"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7aead79c-6cf7-4710-b782-ba675c70fd57",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "2uBUTJ0G5ULjCcmF",
+  "tags": []
+}

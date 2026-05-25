@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-O",
+  "component_version": "v1",
+  "event_id": "evt_approval_not_requested",
+  "event_type": "ai_blog_draft",
+  "approval": {
+    "approval_id": null,
+    "status": "failed",
+    "approval_type": "content_review",
+    "approval_title": "Review AI blog draft",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "allowed_actions": ["approve", "reject", "revise"],
+    "context": {}
+  },
+  "source_result": {
+    "component_id": "C4-M",
+    "event_id": "evt_approval_not_requested",
+    "event_type": "ai_blog_draft",
+    "next_action": "publish_directly"
+  },
+  "notification_payload": null,
+  "error": {
+    "code": "APPROVAL_NOT_REQUESTED",
+    "message": "source.next_action is not request_approval."
+  },
+  "next_action": "route_to_failure_log"
+}

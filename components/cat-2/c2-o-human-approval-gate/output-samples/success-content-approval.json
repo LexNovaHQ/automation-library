@@ -1,0 +1,36 @@
+﻿{
+  "success": true,
+  "component_id": "C2-O",
+  "component_version": "v1",
+  "event_id": "evt_approval_ai_blog_draft",
+  "event_type": "ai_blog_draft",
+  "approval": {
+    "approval_id": "appr_evt_approval_ai_blog_draft_sample",
+    "status": "pending",
+    "approval_type": "content_review",
+    "approval_title": "Review AI blog draft",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "allowed_actions": ["approve", "reject", "revise"],
+    "context": {
+      "payload.title": "5 Ways Automation Improves Shopify Marketing",
+      "payload.draft_type": "blog",
+      "payload.draft_summary": "AI-generated blog draft about automation for Shopify marketing.",
+      "payload.content_url": "https://example.com/drafts/blog-123"
+    },
+    "requested_at": "2026-05-25T00:00:00.000Z"
+  },
+  "source_result": {
+    "component_id": "C4-M",
+    "event_id": "evt_approval_ai_blog_draft",
+    "event_type": "ai_blog_draft",
+    "next_action": "request_approval"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Approval required: Review AI blog draft",
+    "text": "Approval request..."
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

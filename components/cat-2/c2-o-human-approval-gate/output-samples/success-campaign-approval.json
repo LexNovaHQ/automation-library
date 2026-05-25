@@ -1,0 +1,36 @@
+﻿{
+  "success": true,
+  "component_id": "C2-O",
+  "component_version": "v1",
+  "event_id": "evt_approval_email_campaign",
+  "event_type": "email_campaign",
+  "approval": {
+    "approval_id": "appr_evt_approval_email_campaign_sample",
+    "status": "pending",
+    "approval_type": "campaign_send",
+    "approval_title": "Approve email campaign send",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "allowed_actions": ["approve", "reject"],
+    "context": {
+      "payload.campaign_name": "May Shopify Promo",
+      "payload.audience": "Warm leads",
+      "payload.estimated_recipients": 450,
+      "payload.send_window": "2026-05-26 10:00 IST"
+    },
+    "requested_at": "2026-05-25T00:00:00.000Z"
+  },
+  "source_result": {
+    "component_id": "C1",
+    "event_id": "evt_approval_email_campaign",
+    "event_type": "email_campaign",
+    "next_action": "request_approval"
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Approval required: Approve email campaign send",
+    "text": "Approval request..."
+  },
+  "error": null,
+  "next_action": "notify_reviewer"
+}

@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-O",
+  "component_version": "v1",
+  "event_id": "evt_approval_failed_input",
+  "event_type": "ai_blog_draft",
+  "approval": {
+    "approval_id": null,
+    "status": "failed",
+    "approval_type": "content_review",
+    "approval_title": "Review AI blog draft",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "allowed_actions": ["approve", "reject", "revise"],
+    "context": {}
+  },
+  "source_result": {
+    "component_id": "C4-M",
+    "event_id": "evt_approval_failed_input",
+    "event_type": "ai_blog_draft",
+    "success": false
+  },
+  "notification_payload": null,
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-O will not create approval request when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}
