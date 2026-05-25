@@ -1,0 +1,24 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-A1",
+    "component_version": "v1",
+    "event_id": "evt_error_missing_error_object",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "error_owner_email": "shwetabh.singh@lexnovahq.com",
+    "default_severity": "medium",
+    "default_retry_status": "pending_manual_review",
+    "default_next_action": "notify_error_owner"
+  }
+}

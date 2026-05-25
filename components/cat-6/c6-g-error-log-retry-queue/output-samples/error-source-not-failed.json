@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C6-G",
+  "component_version": "v1",
+  "event_id": "evt_error_success_input",
+  "event_type": "lead_intake",
+  "error_log": {
+    "error_id": null,
+    "status": "failed",
+    "severity": null,
+    "retry_status": null,
+    "source_component": "C2-A1",
+    "source_error_code": null,
+    "owner_email": "shwetabh.singh@lexnovahq.com"
+  },
+  "source_result": {
+    "component_id": "C2-A1",
+    "event_id": "evt_error_success_input",
+    "event_type": "lead_intake",
+    "success": true
+  },
+  "notification_payload": null,
+  "error": {
+    "code": "SOURCE_NOT_FAILED",
+    "message": "C6-G only creates error log records for failed upstream outputs."
+  },
+  "next_action": "route_to_failure_log"
+}

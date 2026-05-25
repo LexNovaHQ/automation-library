@@ -647,3 +647,35 @@ Will be locked when Category 6 sprint begins. Mostly soft tooling (checklists, S
 ---
 
 **This document is the canonical source of truth for the component library. Every change to component definitions, status, or scope is recorded here first, before code changes.**
+
+## C6-G Build Record - Error Log + Retry Queue
+
+**Status:** Built v1.0  
+**Location:** `components/cat-6/c6-g-error-log-retry-queue`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c6-g-core-error-log-retry-queue-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C6-G_CORE_Error_Log_Retry_Queue_v1`
+- Creates standardized error log objects
+- Classifies severity using configurable severity rules
+- Creates retry/manual-resolution status fields
+- Generates owner notification payload
+
+**Passed tests:**
+- Validation failed log
+- Write failed log
+- Notification failed log
+- Success input invalid
+- Missing error object invalid
+
+**Implementation note:**  
+C6-G v1 is built as the reusable error-log and retry-queue object generator. It does not store the record or execute retries. Storage belongs to C5-W / C2-A. Notification belongs to C2-I. Retry execution belongs to C6-G2.
+
+**Excluded by design:**  
+Database/status-table write belongs to C5-W / C2-A. Error owner notification belongs to C2-I. Actual retry execution belongs to C6-G2. Diagnostic auto-fix belongs to later C6 components.

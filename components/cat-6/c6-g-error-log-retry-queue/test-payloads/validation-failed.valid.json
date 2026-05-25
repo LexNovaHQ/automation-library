@@ -1,0 +1,50 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_error_validation_failed",
+    "event_type": "lead_intake",
+    "payload": {
+      "name": "Riya Sharma"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "validation": {
+      "status": "failed",
+      "checked_fields": ["name", "email", "message"],
+      "failed_fields": ["email", "message"]
+    },
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation.",
+      "details": [
+        {
+          "field": "email",
+          "rule": "required",
+          "issue": "email is required."
+        },
+        {
+          "field": "message",
+          "rule": "required",
+          "issue": "message is required."
+        }
+      ]
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "error_owner_email": "shwetabh.singh@lexnovahq.com",
+    "severity_rules": {
+      "VALIDATION_FAILED": "medium",
+      "MISSING_SPREADSHEET_ID": "high",
+      "UPSTREAM_ACTION_FAILED": "high",
+      "AUTH_FAILED": "critical"
+    },
+    "default_severity": "medium",
+    "default_retry_status": "pending_manual_review",
+    "default_next_action": "notify_error_owner"
+  }
+}

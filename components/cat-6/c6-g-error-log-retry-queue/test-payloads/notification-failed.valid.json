@@ -1,0 +1,49 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-I1",
+    "component_version": "v1",
+    "event_id": "evt_error_missing_recipient",
+    "event_type": "lead_intake",
+    "notification": {
+      "channel": "email",
+      "status": "failed",
+      "to": null,
+      "subject": null,
+      "provider_message_id": null
+    },
+    "source_result": {
+      "component_id": "C2-A2",
+      "destination": {
+        "type": "airtable",
+        "record_id": "rec_sample_success"
+      },
+      "write": {
+        "status": "created"
+      }
+    },
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": {
+      "code": "MISSING_RECIPIENT",
+      "message": "config.to is required."
+    },
+    "next_action": "route_to_failure_log"
+  },
+  "config": {
+    "error_owner_email": "shwetabh.singh@lexnovahq.com",
+    "severity_rules": {
+      "MISSING_RECIPIENT": "medium",
+      "SMTP_AUTH_FAILED": "critical"
+    },
+    "default_severity": "medium",
+    "default_retry_status": "pending_manual_review",
+    "default_next_action": "notify_error_owner"
+  }
+}

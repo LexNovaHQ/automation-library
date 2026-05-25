@@ -1,0 +1,41 @@
+﻿{
+  "success": true,
+  "component_id": "C6-G",
+  "component_version": "v1",
+  "event_id": "evt_error_missing_recipient",
+  "event_type": "lead_intake",
+  "error_log": {
+    "error_id": "err_C2_I1_evt_error_missing_recipient_sample",
+    "status": "logged",
+    "severity": "medium",
+    "retry_status": "pending_manual_review",
+    "source_component": "C2-I1",
+    "source_component_version": "v1",
+    "source_error_code": "MISSING_RECIPIENT",
+    "source_error_message": "config.to is required.",
+    "source_error_details": [],
+    "owner_email": "shwetabh.singh@lexnovahq.com",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "resolution_status": "open",
+    "retry_attempts": 0,
+    "manual_notes": ""
+  },
+  "source_result": {
+    "component_id": "C2-I1",
+    "event_id": "evt_error_missing_recipient",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "MISSING_RECIPIENT",
+      "message": "config.to is required."
+    }
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Automation error: MISSING_RECIPIENT",
+    "text": "Automation error logged..."
+  },
+  "error": null,
+  "next_action": "notify_error_owner"
+}

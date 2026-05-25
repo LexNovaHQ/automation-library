@@ -1,0 +1,173 @@
+{
+  "name": "C6-G_CORE_Error_Log_Retry_Queue_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -208,
+        -176
+      ],
+      "id": "bb840613-9697-403e-8445-7bc2393584df",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction makeErrorId(source = {}) {\n  const eventId = source.event_id || \"unknown_event\";\n  const component = source.component_id || \"unknown_component\";\n  const suffix = Date.now().toString(36);\n  return `err_${component}_${eventId}_${suffix}`.replace(/[^a-zA-Z0-9_]/g, \"_\");\n}\n\nfunction safe(value) {\n  return value === undefined || value === null || value === \"\" ? \"-\" : String(value);\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C6-G\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        error_log: {\n          error_id: null,\n          status: \"failed\",\n          severity: null,\n          retry_status: null,\n          source_component: input.input?.component_id || null,\n          source_error_code: input.input?.error?.code || null,\n          owner_email: input.config?.error_owner_email || null\n        },\n        source_result: input.input || {},\n        notification_payload: null,\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== false) {\n  return fail({\n    code: \"SOURCE_NOT_FAILED\",\n    message: \"C6-G only creates error log records for failed upstream outputs.\",\n    details: [{ source_success: source.success }]\n  });\n}\n\nif (!source.error || typeof source.error !== \"object\") {\n  return fail({\n    code: \"MISSING_SOURCE_ERROR\",\n    message: \"Failed source output must include an error object.\"\n  });\n}\n\nif (!source.error.code) {\n  return fail({\n    code: \"MISSING_SOURCE_ERROR_CODE\",\n    message: \"source.error.code is required.\"\n  });\n}\n\nconst severityRules = config.severity_rules || {};\nconst sourceErrorCode = source.error.code;\nconst severity = severityRules[sourceErrorCode] || config.default_severity || \"medium\";\nconst retryStatus = config.default_retry_status || \"pending_manual_review\";\nconst ownerEmail = config.error_owner_email || null;\nconst errorId = makeErrorId(source);\nconst createdAt = new Date().toISOString();\n\nconst errorSummary = [\n  `Automation error logged`,\n  ``,\n  `Error ID: ${errorId}`,\n  `Severity: ${severity}`,\n  `Retry Status: ${retryStatus}`,\n  `Event ID: ${safe(source.event_id)}`,\n  `Event Type: ${safe(source.event_type)}`,\n  `Source Component: ${safe(source.component_id)}`,\n  `Source Error Code: ${safe(sourceErrorCode)}`,\n  `Source Error Message: ${safe(source.error.message)}`,\n  ``,\n  `Next manual action: Review payload, fix configuration/data issue, then mark retry_status as retry_ready or resolved.`\n].join(\"\\n\");\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C6-G\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      error_log: {\n        error_id: errorId,\n        status: \"logged\",\n        severity,\n        retry_status: retryStatus,\n        source_component: source.component_id || null,\n        source_component_version: source.component_version || null,\n        source_error_code: sourceErrorCode,\n        source_error_message: source.error.message || null,\n        source_error_details: source.error.details || [],\n        owner_email: ownerEmail,\n        created_at: createdAt,\n        resolution_status: \"open\",\n        retry_attempts: 0,\n        manual_notes: \"\"\n      },\n      source_result: source,\n      notification_payload: ownerEmail\n        ? {\n            channel: \"email\",\n            to: ownerEmail,\n            subject: `Automation error: ${sourceErrorCode}`,\n            text: errorSummary\n          }\n        : null,\n      error: null,\n      next_action: config.default_next_action || \"notify_error_owner\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -176
+      ],
+      "id": "3bb52733-2d10-4af8-8815-a0a14c84d46f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b490349e-0065-4ca1-8761-ace459f4c5a3",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "0408a8b4-2ccc-4be3-a29c-344160f6ac0c",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c1ba7bec-8cf7-4f52-a41d-cfc2a391a362",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "50a687d4-ef12-435b-ad8e-81b80a50c227",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a466b887-fbe1-46e4-8dcd-2a517da46c7e",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "454e3dcd-1202-42d1-a358-39c4a6b4016c",
+              "name": "error_log",
+              "value": "={{ $json.error_log }}",
+              "type": "object"
+            },
+            {
+              "id": "835b84e3-b665-47f5-8d70-ae970bad11a8",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "2f14bd2f-cff8-4c15-ac14-570a01f00b29",
+              "name": "notification_payload",
+              "value": "={{ $json.notification_payload }}",
+              "type": "object"
+            },
+            {
+              "id": "92096d3d-dd0b-4153-9a43-3a46061606c2",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "a687be4e-84aa-45ec-8b10-2d03dda2faaa",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -176
+      ],
+      "id": "fb553c85-b4c9-4615-aff9-3262d5753579",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": false,
+            "component_id": "C2-A1",
+            "component_version": "v1",
+            "event_id": "evt_error_missing_error_object",
+            "event_type": "lead_intake",
+            "payload": {
+              "name": "Riya Sharma"
+            },
+            "metadata": {
+              "origin": "manual_test",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "route_to_failure_log"
+          },
+          "config": {
+            "error_owner_email": "shwetabh.singh@lexnovahq.com",
+            "default_severity": "medium",
+            "default_retry_status": "pending_manual_review",
+            "default_next_action": "notify_error_owner"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8a5d4e87-03aa-4866-8412-12180e3b2b91",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "L0POi3Echjj109KW",
+  "tags": []
+}

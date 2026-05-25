@@ -1,0 +1,52 @@
+﻿{
+  "success": true,
+  "component_id": "C6-G",
+  "component_version": "v1",
+  "event_id": "evt_error_validation_failed",
+  "event_type": "lead_intake",
+  "error_log": {
+    "error_id": "err_C2_F_evt_error_validation_failed_sample",
+    "status": "logged",
+    "severity": "medium",
+    "retry_status": "pending_manual_review",
+    "source_component": "C2-F",
+    "source_component_version": "v1",
+    "source_error_code": "VALIDATION_FAILED",
+    "source_error_message": "Payload failed validation.",
+    "source_error_details": [
+      {
+        "field": "email",
+        "rule": "required",
+        "issue": "email is required."
+      },
+      {
+        "field": "message",
+        "rule": "required",
+        "issue": "message is required."
+      }
+    ],
+    "owner_email": "shwetabh.singh@lexnovahq.com",
+    "created_at": "2026-05-25T00:00:00.000Z",
+    "resolution_status": "open",
+    "retry_attempts": 0,
+    "manual_notes": ""
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_error_validation_failed",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "message": "Payload failed validation."
+    }
+  },
+  "notification_payload": {
+    "channel": "email",
+    "to": "shwetabh.singh@lexnovahq.com",
+    "subject": "Automation error: VALIDATION_FAILED",
+    "text": "Automation error logged..."
+  },
+  "error": null,
+  "next_action": "notify_error_owner"
+}

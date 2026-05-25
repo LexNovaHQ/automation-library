@@ -1,0 +1,29 @@
+﻿{
+  "success": false,
+  "component_id": "C6-G",
+  "component_version": "v1",
+  "event_id": "evt_error_missing_error_object",
+  "event_type": "lead_intake",
+  "error_log": {
+    "error_id": null,
+    "status": "failed",
+    "severity": null,
+    "retry_status": null,
+    "source_component": "C2-A1",
+    "source_error_code": null,
+    "owner_email": "shwetabh.singh@lexnovahq.com"
+  },
+  "source_result": {
+    "component_id": "C2-A1",
+    "event_id": "evt_error_missing_error_object",
+    "event_type": "lead_intake",
+    "success": false,
+    "error": null
+  },
+  "notification_payload": null,
+  "error": {
+    "code": "MISSING_SOURCE_ERROR",
+    "message": "Failed source output must include an error object."
+  },
+  "next_action": "route_to_failure_log"
+}
