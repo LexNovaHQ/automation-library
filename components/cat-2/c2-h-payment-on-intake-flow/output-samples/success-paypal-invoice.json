@@ -1,0 +1,79 @@
+﻿{
+  "success": true,
+  "component_id": "C2-H",
+  "component_version": "v1",
+  "event_id": "evt_c2h_paypal_invoice",
+  "event_type": "approved_payment_request",
+  "payment_request": {
+    "provider": "paypal",
+    "mode": "invoice_handoff",
+    "status": "ready",
+    "payment_type": "invoice_payment",
+    "amount": 750,
+    "currency": "USD",
+    "description": "AI workflow implementation invoice",
+    "reference_id": "INV-PAYPAL-001",
+    "customer": {
+      "name": "Neha Kapoor",
+      "email": "neha@example.com",
+      "phone": "+917777777777",
+      "company": "OpsFlow"
+    },
+    "payment_terms": {
+      "due_in_days": 10,
+      "due_at": "2026-06-04T00:00:00.000Z",
+      "allow_partial_payment": false,
+      "send_reminder": true
+    },
+    "requires_approval": true,
+    "approval_status_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": {
+    "next_component": "paypal_payment_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-H",
+      "component_version": "v1",
+      "event_id": "evt_c2h_paypal_invoice",
+      "event_type": "payment_provider_request",
+      "provider_payload": {
+        "provider": "paypal",
+        "action": "create_invoice",
+        "amount": 750,
+        "currency": "USD",
+        "description": "AI workflow implementation invoice",
+        "reference_id": "INV-PAYPAL-001",
+        "recipient": {
+          "name": "Neha Kapoor",
+          "email": "neha@example.com"
+        },
+        "invoice_detail": {
+          "currency_code": "USD",
+          "note": "AI workflow implementation invoice",
+          "payment_term": {
+            "term_type": "DUE_ON_DATE_SPECIFIED",
+            "due_date": "2026-06-04T00:00:00.000Z"
+          }
+        }
+      },
+      "error": null,
+      "next_action": "create_payment_request"
+    },
+    "config": {
+      "provider": "paypal",
+      "adapter_required": true,
+      "default_next_action": "track_payment_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2h_paypal_invoice",
+    "event_type": "approved_payment_request",
+    "success": true,
+    "next_action": "prepare_payment_request"
+  },
+  "error": null,
+  "next_action": "create_payment_provider_handoff"
+}

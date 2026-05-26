@@ -1,0 +1,44 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_stripe_link",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_name": "Aman Mehta",
+      "customer_email": "aman@example.com",
+      "customer_phone": "+918888888888",
+      "company": "CartLift",
+      "amount": 500,
+      "currency": "USD",
+      "description": "Workflow automation discovery + setup deposit",
+      "reference_id": "INV-STRIPE-001"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_payment_request"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "stripe",
+    "mode": "payment_link_handoff",
+    "payment_type": "deposit",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_currencies": ["USD", "EUR", "GBP"],
+    "allowed_payment_types": ["advance_payment", "full_payment", "deposit", "invoice_payment"],
+    "payment_terms": {
+      "due_in_days": 5,
+      "allow_partial_payment": false,
+      "send_reminder": true
+    },
+    "default_next_action": "create_payment_provider_handoff"
+  }
+}

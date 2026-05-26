@@ -1382,3 +1382,44 @@ C2-M v1 is built as the reusable WhatsApp handoff/router layer. WhatsApp Cloud A
 
 **Excluded by design:**  
 AI message drafting belongs to C4-E or a future message draft component. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual provider sends belong to future WhatsApp Cloud API/Twilio/WATI adapters. Status tracking belongs to C5-W. Error logging belongs to C6-G.
+
+## C2-H Build Record - Payment-on-Intake Flow
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-h-payment-on-intake-flow`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-h-core-payment-on-intake-flow-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-H_CORE_Payment_On_Intake_Flow_v1`
+- Prepares provider-agnostic payment request objects and handoffs
+- Supports Razorpay payment link handoff
+- Supports Stripe payment link handoff
+- Supports PayPal invoice handoff
+- Supports Wise/manual payment instruction handoff
+- Supports approval gating, currency gating, payment type gating, amount checks, and provider/mode validation
+- Creates provider adapter handoff for payment request creation
+- Does not directly charge cards, create live payment links, send invoices, or call payment APIs
+
+**Passed tests:**
+- Razorpay payment link
+- Stripe payment link
+- PayPal invoice
+- Wise manual payment
+- Upstream failed
+- Payment not requested
+- Missing provider
+- Missing amount
+- Not approved
+- Currency not allowed
+
+**Implementation note:**  
+C2-H v1 is built as the reusable payment-intake handoff/router layer. Razorpay, Stripe, PayPal, and Wise are provider modes, not hard-coded component identities. Actual provider calls belong to future provider adapters.
+
+**Excluded by design:**  
+Actual payment link/invoice creation belongs to future Razorpay/Stripe/PayPal adapters. Payment status tracking belongs to C5-W or a future payment status component. Payment reminders belong to C2-I/C2-J or a future reminder component. Human approval belongs to C2-O/C2-O2. Error logging belongs to C6-G.

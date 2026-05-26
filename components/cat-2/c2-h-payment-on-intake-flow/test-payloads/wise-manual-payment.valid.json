@@ -1,0 +1,46 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_wise_manual",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_name": "Dev Rao",
+      "customer_email": "dev@example.com",
+      "customer_phone": "+916666666666",
+      "company": "ScaleCart",
+      "amount": 400,
+      "currency": "USD",
+      "description": "Manual Wise transfer for automation setup",
+      "reference_id": "INV-WISE-001"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_payment_request"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "wise",
+    "mode": "manual_payment_handoff",
+    "payment_type": "manual_transfer",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_currencies": ["USD", "EUR", "GBP", "INR"],
+    "allowed_payment_types": ["manual_transfer", "invoice_payment", "deposit"],
+    "manual_payment_instructions": {
+      "method": "Wise transfer",
+      "recipient_name": "GrowthOps Studio",
+      "note_required": true,
+      "reference_instruction": "Use invoice/reference ID in payment note."
+    },
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "default_next_action": "manual_payment_review"
+  }
+}

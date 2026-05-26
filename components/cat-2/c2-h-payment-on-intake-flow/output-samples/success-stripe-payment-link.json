@@ -1,0 +1,74 @@
+﻿{
+  "success": true,
+  "component_id": "C2-H",
+  "component_version": "v1",
+  "event_id": "evt_c2h_stripe_link",
+  "event_type": "approved_payment_request",
+  "payment_request": {
+    "provider": "stripe",
+    "mode": "payment_link_handoff",
+    "status": "ready",
+    "payment_type": "deposit",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Workflow automation discovery + setup deposit",
+    "reference_id": "INV-STRIPE-001",
+    "customer": {
+      "name": "Aman Mehta",
+      "email": "aman@example.com",
+      "phone": "+918888888888",
+      "company": "CartLift"
+    },
+    "payment_terms": {
+      "due_in_days": 5,
+      "due_at": "2026-05-30T00:00:00.000Z",
+      "allow_partial_payment": false,
+      "send_reminder": true
+    },
+    "requires_approval": true,
+    "approval_status_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": {
+    "next_component": "stripe_payment_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-H",
+      "component_version": "v1",
+      "event_id": "evt_c2h_stripe_link",
+      "event_type": "payment_provider_request",
+      "provider_payload": {
+        "provider": "stripe",
+        "action": "create_payment_link_or_checkout_session",
+        "amount": 500,
+        "currency": "USD",
+        "description": "Workflow automation discovery + setup deposit",
+        "reference_id": "INV-STRIPE-001",
+        "customer_email": "aman@example.com",
+        "metadata": {
+          "customer_name": "Aman Mehta",
+          "company": "CartLift",
+          "payment_type": "deposit",
+          "reference_id": "INV-STRIPE-001"
+        }
+      },
+      "error": null,
+      "next_action": "create_payment_request"
+    },
+    "config": {
+      "provider": "stripe",
+      "adapter_required": true,
+      "default_next_action": "track_payment_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2h_stripe_link",
+    "event_type": "approved_payment_request",
+    "success": true,
+    "next_action": "prepare_payment_request"
+  },
+  "error": null,
+  "next_action": "create_payment_provider_handoff"
+}

@@ -1,0 +1,26 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_upstream_failed",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_email": "riya@example.com",
+      "amount": 25000,
+      "currency": "INR"
+    },
+    "error": {
+      "code": "APPROVAL_FAILED",
+      "message": "Approval response failed."
+    },
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "razorpay",
+    "mode": "payment_link_handoff",
+    "payment_type": "advance_payment",
+    "approval_status_required": true,
+    "default_next_action": "create_payment_provider_handoff"
+  }
+}

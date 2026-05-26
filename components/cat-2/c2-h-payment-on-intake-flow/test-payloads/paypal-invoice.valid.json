@@ -1,0 +1,44 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_paypal_invoice",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_name": "Neha Kapoor",
+      "customer_email": "neha@example.com",
+      "customer_phone": "+917777777777",
+      "company": "OpsFlow",
+      "amount": 750,
+      "currency": "USD",
+      "description": "AI workflow implementation invoice",
+      "reference_id": "INV-PAYPAL-001"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_payment_request"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "paypal",
+    "mode": "invoice_handoff",
+    "payment_type": "invoice_payment",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_currencies": ["USD", "EUR", "GBP"],
+    "allowed_payment_types": ["invoice_payment", "full_payment", "deposit"],
+    "payment_terms": {
+      "due_in_days": 10,
+      "allow_partial_payment": false,
+      "send_reminder": true
+    },
+    "default_next_action": "create_payment_provider_handoff"
+  }
+}

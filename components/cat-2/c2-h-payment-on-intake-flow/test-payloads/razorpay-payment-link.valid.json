@@ -1,0 +1,44 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_razorpay_link",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_name": "Riya Sharma",
+      "customer_email": "riya@example.com",
+      "customer_phone": "+919999999999",
+      "company": "GrowthOps Studio",
+      "amount": 25000,
+      "currency": "INR",
+      "description": "Automation setup advance payment",
+      "reference_id": "INV-RAZORPAY-001"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_payment_request"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "razorpay",
+    "mode": "payment_link_handoff",
+    "payment_type": "advance_payment",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_currencies": ["INR"],
+    "allowed_payment_types": ["advance_payment", "full_payment", "deposit", "invoice_payment"],
+    "payment_terms": {
+      "due_in_days": 7,
+      "allow_partial_payment": false,
+      "send_reminder": true
+    },
+    "default_next_action": "create_payment_provider_handoff"
+  }
+}

@@ -1,0 +1,79 @@
+﻿{
+  "success": true,
+  "component_id": "C2-H",
+  "component_version": "v1",
+  "event_id": "evt_c2h_wise_manual",
+  "event_type": "approved_payment_request",
+  "payment_request": {
+    "provider": "wise",
+    "mode": "manual_payment_handoff",
+    "status": "ready",
+    "payment_type": "manual_transfer",
+    "amount": 400,
+    "currency": "USD",
+    "description": "Manual Wise transfer for automation setup",
+    "reference_id": "INV-WISE-001",
+    "customer": {
+      "name": "Dev Rao",
+      "email": "dev@example.com",
+      "phone": "+916666666666",
+      "company": "ScaleCart"
+    },
+    "payment_terms": {
+      "due_in_days": 7,
+      "due_at": "2026-06-01T00:00:00.000Z",
+      "allow_partial_payment": false,
+      "send_reminder": false
+    },
+    "requires_approval": true,
+    "approval_status_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": {
+    "next_component": "wise_payment_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-H",
+      "component_version": "v1",
+      "event_id": "evt_c2h_wise_manual",
+      "event_type": "payment_provider_request",
+      "provider_payload": {
+        "provider": "wise",
+        "action": "prepare_manual_payment_instructions",
+        "amount": 400,
+        "currency": "USD",
+        "description": "Manual Wise transfer for automation setup",
+        "reference_id": "INV-WISE-001",
+        "customer": {
+          "name": "Dev Rao",
+          "email": "dev@example.com",
+          "phone": "+916666666666",
+          "company": "ScaleCart"
+        },
+        "manual_payment_instructions": {
+          "method": "Wise transfer",
+          "recipient_name": "GrowthOps Studio",
+          "note_required": true,
+          "reference_instruction": "Use invoice/reference ID in payment note."
+        }
+      },
+      "error": null,
+      "next_action": "create_payment_request"
+    },
+    "config": {
+      "provider": "wise",
+      "adapter_required": true,
+      "default_next_action": "track_payment_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2h_wise_manual",
+    "event_type": "approved_payment_request",
+    "success": true,
+    "next_action": "prepare_payment_request"
+  },
+  "error": null,
+  "next_action": "manual_payment_review"
+}

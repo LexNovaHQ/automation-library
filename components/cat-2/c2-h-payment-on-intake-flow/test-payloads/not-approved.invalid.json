@@ -1,0 +1,27 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2h_not_approved",
+    "event_type": "approved_payment_request",
+    "payload": {
+      "customer_email": "riya@example.com",
+      "amount": 25000,
+      "currency": "INR"
+    },
+    "approved_action": {
+      "approved": false,
+      "action": "prepare_payment_request"
+    },
+    "error": null,
+    "next_action": "prepare_payment_request"
+  },
+  "config": {
+    "provider": "razorpay",
+    "mode": "payment_link_handoff",
+    "payment_type": "advance_payment",
+    "approval_status_required": true,
+    "default_next_action": "create_payment_provider_handoff"
+  }
+}

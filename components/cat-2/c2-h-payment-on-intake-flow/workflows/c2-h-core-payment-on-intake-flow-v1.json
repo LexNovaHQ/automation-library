@@ -1,0 +1,206 @@
+{
+  "name": "C2-H_CORE_Payment_On_Intake_Flow_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -224
+      ],
+      "id": "d343f6b7-12bf-462f-aae8-28dc3b39696e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction normalizeCurrency(value) {\n  return normalizeString(value).toUpperCase();\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-H\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        payment_request: null,\n        provider_handoff: null,\n        manual_review_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-H will not prepare payment request when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"prepare_payment_request\") {\n  return fail({\n    code: \"PAYMENT_NOT_REQUESTED\",\n    message: \"source.next_action is not prepare_payment_request.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.provider) {\n  return fail({\n    code: \"MISSING_PROVIDER\",\n    message: \"config.provider is required.\"\n  });\n}\n\nif (!config.mode) {\n  return fail({\n    code: \"MISSING_MODE\",\n    message: \"config.mode is required.\"\n  });\n}\n\nif (!config.payment_type) {\n  return fail({\n    code: \"MISSING_PAYMENT_TYPE\",\n    message: \"config.payment_type is required.\"\n  });\n}\n\nconst provider = normalizeString(config.provider).toLowerCase();\nconst mode = normalizeString(config.mode).toLowerCase();\nconst paymentType = normalizeString(config.payment_type).toLowerCase();\n\nconst supportedProviders = [\"razorpay\", \"stripe\", \"paypal\", \"wise\", \"manual\"];\nconst supportedModes = [\"payment_link_handoff\", \"invoice_handoff\", \"manual_payment_handoff\", \"manual_review\"];\nconst supportedPaymentTypes = [\"advance_payment\", \"full_payment\", \"deposit\", \"invoice_payment\", \"manual_transfer\"];\n\nif (!supportedProviders.includes(provider)) {\n  return fail({\n    code: \"UNSUPPORTED_PROVIDER\",\n    message: \"config.provider is not supported in C2-H v1.\",\n    details: [{ provider, supported_providers: supportedProviders }]\n  });\n}\n\nif (!supportedModes.includes(mode)) {\n  return fail({\n    code: \"UNSUPPORTED_MODE\",\n    message: \"config.mode is not supported in C2-H v1.\",\n    details: [{ mode, supported_modes: supportedModes }]\n  });\n}\n\nif (!supportedPaymentTypes.includes(paymentType)) {\n  return fail({\n    code: \"UNSUPPORTED_PAYMENT_TYPE\",\n    message: \"config.payment_type is not supported in C2-H v1.\",\n    details: [{ payment_type: paymentType, supported_payment_types: supportedPaymentTypes }]\n  });\n}\n\nif (Array.isArray(config.allowed_payment_types) && config.allowed_payment_types.length > 0) {\n  if (!config.allowed_payment_types.includes(paymentType)) {\n    return fail({\n      code: \"PAYMENT_TYPE_NOT_ALLOWED\",\n      message: \"config.payment_type is not allowed by config.allowed_payment_types.\",\n      details: [\n        {\n          payment_type: paymentType,\n          allowed_payment_types: config.allowed_payment_types\n        }\n      ]\n    });\n  }\n}\n\nif (config.approval_status_required === true) {\n  const approved = source.approved_action?.approved === true;\n  if (!approved) {\n    return fail({\n      code: \"PAYMENT_NOT_APPROVED\",\n      message: \"Approved action is required before preparing payment provider handoff.\",\n      details: [{ approved_action: source.approved_action || null }]\n    });\n  }\n}\n\nconst amount = Number(payload.amount);\nconst currency = normalizeCurrency(payload.currency);\nconst customerEmail = normalizeString(payload.customer_email);\nconst customerName = normalizeString(payload.customer_name);\nconst customerPhone = normalizeString(payload.customer_phone);\nconst company = normalizeString(payload.company);\nconst description = normalizeString(payload.description);\nconst referenceId = normalizeString(payload.reference_id);\n\nif (!Number.isFinite(amount) || amount <= 0) {\n  return fail({\n    code: \"MISSING_OR_INVALID_AMOUNT\",\n    message: \"input.payload.amount must be a positive number.\"\n  });\n}\n\nif (!currency) {\n  return fail({\n    code: \"MISSING_CURRENCY\",\n    message: \"input.payload.currency is required.\"\n  });\n}\n\nif (!customerEmail && provider !== \"wise\" && provider !== \"manual\") {\n  return fail({\n    code: \"MISSING_CUSTOMER_EMAIL\",\n    message: \"input.payload.customer_email is required for provider handoff.\"\n  });\n}\n\nif (Array.isArray(config.allowed_currencies) && config.allowed_currencies.length > 0) {\n  const allowedCurrencies = config.allowed_currencies.map(item => normalizeCurrency(item));\n  if (!allowedCurrencies.includes(currency)) {\n    return fail({\n      code: \"CURRENCY_NOT_ALLOWED\",\n      message: \"input.payload.currency is not allowed by config.allowed_currencies.\",\n      details: [\n        {\n          currency,\n          allowed_currencies: allowedCurrencies\n        }\n      ]\n    });\n  }\n}\n\nif (provider === \"razorpay\" && mode !== \"payment_link_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Razorpay v1 supports payment_link_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (provider === \"stripe\" && mode !== \"payment_link_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Stripe v1 supports payment_link_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (provider === \"paypal\" && mode !== \"invoice_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"PayPal v1 supports invoice_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (provider === \"wise\" && mode !== \"manual_payment_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Wise v1 supports manual_payment_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (provider === \"manual\" && mode !== \"manual_review\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Manual provider supports manual_review mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nconst paymentTerms = config.payment_terms || {};\nconst dueInDays = Number(paymentTerms.due_in_days || 7);\nconst dueAt = new Date(Date.now() + dueInDays * 24 * 60 * 60 * 1000).toISOString();\n\nconst paymentRequest = {\n  provider,\n  mode,\n  status: \"ready\",\n  payment_type: paymentType,\n  amount,\n  currency,\n  description: description || null,\n  reference_id: referenceId || null,\n  customer: {\n    name: customerName || null,\n    email: customerEmail || null,\n    phone: customerPhone || null,\n    company: company || null\n  },\n  payment_terms: {\n    due_in_days: dueInDays,\n    due_at: dueAt,\n    allow_partial_payment: paymentTerms.allow_partial_payment === true,\n    send_reminder: paymentTerms.send_reminder === true\n  },\n  requires_approval: config.requires_approval === true,\n  approval_status_required: config.approval_status_required === true,\n  prepared_at: nowIso()\n};\n\nlet providerPayload = {};\nlet providerHandoff = null;\nlet manualReviewHandoff = null;\nlet nextAction = config.default_next_action || \"payment_request_ready\";\n\nif (mode === \"payment_link_handoff\") {\n  if (provider === \"razorpay\") {\n    providerPayload = {\n      provider,\n      action: \"create_payment_link\",\n      amount,\n      currency,\n      description,\n      reference_id: referenceId,\n      customer: {\n        name: customerName,\n        email: customerEmail,\n        contact: customerPhone\n      },\n      options: {\n        accept_partial: paymentTerms.allow_partial_payment === true,\n        expire_by: dueAt,\n        reminder_enable: paymentTerms.send_reminder === true\n      }\n    };\n  }\n\n  if (provider === \"stripe\") {\n    providerPayload = {\n      provider,\n      action: \"create_payment_link_or_checkout_session\",\n      amount,\n      currency,\n      description,\n      reference_id: referenceId,\n      customer_email: customerEmail,\n      metadata: {\n        customer_name: customerName,\n        company,\n        payment_type: paymentType,\n        reference_id: referenceId\n      }\n    };\n  }\n}\n\nif (mode === \"invoice_handoff\") {\n  if (provider === \"paypal\") {\n    providerPayload = {\n      provider,\n      action: \"create_invoice\",\n      amount,\n      currency,\n      description,\n      reference_id: referenceId,\n      recipient: {\n        name: customerName,\n        email: customerEmail\n      },\n      invoice_detail: {\n        currency_code: currency,\n        note: description,\n        payment_term: {\n          term_type: \"DUE_ON_DATE_SPECIFIED\",\n          due_date: dueAt\n        }\n      }\n    };\n  }\n}\n\nif (mode === \"manual_payment_handoff\") {\n  providerPayload = {\n    provider,\n    action: \"prepare_manual_payment_instructions\",\n    amount,\n    currency,\n    description,\n    reference_id: referenceId,\n    customer: {\n      name: customerName,\n      email: customerEmail,\n      phone: customerPhone,\n      company\n    },\n    manual_payment_instructions: config.manual_payment_instructions || {}\n  };\n}\n\nif ([\"payment_link_handoff\", \"invoice_handoff\", \"manual_payment_handoff\"].includes(mode)) {\n  providerHandoff = {\n    next_component: `${provider}_payment_adapter`,\n    input: {\n      success: true,\n      component_id: \"C2-H\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"payment_provider_request\",\n      payment_request: paymentRequest,\n      provider_payload: providerPayload,\n      source_result: source,\n      error: null,\n      next_action: \"create_payment_request\"\n    },\n    config: {\n      provider,\n      adapter_required: true,\n      default_next_action: \"track_payment_status\"\n    }\n  };\n\n  nextAction = config.default_next_action || \"create_payment_provider_handoff\";\n}\n\nif (mode === \"manual_review\") {\n  manualReviewHandoff = {\n    next_component: \"C5-E\",\n    input: {\n      success: true,\n      component_id: \"C2-H\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"manual_payment_review\",\n      payment_request: paymentRequest,\n      source_result: source,\n      error: null,\n      next_action: \"manual_review\"\n    },\n    config: {\n      queue_type: \"payment_review\",\n      review_reason: \"Manual payment review required.\",\n      reviewer_email: config.reviewer_email || \"shwetabh.singh@lexnovahq.com\",\n      owner: \"ops\",\n      priority: config.priority || \"normal\",\n      allowed_actions: [\"approve_payment_request\", \"edit_payment_request\", \"reject_payment_request\", \"request_more_info\"],\n      default_next_action: \"notify_reviewer\"\n    }\n  };\n\n  nextAction = \"manual_review\";\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-H\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      payment_request: paymentRequest,\n      provider_handoff: providerHandoff,\n      manual_review_handoff: manualReviewHandoff,\n      source_result: source,\n      error: null,\n      next_action: nextAction\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -224
+      ],
+      "id": "cba12696-aa8e-4a7c-bbb0-4c42e49b2593",
+      "name": "Prepare Payment Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0b0b63d-72d9-4813-ab8f-d5c35624a226",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c274696b-8d70-45e0-8d29-233fd7b53b93",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7107fa2b-5906-43c5-9161-cd259f52e126",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "8648f756-b411-4138-a506-ccbca45a7449",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "5eb9cc9f-b2ac-4904-9f3f-da21c1d9ed82",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "f417320a-296f-4b14-9553-0ac5bcdeab21",
+              "name": "payment_request",
+              "value": "={{ $json.payment_request }}",
+              "type": "object"
+            },
+            {
+              "id": "bfb75252-d396-4c63-afff-dd410f539150",
+              "name": "provider_handoff",
+              "value": "={{ $json.provider_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "9742a239-0f43-4c7d-8a5d-d0faf163a6ce",
+              "name": "manual_review_handoff",
+              "value": "={{ $json.manual_review_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "4d444368-74b4-4604-8468-dcf1e2489ee0",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "3786c9ee-7f25-4915-bb6c-85b2e33ae9fc",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "d705eff7-c57a-4bb2-8ab4-ddb16ead6274",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -224
+      ],
+      "id": "6f1b576b-9f5b-4fac-aa55-8437c95eee29",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-O2",
+            "component_version": "v1",
+            "event_id": "evt_c2h_razorpay_link",
+            "event_type": "approved_payment_request",
+            "payload": {
+              "customer_name": "Riya Sharma",
+              "customer_email": "riya@example.com",
+              "customer_phone": "+919999999999",
+              "company": "GrowthOps Studio",
+              "amount": 25000,
+              "currency": "INR",
+              "description": "Automation setup advance payment",
+              "reference_id": "INV-RAZORPAY-001"
+            },
+            "approved_action": {
+              "approved": true,
+              "action": "prepare_payment_request"
+            },
+            "metadata": {
+              "origin": "approval_response",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "prepare_payment_request"
+          },
+          "config": {
+            "provider": "razorpay",
+            "mode": "payment_link_handoff",
+            "payment_type": "advance_payment",
+            "requires_approval": true,
+            "approval_status_required": true,
+            "allowed_currencies": [
+              "INR"
+            ],
+            "allowed_payment_types": [
+              "advance_payment",
+              "full_payment",
+              "deposit",
+              "invoice_payment"
+            ],
+            "payment_terms": {
+              "due_in_days": 7,
+              "allow_partial_payment": false,
+              "send_reminder": true
+            },
+            "default_next_action": "create_payment_provider_handoff"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Payment Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Payment Request": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8d230721-c5c8-4a62-886c-a487ec1c6cf9",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "9k8CFEDtUJj7dbj1",
+  "tags": []
+}
