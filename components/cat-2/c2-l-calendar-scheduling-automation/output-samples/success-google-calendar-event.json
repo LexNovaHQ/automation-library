@@ -1,0 +1,73 @@
+﻿{
+  "success": true,
+  "component_id": "C2-L",
+  "component_version": "v1",
+  "event_id": "evt_c2l_google_event",
+  "event_type": "approved_scheduling_request",
+  "scheduling": {
+    "provider": "google_calendar",
+    "mode": "event_handoff",
+    "status": "ready",
+    "meeting_type": "onboarding_call",
+    "meeting_title": "Onboarding call with OpsFlow",
+    "duration_minutes": 45,
+    "timezone": "Asia/Kolkata",
+    "booking_url": null,
+    "attendee": {
+      "name": "Neha Kapoor",
+      "email": "neha@example.com",
+      "company": "OpsFlow"
+    },
+    "scheduling_goal": "Prepare Google Calendar event creation handoff after approval.",
+    "manual_review_required": false,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "calendar_event_handoff": {
+    "next_component": "google_calendar_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-L",
+      "component_version": "v1",
+      "event_id": "evt_c2l_google_event",
+      "event_type": "calendar_event_request",
+      "provider": "google_calendar",
+      "action": "create_event",
+      "event": {
+        "title": "Onboarding call with OpsFlow",
+        "start_time": "2026-05-28T15:00:00+05:30",
+        "end_time": "2026-05-28T15:45:00+05:30",
+        "timezone": "Asia/Kolkata",
+        "attendees": [
+          {
+            "name": "Neha Kapoor",
+            "email": "neha@example.com"
+          }
+        ],
+        "description": "Prepare Google Calendar event creation handoff after approval.\nCompany: OpsFlow",
+        "calendar_id": "primary",
+        "add_google_meet": true,
+        "reminders": {
+          "use_default": true
+        }
+      },
+      "error": null,
+      "next_action": "create_calendar_event"
+    },
+    "config": {
+      "provider": "google_calendar",
+      "adapter_required": true,
+      "default_next_action": "notify_attendees"
+    }
+  },
+  "message_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2l_google_event",
+    "event_type": "approved_scheduling_request",
+    "success": true,
+    "next_action": "prepare_scheduling"
+  },
+  "error": null,
+  "next_action": "create_calendar_event"
+}

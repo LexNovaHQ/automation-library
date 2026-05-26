@@ -1298,3 +1298,44 @@ C4-D v1 is built as a client-configurable content draft processor, not a publish
 
 **Excluded by design:**  
 Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Publishing belongs to C2-Q. Status tracking belongs to C5-W. Error logging belongs to C6-G.
+
+## C2-L Build Record - Calendar / Scheduling Automation
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-l-calendar-scheduling-automation`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-l-core-calendar-scheduling-automation-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-L_CORE_Calendar_Scheduling_Automation_v1`
+- Prepares provider-agnostic scheduling objects and handoffs
+- Supports Calendly booking link mode
+- Supports Cal.com booking link mode
+- Supports Google Calendar event handoff mode
+- Supports manual scheduling mode
+- Creates C4-E handoff for scheduling message drafting where configured
+- Creates Google Calendar adapter handoff for event creation
+- Creates C5-E handoff for manual scheduling
+- Does not directly send messages, create calendar events, call booking APIs, or act autonomously
+
+**Passed tests:**
+- Calendly link
+- Cal.com link
+- Google Calendar event
+- Manual scheduling
+- Upstream failed
+- Scheduling not requested
+- Missing provider
+- Missing booking URL
+- Missing event time
+
+**Implementation note:**  
+C2-L v1 is built as the reusable scheduling handoff/router layer. Calendly, Cal.com, and Google Calendar are provider modes, not hard-coded component identities. Actual booking APIs, calendar creation, message sending, and webhook handling belong to downstream adapters or adjacent components.
+
+**Excluded by design:**  
+Email draft generation belongs to C4-E. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual Google Calendar creation belongs to a future Google Calendar adapter. Calendly/Cal.com webhook intake belongs to C2-C plus future provider adapter/runtime. Notifications belong to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G.

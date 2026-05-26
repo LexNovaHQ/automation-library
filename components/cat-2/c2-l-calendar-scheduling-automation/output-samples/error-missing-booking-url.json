@@ -1,0 +1,23 @@
+﻿{
+  "success": false,
+  "component_id": "C2-L",
+  "component_version": "v1",
+  "event_id": "evt_c2l_missing_booking_url",
+  "event_type": "qualified_lead",
+  "scheduling": null,
+  "calendar_event_handoff": null,
+  "message_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-L",
+    "event_id": "evt_c2l_missing_booking_url",
+    "event_type": "qualified_lead",
+    "success": true,
+    "next_action": "prepare_scheduling"
+  },
+  "error": {
+    "code": "MISSING_BOOKING_URL",
+    "message": "config.booking_url is required for booking_link mode."
+  },
+  "next_action": "route_to_failure_log"
+}

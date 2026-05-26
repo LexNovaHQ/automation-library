@@ -1,0 +1,69 @@
+﻿{
+  "success": true,
+  "component_id": "C2-L",
+  "component_version": "v1",
+  "event_id": "evt_c2l_calendly_link",
+  "event_type": "qualified_lead",
+  "scheduling": {
+    "provider": "calendly",
+    "mode": "booking_link",
+    "status": "ready",
+    "meeting_type": "discovery_call",
+    "meeting_title": "Discovery call",
+    "duration_minutes": 30,
+    "timezone": "Asia/Kolkata",
+    "booking_url": "https://calendly.com/growthops/discovery-call",
+    "attendee": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio"
+    },
+    "scheduling_goal": "Invite qualified lead to book a discovery call.",
+    "manual_review_required": false,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "calendar_event_handoff": null,
+  "message_handoff": {
+    "next_component": "C4-E",
+    "input": {
+      "success": true,
+      "component_id": "C2-L",
+      "component_version": "v1",
+      "event_id": "evt_c2l_calendly_link",
+      "event_type": "scheduling_message_request",
+      "payload": {
+        "name": "Riya Sharma",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio",
+        "message": "We need automation help for lead intake and CRM updates.",
+        "scheduling": {
+          "provider": "calendly",
+          "provider_label": "Calendly",
+          "booking_url": "https://calendly.com/growthops/discovery-call",
+          "meeting_type": "discovery_call",
+          "meeting_title": "Discovery call",
+          "duration_minutes": 30,
+          "timezone": "Asia/Kolkata"
+        }
+      },
+      "error": null,
+      "next_action": "generate_email_draft"
+    },
+    "config": {
+      "email_type": "scheduling_email",
+      "email_goal": "Invite recipient to schedule Discovery call using Calendly booking link.",
+      "recipient_context": "Scheduling invite for qualified/approved workflow contact.",
+      "default_next_action": "package_draft_for_approval"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-L",
+    "event_id": "evt_c2l_calendly_link",
+    "event_type": "qualified_lead",
+    "success": true,
+    "next_action": "prepare_scheduling"
+  },
+  "error": null,
+  "next_action": "send_scheduling_message_for_approval"
+}

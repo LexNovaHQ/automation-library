@@ -1,0 +1,63 @@
+﻿{
+  "success": true,
+  "component_id": "C2-L",
+  "component_version": "v1",
+  "event_id": "evt_c2l_manual_scheduling",
+  "event_type": "qualified_lead",
+  "scheduling": {
+    "provider": "manual",
+    "mode": "manual_scheduling",
+    "status": "ready",
+    "meeting_type": "discovery_call",
+    "meeting_title": "Discovery call",
+    "duration_minutes": 30,
+    "timezone": "Asia/Kolkata",
+    "booking_url": null,
+    "attendee": {
+      "name": "Dev Rao",
+      "email": "dev@example.com",
+      "company": "ScaleCart"
+    },
+    "scheduling_goal": "Create manual scheduling review task because no booking provider is configured.",
+    "manual_review_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "calendar_event_handoff": null,
+  "message_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C2-L",
+      "component_version": "v1",
+      "event_id": "evt_c2l_manual_scheduling",
+      "event_type": "manual_scheduling_request",
+      "scheduling": {
+        "provider": "manual",
+        "mode": "manual_scheduling",
+        "meeting_type": "discovery_call",
+        "meeting_title": "Discovery call"
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "manual_scheduling",
+      "review_reason": "Manual scheduling required because no booking provider/event handoff is configured.",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "ops",
+      "priority": "medium",
+      "allowed_actions": ["send_booking_link", "propose_times", "create_event", "request_more_info"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C4-L",
+    "event_id": "evt_c2l_manual_scheduling",
+    "event_type": "qualified_lead",
+    "success": true,
+    "next_action": "prepare_scheduling"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

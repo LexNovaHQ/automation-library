@@ -1,0 +1,43 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-L",
+    "component_version": "v1",
+    "event_id": "evt_c2l_calcom_link",
+    "event_type": "qualified_lead",
+    "payload": {
+      "name": "Aman Mehta",
+      "email": "aman@example.com",
+      "company": "CartLift",
+      "message": "We want abandoned cart follow-up and lead alerts."
+    },
+    "lead_qualification": {
+      "status": "qualified",
+      "score": 80,
+      "priority": "high",
+      "recommended_next_action": "schedule_call"
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_scheduling"
+  },
+  "config": {
+    "provider": "cal_com",
+    "mode": "booking_link",
+    "meeting_type": "automation_consult",
+    "meeting_title": "Automation consult",
+    "duration_minutes": 30,
+    "timezone": "Asia/Kolkata",
+    "booking_url": "https://cal.com/growthops/automation-consult",
+    "scheduling_goal": "Invite qualified lead to book an automation consult.",
+    "message_policy": {
+      "create_message_handoff": true,
+      "message_type": "scheduling_email",
+      "approval_required": true
+    },
+    "default_next_action": "send_scheduling_message_for_approval"
+  }
+}

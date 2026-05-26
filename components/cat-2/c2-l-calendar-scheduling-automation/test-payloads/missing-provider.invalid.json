@@ -1,0 +1,24 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-L",
+    "component_version": "v1",
+    "event_id": "evt_c2l_missing_provider",
+    "event_type": "qualified_lead",
+    "payload": {
+      "name": "Riya Sharma",
+      "email": "riya@example.com"
+    },
+    "error": null,
+    "next_action": "prepare_scheduling"
+  },
+  "config": {
+    "mode": "booking_link",
+    "meeting_type": "discovery_call",
+    "meeting_title": "Discovery call",
+    "duration_minutes": 30,
+    "timezone": "Asia/Kolkata",
+    "booking_url": "https://calendly.com/growthops/discovery-call",
+    "default_next_action": "send_scheduling_message_for_approval"
+  }
+}

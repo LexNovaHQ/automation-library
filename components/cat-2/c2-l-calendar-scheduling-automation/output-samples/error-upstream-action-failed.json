@@ -1,0 +1,26 @@
+﻿{
+  "success": false,
+  "component_id": "C2-L",
+  "component_version": "v1",
+  "event_id": "evt_c2l_upstream_failed",
+  "event_type": "qualified_lead",
+  "scheduling": null,
+  "calendar_event_handoff": null,
+  "message_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-L",
+    "event_id": "evt_c2l_upstream_failed",
+    "event_type": "qualified_lead",
+    "success": false,
+    "error": {
+      "code": "QUALIFICATION_FAILED",
+      "message": "Lead qualification failed."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-L will not prepare scheduling when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

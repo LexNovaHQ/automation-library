@@ -1,0 +1,42 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-L",
+    "component_version": "v1",
+    "event_id": "evt_c2l_manual_scheduling",
+    "event_type": "qualified_lead",
+    "payload": {
+      "name": "Dev Rao",
+      "email": "dev@example.com",
+      "company": "ScaleCart",
+      "message": "Can we discuss this next week?"
+    },
+    "lead_qualification": {
+      "status": "qualified",
+      "score": 78,
+      "priority": "medium",
+      "recommended_next_action": "schedule_call"
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_scheduling"
+  },
+  "config": {
+    "provider": "manual",
+    "mode": "manual_scheduling",
+    "meeting_type": "discovery_call",
+    "meeting_title": "Discovery call",
+    "duration_minutes": 30,
+    "timezone": "Asia/Kolkata",
+    "scheduling_goal": "Create manual scheduling review task because no booking provider is configured.",
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "message_policy": {
+      "create_message_handoff": false,
+      "approval_required": true
+    },
+    "default_next_action": "manual_review"
+  }
+}

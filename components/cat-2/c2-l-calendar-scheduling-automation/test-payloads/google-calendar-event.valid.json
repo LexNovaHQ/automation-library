@@ -1,0 +1,49 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2l_google_event",
+    "event_type": "approved_scheduling_request",
+    "payload": {
+      "name": "Neha Kapoor",
+      "email": "neha@example.com",
+      "company": "OpsFlow"
+    },
+    "approved_action": {
+      "action": "create_calendar_event",
+      "approved": true
+    },
+    "metadata": {
+      "origin": "manual_approval",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_scheduling"
+  },
+  "config": {
+    "provider": "google_calendar",
+    "mode": "event_handoff",
+    "meeting_type": "onboarding_call",
+    "meeting_title": "Onboarding call with OpsFlow",
+    "duration_minutes": 45,
+    "timezone": "Asia/Kolkata",
+    "event_time": {
+      "start_time": "2026-05-28T15:00:00+05:30",
+      "end_time": "2026-05-28T15:45:00+05:30"
+    },
+    "calendar": {
+      "calendar_id": "primary",
+      "add_google_meet": true,
+      "reminders": {
+        "use_default": true
+      }
+    },
+    "scheduling_goal": "Prepare Google Calendar event creation handoff after approval.",
+    "message_policy": {
+      "create_message_handoff": false,
+      "approval_required": true
+    },
+    "default_next_action": "create_calendar_event"
+  }
+}

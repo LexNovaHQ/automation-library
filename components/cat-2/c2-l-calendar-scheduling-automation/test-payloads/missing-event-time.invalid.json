@@ -1,0 +1,28 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-L",
+    "component_version": "v1",
+    "event_id": "evt_c2l_missing_event_time",
+    "event_type": "qualified_lead",
+    "payload": {
+      "name": "Neha Kapoor",
+      "email": "neha@example.com"
+    },
+    "error": null,
+    "next_action": "prepare_scheduling"
+  },
+  "config": {
+    "provider": "google_calendar",
+    "mode": "event_handoff",
+    "meeting_type": "onboarding_call",
+    "meeting_title": "Onboarding call",
+    "duration_minutes": 45,
+    "timezone": "Asia/Kolkata",
+    "calendar": {
+      "calendar_id": "primary",
+      "add_google_meet": true
+    },
+    "default_next_action": "create_calendar_event"
+  }
+}
