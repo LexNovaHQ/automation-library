@@ -1,0 +1,50 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-A",
+    "component_version": "v1",
+    "event_id": "evt_c4b_support_text",
+    "event_type": "support_message",
+    "payload": {
+      "raw_text": "This is Aman from CartLift. The daily alert email stopped working yesterday after the workflow update. Please check the Slack and email alert flow.",
+      "source": "support_form"
+    },
+    "classification": {
+      "category": "support_request",
+      "priority": "high",
+      "recommended_next_action": "extract_fields"
+    },
+    "metadata": {
+      "origin": "support_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "extract_fields"
+  },
+  "config": {
+    "extraction_mode": "rules_plus_ai",
+    "extraction_goal": "Extract support ticket context from support message text.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "extraction_rules": {
+        "required_fields": ["name", "company", "issue"],
+        "optional_fields": ["email", "affected_workflow", "time_reference", "requested_action", "source"],
+        "missing_required_field_action": "manual_review",
+        "allow_inference": false,
+        "never_infer_fields": ["email", "phone"],
+        "low_confidence_action": "manual_review",
+        "manual_review_confidence_threshold": 0.75
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.1,
+      "max_tokens": 800
+    },
+    "default_next_action": "validate_payload"
+  }
+}

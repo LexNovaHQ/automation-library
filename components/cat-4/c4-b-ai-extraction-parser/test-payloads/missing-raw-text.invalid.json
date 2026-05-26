@@ -1,0 +1,32 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-A",
+    "component_version": "v1",
+    "event_id": "evt_c4b_missing_text",
+    "event_type": "inbound_message",
+    "payload": {
+      "source": "website_form"
+    },
+    "error": null,
+    "next_action": "extract_fields"
+  },
+  "config": {
+    "extraction_mode": "rules_plus_ai",
+    "extraction_goal": "Extract fields.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "extraction_rules": {
+        "required_fields": ["name", "email"]
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "validate_payload"
+  }
+}

@@ -1,0 +1,24 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-A",
+    "component_version": "v1",
+    "event_id": "evt_c4b_missing_profile",
+    "event_type": "inbound_message",
+    "payload": {
+      "raw_text": "Need automation help."
+    },
+    "error": null,
+    "next_action": "extract_fields"
+  },
+  "config": {
+    "extraction_mode": "rules_plus_ai",
+    "extraction_goal": "Extract fields.",
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "validate_payload"
+  }
+}

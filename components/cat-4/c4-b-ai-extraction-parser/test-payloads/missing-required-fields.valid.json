@@ -1,0 +1,50 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-A",
+    "component_version": "v1",
+    "event_id": "evt_c4b_missing_required",
+    "event_type": "inbound_message",
+    "payload": {
+      "raw_text": "Need automation help soon. Please contact me.",
+      "source": "website_form"
+    },
+    "classification": {
+      "category": "possible_lead",
+      "priority": "medium",
+      "recommended_next_action": "extract_fields"
+    },
+    "metadata": {
+      "origin": "website_form",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "extract_fields"
+  },
+  "config": {
+    "extraction_mode": "rules_plus_ai",
+    "extraction_goal": "Extract lead/contact and sales context fields from inbound message text.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "extraction_rules": {
+        "required_fields": ["name", "email", "company", "need"],
+        "optional_fields": ["phone", "website", "budget", "timeline", "source", "intent"],
+        "missing_required_field_action": "manual_review",
+        "allow_inference": false,
+        "never_infer_fields": ["email", "phone", "budget", "consent"],
+        "low_confidence_action": "manual_review",
+        "manual_review_confidence_threshold": 0.75
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.1,
+      "max_tokens": 800
+    },
+    "default_next_action": "validate_payload"
+  }
+}

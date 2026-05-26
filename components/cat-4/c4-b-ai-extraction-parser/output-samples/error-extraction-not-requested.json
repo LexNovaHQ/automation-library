@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C4-B",
+  "component_version": "v1",
+  "event_id": "evt_c4b_not_requested",
+  "event_type": "inbound_message",
+  "extraction": null,
+  "c2f_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-A",
+    "event_id": "evt_c4b_not_requested",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "qualify_lead"
+  },
+  "error": {
+    "code": "EXTRACTION_NOT_REQUESTED",
+    "message": "source.next_action is not extract_fields."
+  },
+  "next_action": "route_to_failure_log"
+}

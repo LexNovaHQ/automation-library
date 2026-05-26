@@ -1,0 +1,80 @@
+﻿{
+  "success": true,
+  "component_id": "C4-B",
+  "component_version": "v1",
+  "event_id": "evt_c4b_support_text",
+  "event_type": "support_message",
+  "extraction": {
+    "extracted_fields": {
+      "name": "Aman",
+      "company": "CartLift",
+      "issue": "daily alert email stopped working",
+      "email": null,
+      "affected_workflow": "Slack and email alert flow",
+      "time_reference": "yesterday after the workflow update",
+      "requested_action": "check the Slack and email alert flow",
+      "source": "support_form"
+    },
+    "field_confidence": {
+      "name": 0.9,
+      "company": 0.95,
+      "issue": 0.95,
+      "email": 0,
+      "affected_workflow": 0.9,
+      "time_reference": 0.9,
+      "requested_action": 0.9,
+      "source": 0.85
+    },
+    "missing_required_fields": [],
+    "low_confidence_fields": ["email"],
+    "assumptions": [],
+    "risk_flags": [],
+    "manual_review_required": false,
+    "recommended_next_action": "validate_payload",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2f_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C4-B",
+      "component_version": "v1",
+      "event_id": "evt_c4b_support_text",
+      "event_type": "extracted_payload",
+      "payload": {
+        "name": "Aman",
+        "company": "CartLift",
+        "issue": "daily alert email stopped working",
+        "affected_workflow": "Slack and email alert flow",
+        "time_reference": "yesterday after the workflow update",
+        "requested_action": "check the Slack and email alert flow"
+      },
+      "error": null,
+      "next_action": "validate_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "company", "issue"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-A",
+    "event_id": "evt_c4b_support_text",
+    "event_type": "support_message",
+    "success": true,
+    "next_action": "extract_fields"
+  },
+  "error": null,
+  "next_action": "validate_payload"
+}

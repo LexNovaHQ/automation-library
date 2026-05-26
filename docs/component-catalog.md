@@ -1188,3 +1188,40 @@ C4-A v1 is built as a client-configurable classification processor, not an auton
 
 **Excluded by design:**  
 Generic LLM call belongs to C2-K. Field extraction belongs to C4-B. Lead qualification belongs to C4-L. Conditional routing belongs to C2-B. Manual review queue creation belongs to C5-E. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.
+
+## C4-B Build Record - AI Extraction Parser
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-b-ai-extraction-parser`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-b-core-ai-extraction-parser-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-B_CORE_AI_Extraction_Parser_v1`
+- Extracts structured fields from messy text using client profile and extraction rules
+- Calls Groq through OpenAI-compatible chat completions
+- Enforces required fields, missing required field handling, confidence threshold, and manual-review rules
+- Returns structured `extraction`
+- Creates C2-F handoff for clean extracted payloads
+- Creates C5-E handoff for manual review extractions
+- Does not classify, qualify, draft messages, execute routes, or act autonomously
+
+**Passed tests:**
+- Inbound lead text
+- Support text
+- Missing required fields
+- Upstream failed
+- Extraction not requested
+- Missing client profile
+- Missing raw text
+
+**Implementation note:**  
+C4-B v1 is built as a client-configurable extraction processor, not a classifier and not an autonomous agent. It produces structured extracted fields and handoff objects only. Classification, validation, qualification, writes, notifications, and review queue handling belong to downstream/adjacent components.
+
+**Excluded by design:**  
+Generic LLM call belongs to C2-K. Classification belongs to C4-A. Validation belongs to C2-F. Lead qualification belongs to C4-L. Conditional routing belongs to C2-B. Manual review queue creation belongs to C5-E. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.

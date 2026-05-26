@@ -1,0 +1,25 @@
+﻿{
+  "success": false,
+  "component_id": "C4-B",
+  "component_version": "v1",
+  "event_id": "evt_c4b_upstream_failed",
+  "event_type": "inbound_message",
+  "extraction": null,
+  "c2f_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-A",
+    "event_id": "evt_c4b_upstream_failed",
+    "event_type": "inbound_message",
+    "success": false,
+    "error": {
+      "code": "CLASSIFICATION_FAILED",
+      "message": "Could not classify input."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C4-B will not extract fields when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

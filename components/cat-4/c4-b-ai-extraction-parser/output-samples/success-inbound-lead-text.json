@@ -1,0 +1,93 @@
+﻿{
+  "success": true,
+  "component_id": "C4-B",
+  "component_version": "v1",
+  "event_id": "evt_c4b_inbound_lead_text",
+  "event_type": "inbound_message",
+  "extraction": {
+    "extracted_fields": {
+      "name": "Riya",
+      "email": "riya@example.com",
+      "company": "GrowthOps Studio",
+      "need": "lead intake and CRM automation",
+      "phone": null,
+      "website": null,
+      "budget": "around $500",
+      "timeline": "next 2 weeks",
+      "source": "website_form",
+      "intent": "automation implementation",
+      "tool_stack": null
+    },
+    "field_confidence": {
+      "name": 0.9,
+      "email": 0.99,
+      "company": 0.95,
+      "need": 0.95,
+      "phone": 0,
+      "website": 0,
+      "budget": 0.9,
+      "timeline": 0.9,
+      "source": 0.85,
+      "intent": 0.85,
+      "tool_stack": 0
+    },
+    "missing_required_fields": [],
+    "low_confidence_fields": ["phone", "website", "tool_stack"],
+    "assumptions": [],
+    "risk_flags": [],
+    "manual_review_required": false,
+    "recommended_next_action": "validate_payload",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2f_handoff": {
+    "next_component": "C2-F",
+    "input": {
+      "success": true,
+      "component_id": "C4-B",
+      "component_version": "v1",
+      "event_id": "evt_c4b_inbound_lead_text",
+      "event_type": "extracted_payload",
+      "payload": {
+        "name": "Riya",
+        "email": "riya@example.com",
+        "company": "GrowthOps Studio",
+        "need": "lead intake and CRM automation",
+        "budget": "around $500",
+        "timeline": "next 2 weeks",
+        "source": "website_form",
+        "intent": "automation implementation"
+      },
+      "metadata": {
+        "source_component": "C4-A",
+        "original_event_type": "inbound_message",
+        "extraction_goal": "Extract lead/contact and sales context fields from inbound message text."
+      },
+      "error": null,
+      "next_action": "validate_payload"
+    },
+    "config": {
+      "validation_rules": {
+        "required_fields": ["name", "email", "company", "need"],
+        "email_fields": ["email"]
+      },
+      "default_next_action": "dedupe_check"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C4-A",
+    "event_id": "evt_c4b_inbound_lead_text",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "extract_fields"
+  },
+  "error": null,
+  "next_action": "validate_payload"
+}

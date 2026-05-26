@@ -1,0 +1,83 @@
+﻿{
+  "success": true,
+  "component_id": "C4-B",
+  "component_version": "v1",
+  "event_id": "evt_c4b_missing_required",
+  "event_type": "inbound_message",
+  "extraction": {
+    "extracted_fields": {
+      "name": null,
+      "email": null,
+      "company": null,
+      "need": "automation help",
+      "phone": null,
+      "website": null,
+      "budget": null,
+      "timeline": "soon",
+      "source": "website_form",
+      "intent": "automation inquiry"
+    },
+    "field_confidence": {
+      "name": 0,
+      "email": 0,
+      "company": 0,
+      "need": 0.85,
+      "phone": 0,
+      "website": 0,
+      "budget": 0,
+      "timeline": 0.7,
+      "source": 0.85,
+      "intent": 0.75
+    },
+    "missing_required_fields": ["name", "email", "company"],
+    "low_confidence_fields": ["name", "email", "company", "phone", "website", "budget", "timeline"],
+    "assumptions": [],
+    "risk_flags": ["missing_required_fields"],
+    "manual_review_required": true,
+    "recommended_next_action": "manual_review",
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c2f_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C4-B",
+      "component_version": "v1",
+      "event_id": "evt_c4b_missing_required",
+      "event_type": "inbound_message",
+      "extraction": {
+        "missing_required_fields": ["name", "email", "company"],
+        "manual_review_required": true,
+        "recommended_next_action": "manual_review"
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "extraction_review",
+      "review_reason": "Extraction requires manual review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "ops",
+      "priority": "high",
+      "allowed_actions": ["confirm_extraction", "edit_fields", "reject_record", "request_more_info"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C4-A",
+    "event_id": "evt_c4b_missing_required",
+    "event_type": "inbound_message",
+    "success": true,
+    "next_action": "extract_fields"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}
