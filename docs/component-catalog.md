@@ -1423,3 +1423,46 @@ C2-H v1 is built as the reusable payment-intake handoff/router layer. Razorpay, 
 
 **Excluded by design:**  
 Actual payment link/invoice creation belongs to future Razorpay/Stripe/PayPal adapters. Payment status tracking belongs to C5-W or a future payment status component. Payment reminders belong to C2-I/C2-J or a future reminder component. Human approval belongs to C2-O/C2-O2. Error logging belongs to C6-G.
+
+## C2-Q Build Record - Publishing Adapter Family
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-q-publishing-adapter-family`  
+**Last tested:** 2026-05-26  
+
+**Workflow files:**
+- `workflows/c2-q-core-publishing-adapter-family-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-Q_CORE_Publishing_Adapter_Family_v1`
+- Prepares provider/platform-agnostic publishing request objects and handoffs
+- Supports LinkedIn publishing handoff
+- Supports WordPress publishing handoff
+- Supports Webflow publishing handoff
+- Supports X/Twitter publishing handoff
+- Supports manual publishing review handoff
+- Enforces approval gating, allowed platform gating, allowed publish type gating, body validation, and direct-publish blocking
+- Creates platform adapter handoff for platform publishing/draft creation
+- Does not directly publish content or call platform APIs
+
+**Passed tests:**
+- LinkedIn post
+- WordPress blog
+- Webflow CMS
+- X/Twitter post
+- Manual publish
+- Upstream failed
+- Publishing not requested
+- Missing platform
+- Missing body
+- Not approved
+- Platform not allowed
+
+**Implementation note:**  
+C2-Q v1 is built as the reusable publishing handoff/router layer. LinkedIn, WordPress, Webflow, and X/Twitter are platform modes, not hard-coded component identities. Actual publishing belongs to future platform adapters.
+
+**Excluded by design:**  
+AI content generation belongs to C4-D. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual publishing belongs to future LinkedIn/WordPress/Webflow/X-Twitter adapters. Publish status tracking belongs to C5-W or a future publish status component. Error logging belongs to C6-G.

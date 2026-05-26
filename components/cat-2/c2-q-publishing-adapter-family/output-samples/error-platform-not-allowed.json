@@ -1,0 +1,28 @@
+﻿{
+  "success": false,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_platform_not_allowed",
+  "event_type": "approved_content",
+  "publish_request": null,
+  "platform_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2q_platform_not_allowed",
+    "event_type": "approved_content",
+    "success": true,
+    "next_action": "prepare_publish"
+  },
+  "error": {
+    "code": "UNSUPPORTED_PLATFORM",
+    "message": "config.platform is not supported in C2-Q v1.",
+    "details": [
+      {
+        "platform": "instagram",
+        "supported_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"]
+      }
+    ]
+  },
+  "next_action": "route_to_failure_log"
+}

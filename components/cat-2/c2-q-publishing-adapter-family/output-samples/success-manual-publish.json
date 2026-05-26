@@ -1,0 +1,61 @@
+﻿{
+  "success": true,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_manual",
+  "event_type": "content_draft",
+  "publish_request": {
+    "platform": "manual",
+    "mode": "manual_publish_handoff",
+    "status": "manual_review",
+    "publish_type": "manual_publish",
+    "content_type": "manual_publish",
+    "title": "Manual publish item",
+    "body": "This draft needs to be posted manually by the operator.",
+    "slug": null,
+    "excerpt": null,
+    "tags": [],
+    "cta": null,
+    "source_platform": "manual",
+    "requires_approval": true,
+    "approval_status_required": false,
+    "human_publish_review_required": true,
+    "prepared_at": "2026-05-26T00:00:00.000Z"
+  },
+  "platform_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C2-Q",
+      "component_version": "v1",
+      "event_id": "evt_c2q_manual",
+      "event_type": "manual_publish_review",
+      "publish_request": {
+        "platform": "manual",
+        "publish_type": "manual_publish",
+        "title": "Manual publish item"
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "manual_publish",
+      "review_reason": "Manual publishing required.",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "marketing",
+      "priority": "normal",
+      "allowed_actions": ["publish_manually", "edit_content", "reject_publish", "request_revision"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C4-M",
+    "event_id": "evt_c2q_manual",
+    "event_type": "content_draft",
+    "success": true,
+    "next_action": "prepare_publish"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

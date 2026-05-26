@@ -1,0 +1,41 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_linkedin",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Why ecommerce teams miss leads",
+      "body": "Most ecommerce teams do not miss leads because they lack traffic.\n\nThey miss leads because the handoff is broken.\n\nA form submission comes in, but the CRM is not updated. The team does not get alerted. The lead waits. Then the opportunity goes cold.\n\nStart with a workflow map before building anything.",
+      "content_type": "linkedin_post",
+      "platform": "linkedin",
+      "cta": "Ask for a workflow map before implementation."
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "linkedin",
+    "mode": "platform_handoff",
+    "publish_type": "social_post",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"],
+    "allowed_publish_types": ["social_post", "blog_post", "cms_page", "short_post", "manual_publish"],
+    "publishing_rules": {
+      "allow_direct_publish": false,
+      "default_status": "draft_ready",
+      "require_human_publish_review": true
+    },
+    "default_next_action": "create_publish_handoff"
+  }
+}

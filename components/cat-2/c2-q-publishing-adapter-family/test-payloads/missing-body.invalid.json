@@ -1,0 +1,25 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_missing_body",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Post"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "linkedin",
+    "mode": "platform_handoff",
+    "publish_type": "social_post",
+    "approval_status_required": true,
+    "default_next_action": "create_publish_handoff"
+  }
+}

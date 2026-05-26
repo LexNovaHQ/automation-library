@@ -1,0 +1,47 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_webflow",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Lead intake workflow checklist",
+      "body": "Use this checklist before building lead intake automation.",
+      "content_type": "cms_page",
+      "platform": "webflow",
+      "slug": "lead-intake-workflow-checklist",
+      "summary": "Checklist for cleaner lead intake automation."
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "webflow",
+    "mode": "platform_handoff",
+    "publish_type": "cms_page",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"],
+    "allowed_publish_types": ["social_post", "blog_post", "cms_page", "short_post", "manual_publish"],
+    "publishing_rules": {
+      "allow_direct_publish": false,
+      "default_status": "draft",
+      "require_human_publish_review": true
+    },
+    "webflow": {
+      "site_id": "site_123",
+      "collection_id": "collection_456",
+      "publish_to_live": false
+    },
+    "default_next_action": "create_publish_handoff"
+  }
+}

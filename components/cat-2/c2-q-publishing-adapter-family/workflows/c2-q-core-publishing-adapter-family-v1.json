@@ -1,0 +1,208 @@
+{
+  "name": "C2-Q_CORE_Publishing_Adapter_Family_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -272
+      ],
+      "id": "715c1c72-0a66-41a2-9c97-f1c86cd4eac2",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-Q\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        publish_request: null,\n        platform_handoff: null,\n        manual_review_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-Q will not prepare publishing handoff when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"prepare_publish\") {\n  return fail({\n    code: \"PUBLISHING_NOT_REQUESTED\",\n    message: \"source.next_action is not prepare_publish.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.platform) {\n  return fail({\n    code: \"MISSING_PLATFORM\",\n    message: \"config.platform is required.\"\n  });\n}\n\nif (!config.mode) {\n  return fail({\n    code: \"MISSING_MODE\",\n    message: \"config.mode is required.\"\n  });\n}\n\nif (!config.publish_type) {\n  return fail({\n    code: \"MISSING_PUBLISH_TYPE\",\n    message: \"config.publish_type is required.\"\n  });\n}\n\nconst platform = normalizeString(config.platform).toLowerCase();\nconst mode = normalizeString(config.mode).toLowerCase();\nconst publishType = normalizeString(config.publish_type).toLowerCase();\n\nconst supportedPlatforms = [\"linkedin\", \"wordpress\", \"webflow\", \"x_twitter\", \"manual\"];\nconst supportedModes = [\"platform_handoff\", \"manual_publish_handoff\"];\nconst supportedPublishTypes = [\"social_post\", \"blog_post\", \"cms_page\", \"short_post\", \"manual_publish\"];\n\nif (!supportedPlatforms.includes(platform)) {\n  return fail({\n    code: \"UNSUPPORTED_PLATFORM\",\n    message: \"config.platform is not supported in C2-Q v1.\",\n    details: [{ platform, supported_platforms: supportedPlatforms }]\n  });\n}\n\nif (!supportedModes.includes(mode)) {\n  return fail({\n    code: \"UNSUPPORTED_MODE\",\n    message: \"config.mode is not supported in C2-Q v1.\",\n    details: [{ mode, supported_modes: supportedModes }]\n  });\n}\n\nif (!supportedPublishTypes.includes(publishType)) {\n  return fail({\n    code: \"UNSUPPORTED_PUBLISH_TYPE\",\n    message: \"config.publish_type is not supported in C2-Q v1.\",\n    details: [{ publish_type: publishType, supported_publish_types: supportedPublishTypes }]\n  });\n}\n\nif (Array.isArray(config.allowed_platforms) && config.allowed_platforms.length > 0) {\n  if (!config.allowed_platforms.includes(platform)) {\n    return fail({\n      code: \"PLATFORM_NOT_ALLOWED\",\n      message: \"config.platform is not allowed by config.allowed_platforms.\",\n      details: [\n        {\n          platform,\n          allowed_platforms: config.allowed_platforms\n        }\n      ]\n    });\n  }\n}\n\nif (Array.isArray(config.allowed_publish_types) && config.allowed_publish_types.length > 0) {\n  if (!config.allowed_publish_types.includes(publishType)) {\n    return fail({\n      code: \"PUBLISH_TYPE_NOT_ALLOWED\",\n      message: \"config.publish_type is not allowed by config.allowed_publish_types.\",\n      details: [\n        {\n          publish_type: publishType,\n          allowed_publish_types: config.allowed_publish_types\n        }\n      ]\n    });\n  }\n}\n\nif (config.approval_status_required === true) {\n  const approved = source.approved_action?.approved === true;\n  if (!approved) {\n    return fail({\n      code: \"PUBLISH_NOT_APPROVED\",\n      message: \"Approved action is required before preparing publishing handoff.\",\n      details: [{ approved_action: source.approved_action || null }]\n    });\n  }\n}\n\nconst title = normalizeString(payload.title);\nconst body = normalizeString(payload.body);\nconst contentType = normalizeString(payload.content_type || publishType);\nconst originalPlatform = normalizeString(payload.platform || platform);\n\nif (!body) {\n  return fail({\n    code: \"MISSING_BODY\",\n    message: \"input.payload.body is required.\"\n  });\n}\n\nif (platform === \"manual\" && mode !== \"manual_publish_handoff\") {\n  return fail({\n    code: \"INVALID_PLATFORM_MODE\",\n    message: \"Manual platform supports manual_publish_handoff mode only.\",\n    details: [{ platform, mode }]\n  });\n}\n\nif (platform !== \"manual\" && mode !== \"platform_handoff\") {\n  return fail({\n    code: \"INVALID_PLATFORM_MODE\",\n    message: \"Publishing platforms support platform_handoff mode only.\",\n    details: [{ platform, mode }]\n  });\n}\n\nconst publishingRules = config.publishing_rules || {};\nconst allowDirectPublish = publishingRules.allow_direct_publish === true;\nconst defaultStatus = publishingRules.default_status || \"draft_ready\";\nconst requireHumanPublishReview = publishingRules.require_human_publish_review !== false;\n\nif (allowDirectPublish === true) {\n  return fail({\n    code: \"DIRECT_PUBLISH_NOT_ALLOWED_IN_V1\",\n    message: \"C2-Q v1 does not directly publish. Set allow_direct_publish to false and use platform handoff.\"\n  });\n}\n\nif (platform === \"x_twitter\") {\n  const maxCharacterCount = Number(publishingRules.max_character_count || 280);\n  if (body.length > maxCharacterCount) {\n    return fail({\n      code: \"BODY_EXCEEDS_CHARACTER_LIMIT\",\n      message: \"Body exceeds configured max_character_count.\",\n      details: [\n        {\n          body_length: body.length,\n          max_character_count: maxCharacterCount\n        }\n      ]\n    });\n  }\n}\n\nconst publishRequest = {\n  platform,\n  mode,\n  status: defaultStatus,\n  publish_type: publishType,\n  content_type: contentType,\n  title: title || null,\n  body,\n  slug: payload.slug || null,\n  excerpt: payload.excerpt || payload.summary || null,\n  tags: Array.isArray(payload.tags) ? payload.tags : [],\n  cta: payload.cta || null,\n  source_platform: originalPlatform || null,\n  requires_approval: config.requires_approval === true,\n  approval_status_required: config.approval_status_required === true,\n  human_publish_review_required: requireHumanPublishReview,\n  prepared_at: nowIso()\n};\n\nlet platformPayload = {};\nlet platformHandoff = null;\nlet manualReviewHandoff = null;\nlet nextAction = config.default_next_action || \"publish_handoff_ready\";\n\nif (mode === \"platform_handoff\") {\n  if (platform === \"linkedin\") {\n    platformPayload = {\n      platform,\n      action: \"prepare_linkedin_post\",\n      text: body,\n      title: title || null,\n      visibility: config.linkedin?.visibility || \"PUBLIC\",\n      publish_status: defaultStatus\n    };\n  }\n\n  if (platform === \"wordpress\") {\n    platformPayload = {\n      platform,\n      action: \"create_or_update_post\",\n      site_id: config.wordpress?.site_id || null,\n      post_status: config.wordpress?.post_status || defaultStatus || \"draft\",\n      title,\n      content: body,\n      slug: payload.slug || null,\n      excerpt: payload.excerpt || null,\n      category: config.wordpress?.category || null,\n      tags: Array.isArray(payload.tags) ? payload.tags : []\n    };\n  }\n\n  if (platform === \"webflow\") {\n    platformPayload = {\n      platform,\n      action: \"create_or_update_cms_item\",\n      site_id: config.webflow?.site_id || null,\n      collection_id: config.webflow?.collection_id || null,\n      publish_to_live: config.webflow?.publish_to_live === true,\n      fields: {\n        name: title || payload.slug || \"Untitled\",\n        slug: payload.slug || null,\n        body,\n        summary: payload.summary || payload.excerpt || null\n      }\n    };\n  }\n\n  if (platform === \"x_twitter\") {\n    platformPayload = {\n      platform,\n      action: \"prepare_tweet\",\n      text: body,\n      character_count: body.length,\n      max_character_count: Number(publishingRules.max_character_count || 280),\n      publish_status: defaultStatus\n    };\n  }\n\n  platformHandoff = {\n    next_component: `${platform}_publishing_adapter`,\n    input: {\n      success: true,\n      component_id: \"C2-Q\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"publishing_provider_request\",\n      publish_request: publishRequest,\n      platform_payload: platformPayload,\n      source_result: source,\n      error: null,\n      next_action: \"publish_or_save_draft\"\n    },\n    config: {\n      platform,\n      adapter_required: true,\n      direct_publish_allowed: false,\n      default_next_action: \"track_publish_status\"\n    }\n  };\n\n  nextAction = config.default_next_action || \"create_publish_handoff\";\n}\n\nif (mode === \"manual_publish_handoff\") {\n  manualReviewHandoff = {\n    next_component: \"C5-E\",\n    input: {\n      success: true,\n      component_id: \"C2-Q\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"manual_publish_review\",\n      publish_request: publishRequest,\n      source_result: source,\n      error: null,\n      next_action: \"manual_review\"\n    },\n    config: {\n      queue_type: \"manual_publish\",\n      review_reason: \"Manual publishing required.\",\n      reviewer_email: config.reviewer_email || \"shwetabh.singh@lexnovahq.com\",\n      owner: \"marketing\",\n      priority: config.priority || \"normal\",\n      allowed_actions: [\"publish_manually\", \"edit_content\", \"reject_publish\", \"request_revision\"],\n      default_next_action: \"notify_reviewer\"\n    }\n  };\n\n  nextAction = \"manual_review\";\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-Q\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      publish_request: publishRequest,\n      platform_handoff: platformHandoff,\n      manual_review_handoff: manualReviewHandoff,\n      source_result: source,\n      error: null,\n      next_action: nextAction\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -272
+      ],
+      "id": "2a89f093-fabf-41b5-bd2b-3fb0ddd2df7e",
+      "name": "Prepare Publishing Handoff"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8cf14df7-b016-4306-8d36-51ef3746822d",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "68f0e82c-9aaa-4006-a751-be51cff2ba1f",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f3dddc11-ed97-4a21-b95b-841e6702f51f",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "e5b15987-3e65-4bfd-9531-49b295cd9a87",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "558f2787-a8b7-4a88-9fae-59e470c335ff",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "8eec672d-cdc0-444e-936a-666a659e282c",
+              "name": "publish_request",
+              "value": "={{ $json.publish_request }}",
+              "type": "object"
+            },
+            {
+              "id": "d15a8e8d-b82d-4859-a6b3-ea6519ebda5f",
+              "name": "platform_handoff",
+              "value": "={{ $json.platform_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "1451ca13-22c8-4cda-8970-8ec1b1552ddb",
+              "name": "manual_review_handoff",
+              "value": "={{ $json.manual_review_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "f898c6b7-89b0-4cd2-b584-6bf2ccb52604",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "d5100c4f-e1c5-4cc9-8cc9-e6d99412eeb8",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "c020e3d9-473f-463f-a4e4-a7b8596cd1a0",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        -272
+      ],
+      "id": "f9b99563-8450-4231-ab55-5be89a5169ee",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-O2",
+            "component_version": "v1",
+            "event_id": "evt_c2q_linkedin",
+            "event_type": "approved_content",
+            "payload": {
+              "title": "Why ecommerce teams miss leads",
+              "body": "Most ecommerce teams do not miss leads because they lack traffic.\n\nThey miss leads because the handoff is broken.\n\nA form submission comes in, but the CRM is not updated. The team does not get alerted. The lead waits. Then the opportunity goes cold.\n\nStart with a workflow map before building anything.",
+              "content_type": "linkedin_post",
+              "platform": "linkedin",
+              "cta": "Ask for a workflow map before implementation."
+            },
+            "approved_action": {
+              "approved": true,
+              "action": "prepare_publish"
+            },
+            "metadata": {
+              "origin": "approval_response",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "prepare_publish"
+          },
+          "config": {
+            "platform": "linkedin",
+            "mode": "platform_handoff",
+            "publish_type": "social_post",
+            "requires_approval": true,
+            "approval_status_required": true,
+            "allowed_platforms": [
+              "linkedin",
+              "wordpress",
+              "webflow",
+              "x_twitter",
+              "manual"
+            ],
+            "allowed_publish_types": [
+              "social_post",
+              "blog_post",
+              "cms_page",
+              "short_post",
+              "manual_publish"
+            ],
+            "publishing_rules": {
+              "allow_direct_publish": false,
+              "default_status": "draft_ready",
+              "require_human_publish_review": true
+            },
+            "default_next_action": "create_publish_handoff"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Publishing Handoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Publishing Handoff": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0597db33-a66d-43ce-8e23-0c748cd518a3",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "pWxGR6bDzq3r5Kpj",
+  "tags": []
+}

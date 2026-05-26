@@ -1,0 +1,25 @@
+﻿{
+  "input": {
+    "success": false,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_upstream_failed",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Failed draft",
+      "body": "Failed"
+    },
+    "error": {
+      "code": "APPROVAL_FAILED",
+      "message": "Approval response failed."
+    },
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "linkedin",
+    "mode": "platform_handoff",
+    "publish_type": "social_post",
+    "approval_status_required": true,
+    "default_next_action": "create_publish_handoff"
+  }
+}

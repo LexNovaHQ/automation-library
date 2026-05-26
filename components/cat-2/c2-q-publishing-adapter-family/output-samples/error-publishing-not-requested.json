@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_not_requested",
+  "event_type": "approved_content",
+  "publish_request": null,
+  "platform_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2q_not_requested",
+    "event_type": "approved_content",
+    "success": true,
+    "next_action": "send_email"
+  },
+  "error": {
+    "code": "PUBLISHING_NOT_REQUESTED",
+    "message": "source.next_action is not prepare_publish."
+  },
+  "next_action": "route_to_failure_log"
+}

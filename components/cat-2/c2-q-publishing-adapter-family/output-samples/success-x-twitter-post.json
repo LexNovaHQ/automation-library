@@ -1,0 +1,61 @@
+﻿{
+  "success": true,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_x_twitter",
+  "event_type": "approved_content",
+  "publish_request": {
+    "platform": "x_twitter",
+    "mode": "platform_handoff",
+    "status": "draft_ready",
+    "publish_type": "short_post",
+    "content_type": "short_post",
+    "title": "Lead handoff problem",
+    "body": "Most missed leads are not a traffic problem. They are a handoff problem. Fix the path from form submission → CRM → team alert.",
+    "slug": null,
+    "excerpt": null,
+    "tags": [],
+    "cta": null,
+    "source_platform": "x_twitter",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "human_publish_review_required": true,
+    "prepared_at": "2026-05-26T00:00:00.000Z"
+  },
+  "platform_handoff": {
+    "next_component": "x_twitter_publishing_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-Q",
+      "component_version": "v1",
+      "event_id": "evt_c2q_x_twitter",
+      "event_type": "publishing_provider_request",
+      "platform_payload": {
+        "platform": "x_twitter",
+        "action": "prepare_tweet",
+        "text": "Most missed leads are not a traffic problem. They are a handoff problem. Fix the path from form submission → CRM → team alert.",
+        "character_count": 130,
+        "max_character_count": 280,
+        "publish_status": "draft_ready"
+      },
+      "error": null,
+      "next_action": "publish_or_save_draft"
+    },
+    "config": {
+      "platform": "x_twitter",
+      "adapter_required": true,
+      "direct_publish_allowed": false,
+      "default_next_action": "track_publish_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2q_x_twitter",
+    "event_type": "approved_content",
+    "success": true,
+    "next_action": "prepare_publish"
+  },
+  "error": null,
+  "next_action": "create_publish_handoff"
+}

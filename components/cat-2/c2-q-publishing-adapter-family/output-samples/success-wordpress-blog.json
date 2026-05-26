@@ -1,0 +1,65 @@
+﻿{
+  "success": true,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_wordpress",
+  "event_type": "approved_content",
+  "publish_request": {
+    "platform": "wordpress",
+    "mode": "platform_handoff",
+    "status": "draft",
+    "publish_type": "blog_post",
+    "content_type": "blog_draft",
+    "title": "How small ecommerce teams can reduce missed leads",
+    "body": "Small ecommerce teams often lose leads in the space between form submission and follow-up.\n\nA connected lead intake workflow can capture submissions, validate required fields, check duplicates, update the CRM, and alert the team.",
+    "slug": "reduce-missed-leads",
+    "excerpt": "A practical workflow map for reducing missed lead handoff problems.",
+    "tags": ["automation", "ecommerce", "crm"],
+    "cta": null,
+    "source_platform": "wordpress",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "human_publish_review_required": true,
+    "prepared_at": "2026-05-26T00:00:00.000Z"
+  },
+  "platform_handoff": {
+    "next_component": "wordpress_publishing_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-Q",
+      "component_version": "v1",
+      "event_id": "evt_c2q_wordpress",
+      "event_type": "publishing_provider_request",
+      "platform_payload": {
+        "platform": "wordpress",
+        "action": "create_or_update_post",
+        "site_id": "growthops-site",
+        "post_status": "draft",
+        "title": "How small ecommerce teams can reduce missed leads",
+        "content": "Small ecommerce teams often lose leads in the space between form submission and follow-up.\n\nA connected lead intake workflow can capture submissions, validate required fields, check duplicates, update the CRM, and alert the team.",
+        "slug": "reduce-missed-leads",
+        "excerpt": "A practical workflow map for reducing missed lead handoff problems.",
+        "category": "Automation",
+        "tags": ["automation", "ecommerce", "crm"]
+      },
+      "error": null,
+      "next_action": "publish_or_save_draft"
+    },
+    "config": {
+      "platform": "wordpress",
+      "adapter_required": true,
+      "direct_publish_allowed": false,
+      "default_next_action": "track_publish_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2q_wordpress",
+    "event_type": "approved_content",
+    "success": true,
+    "next_action": "prepare_publish"
+  },
+  "error": null,
+  "next_action": "create_publish_handoff"
+}

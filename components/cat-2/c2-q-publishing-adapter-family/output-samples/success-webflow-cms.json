@@ -1,0 +1,66 @@
+﻿{
+  "success": true,
+  "component_id": "C2-Q",
+  "component_version": "v1",
+  "event_id": "evt_c2q_webflow",
+  "event_type": "approved_content",
+  "publish_request": {
+    "platform": "webflow",
+    "mode": "platform_handoff",
+    "status": "draft",
+    "publish_type": "cms_page",
+    "content_type": "cms_page",
+    "title": "Lead intake workflow checklist",
+    "body": "Use this checklist before building lead intake automation.",
+    "slug": "lead-intake-workflow-checklist",
+    "excerpt": "Checklist for cleaner lead intake automation.",
+    "tags": [],
+    "cta": null,
+    "source_platform": "webflow",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "human_publish_review_required": true,
+    "prepared_at": "2026-05-26T00:00:00.000Z"
+  },
+  "platform_handoff": {
+    "next_component": "webflow_publishing_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-Q",
+      "component_version": "v1",
+      "event_id": "evt_c2q_webflow",
+      "event_type": "publishing_provider_request",
+      "platform_payload": {
+        "platform": "webflow",
+        "action": "create_or_update_cms_item",
+        "site_id": "site_123",
+        "collection_id": "collection_456",
+        "publish_to_live": false,
+        "fields": {
+          "name": "Lead intake workflow checklist",
+          "slug": "lead-intake-workflow-checklist",
+          "body": "Use this checklist before building lead intake automation.",
+          "summary": "Checklist for cleaner lead intake automation."
+        }
+      },
+      "error": null,
+      "next_action": "publish_or_save_draft"
+    },
+    "config": {
+      "platform": "webflow",
+      "adapter_required": true,
+      "direct_publish_allowed": false,
+      "default_next_action": "track_publish_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2q_webflow",
+    "event_type": "approved_content",
+    "success": true,
+    "next_action": "prepare_publish"
+  },
+  "error": null,
+  "next_action": "create_publish_handoff"
+}

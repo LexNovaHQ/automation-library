@@ -1,0 +1,41 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_x_twitter",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Lead handoff problem",
+      "body": "Most missed leads are not a traffic problem. They are a handoff problem. Fix the path from form submission → CRM → team alert.",
+      "content_type": "short_post",
+      "platform": "x_twitter"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "x_twitter",
+    "mode": "platform_handoff",
+    "publish_type": "short_post",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"],
+    "allowed_publish_types": ["social_post", "blog_post", "cms_page", "short_post", "manual_publish"],
+    "publishing_rules": {
+      "allow_direct_publish": false,
+      "default_status": "draft_ready",
+      "require_human_publish_review": true,
+      "max_character_count": 280
+    },
+    "default_next_action": "create_publish_handoff"
+  }
+}

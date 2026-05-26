@@ -1,0 +1,27 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_platform_not_allowed",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "Post",
+      "body": "Body"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "instagram",
+    "mode": "platform_handoff",
+    "publish_type": "social_post",
+    "approval_status_required": true,
+    "allowed_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"],
+    "default_next_action": "create_publish_handoff"
+  }
+}

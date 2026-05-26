@@ -1,0 +1,48 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2q_wordpress",
+    "event_type": "approved_content",
+    "payload": {
+      "title": "How small ecommerce teams can reduce missed leads",
+      "body": "Small ecommerce teams often lose leads in the space between form submission and follow-up.\n\nA connected lead intake workflow can capture submissions, validate required fields, check duplicates, update the CRM, and alert the team.",
+      "content_type": "blog_draft",
+      "platform": "wordpress",
+      "slug": "reduce-missed-leads",
+      "excerpt": "A practical workflow map for reducing missed lead handoff problems.",
+      "tags": ["automation", "ecommerce", "crm"]
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_publish"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_publish"
+  },
+  "config": {
+    "platform": "wordpress",
+    "mode": "platform_handoff",
+    "publish_type": "blog_post",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_platforms": ["linkedin", "wordpress", "webflow", "x_twitter", "manual"],
+    "allowed_publish_types": ["social_post", "blog_post", "cms_page", "short_post", "manual_publish"],
+    "publishing_rules": {
+      "allow_direct_publish": false,
+      "default_status": "draft",
+      "require_human_publish_review": true
+    },
+    "wordpress": {
+      "site_id": "growthops-site",
+      "post_status": "draft",
+      "category": "Automation"
+    },
+    "default_next_action": "create_publish_handoff"
+  }
+}
