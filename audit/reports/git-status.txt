@@ -1,6 +1,3 @@
-﻿ M audit/reports/audit-summary.md
- M audit/reports/build-completeness.md
- M audit/reports/catalog-consistency.md
- M audit/reports/component-inventory.md
- M audit/reports/duplicate-component-ids.md
- M audit/scripts/run-repo-audit.ps1
+﻿ M docs/component-catalog.md
+?? audit/reports/catalog-classification-update.md
+?? audit/scripts/update-component-catalog-classification.ps1

@@ -101,6 +101,15 @@ Every component is recorded with:
 **Location:** `components/cat-2/c2-o-human-approval-gate`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-o-core-human-approval-gate-v1.json`
 
@@ -132,6 +141,15 @@ Approval response capture belongs to C2-O2. Reviewer notification belongs to C2-
 **Location:** `components/cat-2/c2-b-conditional-routing-engine`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-b-core-conditional-routing-engine-v1.json`
 
@@ -160,6 +178,15 @@ Execution of downstream workflows belongs to parent orchestration workflows. Not
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-c-webhook-trigger-system`  
 **Last tested:** 2026-05-24  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-c-core-event-normalizer-v1.json`
@@ -190,14 +217,50 @@ Business-specific validation belongs to C2-F. Database writes belong to C2-A. Al
 
 ## C2-F Build Record â€” Payload Validation Layer
 
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 ## C2-A1 Build Record - Google Sheets Write Adapter
 
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `data_write`
+- Provider: `Google Sheets`
+- Priority: `P0`
+- Template ready: `Yes`
 ## C2-A2 Build Record - Airtable Write Adapter
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `data_write`
+- Provider: `Airtable`
+- Priority: `P0`
+- Template ready: `Yes`
 ## C2-A3 Build Record - HubSpot Contact Write Adapter
 
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-a3-hubspot-contact-write-adapter`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `crm_write`
+- Provider: `HubSpot`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-a3-core-hubspot-contact-write-adapter-v1.json`
@@ -224,6 +287,15 @@ Google Sheets writes belong to C2-A1. Airtable writes belong to C2-A2. Deduplica
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-a2-airtable-write-adapter`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `crm_write`
+- Provider: `HubSpot`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-a2-core-airtable-write-adapter-v1.json`
@@ -252,6 +324,15 @@ Google Sheets writes belong to C2-A1. HubSpot writes belong to C2-A3. Deduplicat
 **Location:** `components/cat-2/c2-a1-google-sheets-write-adapter`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `crm_write`
+- Provider: `HubSpot`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-a1-core-google-sheets-write-adapter-v1.json`
 
@@ -278,6 +359,15 @@ Airtable writes belong to C2-A2. HubSpot writes belong to C2-A3. Deduplication b
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-f-payload-validation-layer`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `crm_write`
+- Provider: `HubSpot`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-f-core-payload-validator-v1.json`
@@ -307,6 +397,15 @@ External webhook receiving belongs to C2-C. Database writes belong to C2-A. Cond
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-i-notification-alert-engine`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `notification`
+- Provider: `Email/SMTP`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-i1-core-email-notification-adapter-v1.json`
@@ -654,6 +753,15 @@ Will be locked when Category 6 sprint begins. Mostly soft tooling (checklists, S
 **Location:** `components/cat-6/c6-g-error-log-retry-queue`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c6-g-core-error-log-retry-queue-v1.json`
 
@@ -686,6 +794,15 @@ Database/status-table write belongs to C5-W / C2-A. Error owner notification bel
 **Location:** `components/cat-5/c5-w-automation-status-control-table`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c5-w-core-automation-status-control-table-v1.json`
 
@@ -717,6 +834,15 @@ Database writes belong to C2-A1/C2-A2 or later storage adapters. Error log creat
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-k-llm-in-workflow-adapter`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `COMPONENT_ADAPTER`
+- Readiness: `BUILT`
+- Execution level: `provider_execution`
+- Adapter for: `llm_call`
+- Provider: `OpenAI-compatible/Groq`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-k-core-groq-openai-compatible-llm-adapter-v1.json`
@@ -752,6 +878,15 @@ AI draft approval pipeline belongs to C4-M. Human approval belongs to C2-O. Rout
 **Location:** `components/cat-4/c4-m-ai-draft-approval-pipeline`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c4-m-core-ai-draft-approval-pipeline-v1.json`
 
@@ -783,6 +918,15 @@ Direct LLM calls belong to C2-K. Human approval creation belongs to C2-O. Approv
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-d-deduplication-merge-engine`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-d-core-deduplication-merge-engine-v1.json`
@@ -816,6 +960,15 @@ Live Airtable/Sheets/HubSpot lookup belongs to C2-D2 or platform lookup adapters
 **Location:** `components/cat-2/c2-p-suppression-opt-out-guard`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-p-core-suppression-opt-out-guard-v1.json`
 
@@ -847,6 +1000,15 @@ Live suppression lookup belongs to C2-P2 or platform lookup adapters. Record wri
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-j-digest-summary-notification-builder`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-j-core-digest-summary-notification-builder-v1.json`
@@ -881,6 +1043,15 @@ Email sending belongs to C2-I. Status record creation belongs to C5-W. Error log
 **Location:** `components/cat-5/c5-e-manual-review-queue`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c5-e-core-manual-review-queue-v1.json`
 
@@ -913,6 +1084,15 @@ Database/storage writes belong to C2-A/C5-W. Notification sending belongs to C2-
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-o2-approval-response-capture`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-o2-core-approval-response-capture-v1.json`
@@ -949,6 +1129,15 @@ Approval request creation belongs to C2-O. Review queue creation belongs to C5-E
 **Location:** `components/cat-4/c4-e-ai-email-draft-generator`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c4-e-core-ai-email-draft-generator-v1.json`
 
@@ -983,6 +1172,15 @@ Generic LLM call belongs to C2-K. Draft approval packaging belongs to C4-M. Huma
 **Status:** Built v1.0  
 **Location:** `components/cat-4/c4-l-lead-qualification-pipeline`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c4-l-core-lead-qualification-pipeline-v1.json`
@@ -1020,6 +1218,15 @@ Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Manual
 **Location:** `components/cat-2/c2-e-form-intake-pipeline`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-e-core-form-intake-pipeline-v1.json`
 
@@ -1054,6 +1261,15 @@ Webhook/front-door receiving belongs to C2-C. Validation belongs to C2-F. Dedupe
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-n-csv-excel-parser`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c2-n-core-csv-excel-parser-v1.json`
@@ -1092,6 +1308,15 @@ File upload/storage belongs to C2-G. Validation belongs to C2-F. Dedupe belongs 
 **Location:** `components/cat-4/c4-a-ai-classification-pipeline`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c4-a-core-ai-classification-pipeline-v1.json`
 
@@ -1128,6 +1353,15 @@ Generic LLM call belongs to C2-K. Field extraction belongs to C4-B. Lead qualifi
 **Status:** Built v1.0  
 **Location:** `components/cat-4/c4-b-ai-extraction-parser`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P0`
+- Template ready: `Yes`
 
 **Workflow files:**
 - `workflows/c4-b-core-ai-extraction-parser-v1.json`
@@ -1166,6 +1400,15 @@ Generic LLM call belongs to C2-K. Classification belongs to C4-A. Validation bel
 **Location:** `components/cat-2/c2-g-file-upload-routing`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c2-g-core-file-upload-routing-v1.json`
 
@@ -1203,6 +1446,15 @@ Webhook/front-door receiving belongs to C2-C. CSV/Excel parsing belongs to C2-N.
 **Location:** `components/cat-4/c4-d-ai-content-generation-pipeline`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `CORE_COMPONENT`
+- Readiness: `BUILT`
+- Execution level: `core_logic`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes`
+
 **Workflow files:**
 - `workflows/c4-d-core-ai-content-generation-pipeline-v1.json`
 
@@ -1238,6 +1490,15 @@ Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Draft 
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-l-calendar-scheduling-automation`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `HANDOFF_ONLY_CORE`
+- Readiness: `BUILT`
+- Execution level: `handoff_only`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes with adapter caveat`
 
 **Workflow files:**
 - `workflows/c2-l-core-calendar-scheduling-automation-v1.json`
@@ -1279,6 +1540,15 @@ Email draft generation belongs to C4-E. Draft approval packaging belongs to C4-M
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-m-whatsapp-message-automation`  
 **Last tested:** 2026-05-25  
+
+**Architecture Classification:**
+- Layer type: `HANDOFF_ONLY_CORE`
+- Readiness: `BUILT`
+- Execution level: `handoff_only`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P2`
+- Template ready: `Yes with adapter caveat`
 
 **Workflow files:**
 - `workflows/c2-m-core-whatsapp-message-automation-v1.json`
@@ -1323,6 +1593,15 @@ AI message drafting belongs to C4-E or a future message draft component. Draft a
 **Location:** `components/cat-2/c2-h-payment-on-intake-flow`  
 **Last tested:** 2026-05-25  
 
+**Architecture Classification:**
+- Layer type: `HANDOFF_ONLY_CORE`
+- Readiness: `BUILT`
+- Execution level: `handoff_only`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes with adapter caveat`
+
 **Workflow files:**
 - `workflows/c2-h-core-payment-on-intake-flow-v1.json`
 
@@ -1363,6 +1642,15 @@ Actual payment link/invoice creation belongs to future Razorpay/Stripe/PayPal ad
 **Status:** Built v1.0  
 **Location:** `components/cat-2/c2-q-publishing-adapter-family`  
 **Last tested:** 2026-05-26  
+
+**Architecture Classification:**
+- Layer type: `HANDOFF_ONLY_CORE`
+- Readiness: `BUILT`
+- Execution level: `handoff_only`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P2`
+- Template ready: `Yes with adapter caveat`
 
 **Workflow files:**
 - `workflows/c2-q-core-publishing-adapter-family-v1.json`
@@ -1407,6 +1695,15 @@ AI content generation belongs to C4-D. Draft approval packaging belongs to C4-M.
 **Location:** `components/cat-4/c4-t-ocr-document-processing-pipeline`  
 **Last tested:** 2026-05-26  
 
+**Architecture Classification:**
+- Layer type: `HANDOFF_ONLY_CORE`
+- Readiness: `BUILT`
+- Execution level: `handoff_only`
+- Adapter for: `N/A`
+- Provider: `provider_agnostic`
+- Priority: `P1`
+- Template ready: `Yes with adapter caveat`
+
 **Workflow files:**
 - `workflows/c4-t-core-ocr-document-processing-pipeline-v1.json`
 
@@ -1439,5 +1736,6 @@ C4-T v1 is built as the reusable document processing router. OCR providers are a
 
 **Excluded by design:**  
 File upload routing belongs to C2-G. Actual OCR execution belongs to future OCR adapters. Field extraction belongs to C4-B. Payload validation belongs to C2-F. CSV/Excel parsing belongs to C2-N. File storage belongs to a future storage adapter. Manual review queue creation belongs to C5-E. Error logging belongs to C6-G.
+
 
 
