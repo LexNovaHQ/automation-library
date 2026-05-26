@@ -1,0 +1,197 @@
+{
+  "name": "C2-M_CORE_WhatsApp_Message_Automation_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -240
+      ],
+      "id": "6b2dfa19-0072-42ec-9a67-7f24f124789e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction normalizePhone(value) {\n  const phone = normalizeString(value);\n  if (!phone) return \"\";\n  return phone.replace(/\\s+/g, \"\");\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-M\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        whatsapp_message: null,\n        provider_handoff: null,\n        manual_review_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\nconst payload = source.payload || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-M will not prepare WhatsApp message when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"prepare_whatsapp_message\") {\n  return fail({\n    code: \"WHATSAPP_NOT_REQUESTED\",\n    message: \"source.next_action is not prepare_whatsapp_message.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!config.provider) {\n  return fail({\n    code: \"MISSING_PROVIDER\",\n    message: \"config.provider is required.\"\n  });\n}\n\nif (!config.mode) {\n  return fail({\n    code: \"MISSING_MODE\",\n    message: \"config.mode is required.\"\n  });\n}\n\nconst provider = normalizeString(config.provider).toLowerCase();\nconst mode = normalizeString(config.mode).toLowerCase();\nconst messageFormat = normalizeString(config.message_format || \"text\").toLowerCase();\n\nconst supportedProviders = [\"whatsapp_cloud_api\", \"twilio_whatsapp\", \"wati\", \"manual\"];\nconst supportedModes = [\"provider_handoff\", \"manual_handoff\"];\nconst supportedFormats = [\"text\", \"template\"];\n\nif (!supportedProviders.includes(provider)) {\n  return fail({\n    code: \"UNSUPPORTED_PROVIDER\",\n    message: \"config.provider is not supported in C2-M v1.\",\n    details: [{ provider, supported_providers: supportedProviders }]\n  });\n}\n\nif (!supportedModes.includes(mode)) {\n  return fail({\n    code: \"UNSUPPORTED_MODE\",\n    message: \"config.mode is not supported in C2-M v1.\",\n    details: [{ mode, supported_modes: supportedModes }]\n  });\n}\n\nif (!supportedFormats.includes(messageFormat)) {\n  return fail({\n    code: \"UNSUPPORTED_MESSAGE_FORMAT\",\n    message: \"config.message_format is not supported in C2-M v1.\",\n    details: [{ message_format: messageFormat, supported_formats: supportedFormats }]\n  });\n}\n\nif (provider === \"manual\" && mode !== \"manual_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Manual provider supports manual_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (provider !== \"manual\" && mode !== \"provider_handoff\") {\n  return fail({\n    code: \"INVALID_PROVIDER_MODE\",\n    message: \"Provider integrations support provider_handoff mode only.\",\n    details: [{ provider, mode }]\n  });\n}\n\nif (config.approval_status_required === true) {\n  const approved = source.approved_action?.approved === true;\n  if (!approved) {\n    return fail({\n      code: \"MESSAGE_NOT_APPROVED\",\n      message: \"Approved action is required before preparing WhatsApp provider handoff.\",\n      details: [{ approved_action: source.approved_action || null }]\n    });\n  }\n}\n\nconst recipientPhone = normalizePhone(payload.recipient_phone);\nconst messageBody = normalizeString(payload.message_body);\nconst recipientName = normalizeString(payload.recipient_name);\nconst messageType = normalizeString(payload.message_type || \"manual_message\");\n\nif (!recipientPhone) {\n  return fail({\n    code: \"MISSING_RECIPIENT_PHONE\",\n    message: \"input.payload.recipient_phone is required.\"\n  });\n}\n\nif (!messageBody && messageFormat === \"text\") {\n  return fail({\n    code: \"MISSING_MESSAGE_BODY\",\n    message: \"input.payload.message_body is required for text messages.\"\n  });\n}\n\nif (Array.isArray(config.allowed_message_types) && config.allowed_message_types.length > 0) {\n  if (!config.allowed_message_types.includes(messageType)) {\n    return fail({\n      code: \"MESSAGE_TYPE_NOT_ALLOWED\",\n      message: \"input.payload.message_type is not allowed by config.allowed_message_types.\",\n      details: [\n        {\n          message_type: messageType,\n          allowed_message_types: config.allowed_message_types\n        }\n      ]\n    });\n  }\n}\n\nif (provider === \"whatsapp_cloud_api\" && mode === \"provider_handoff\" && !config.from_phone_number_id) {\n  return fail({\n    code: \"MISSING_CLOUD_API_PHONE_NUMBER_ID\",\n    message: \"config.from_phone_number_id is required for WhatsApp Cloud API handoff.\"\n  });\n}\n\nif (provider === \"twilio_whatsapp\" && mode === \"provider_handoff\" && !config.from_whatsapp_number) {\n  return fail({\n    code: \"MISSING_TWILIO_FROM_NUMBER\",\n    message: \"config.from_whatsapp_number is required for Twilio WhatsApp handoff.\"\n  });\n}\n\nif (provider === \"wati\" && mode === \"provider_handoff\" && !config.wati_api_endpoint) {\n  return fail({\n    code: \"MISSING_WATI_ENDPOINT\",\n    message: \"config.wati_api_endpoint is required for WATI handoff.\"\n  });\n}\n\nconst whatsappMessage = {\n  provider,\n  mode,\n  status: \"ready\",\n  message_format: messageFormat,\n  message_type: messageType,\n  recipient: {\n    name: recipientName || null,\n    phone: recipientPhone\n  },\n  body: messageBody,\n  context: payload.context || null,\n  requires_approval: config.requires_approval === true,\n  approval_status_required: config.approval_status_required === true,\n  prepared_at: nowIso()\n};\n\nlet providerHandoff = null;\nlet manualReviewHandoff = null;\nlet nextAction = config.default_next_action || \"whatsapp_message_ready\";\n\nif (mode === \"manual_handoff\") {\n  manualReviewHandoff = {\n    next_component: \"C5-E\",\n    input: {\n      success: true,\n      component_id: \"C2-M\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"manual_whatsapp_message\",\n      whatsapp_message: whatsappMessage,\n      source_result: source,\n      error: null,\n      next_action: \"manual_review\"\n    },\n    config: {\n      queue_type: \"manual_whatsapp_message\",\n      review_reason: \"Manual WhatsApp message handling required.\",\n      reviewer_email: config.reviewer_email || \"shwetabh.singh@lexnovahq.com\",\n      owner: \"ops\",\n      priority: config.priority || \"normal\",\n      allowed_actions: [\"send_manually\", \"edit_message\", \"reject_message\", \"request_more_info\"],\n      default_next_action: \"notify_reviewer\"\n    }\n  };\n\n  nextAction = \"manual_review\";\n}\n\nif (mode === \"provider_handoff\") {\n  let providerPayload = {};\n\n  if (provider === \"whatsapp_cloud_api\") {\n    providerPayload = {\n      provider,\n      method: \"POST\",\n      endpoint_template: \"https://graph.facebook.com/vXX.X/{phone_number_id}/messages\",\n      phone_number_id: config.from_phone_number_id,\n      business_account_id: config.business_account_id || null,\n      body: {\n        messaging_product: \"whatsapp\",\n        to: recipientPhone.replace(/^\\+/, \"\"),\n        type: messageFormat,\n        text: messageFormat === \"text\" ? { body: messageBody } : undefined\n      }\n    };\n  }\n\n  if (provider === \"twilio_whatsapp\") {\n    providerPayload = {\n      provider,\n      method: \"POST\",\n      endpoint_template: \"Twilio Messages API\",\n      from: config.from_whatsapp_number,\n      to: recipientPhone.startsWith(\"whatsapp:\") ? recipientPhone : `whatsapp:${recipientPhone}`,\n      body: messageBody\n    };\n  }\n\n  if (provider === \"wati\") {\n    providerPayload = {\n      provider,\n      method: \"POST\",\n      endpoint: config.wati_api_endpoint,\n      phone: recipientPhone,\n      body: {\n        messageText: messageBody\n      }\n    };\n  }\n\n  providerHandoff = {\n    next_component: `${provider}_adapter`,\n    input: {\n      success: true,\n      component_id: \"C2-M\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"whatsapp_provider_send_request\",\n      whatsapp_message: whatsappMessage,\n      provider_payload: providerPayload,\n      source_result: source,\n      error: null,\n      next_action: \"send_whatsapp_message\"\n    },\n    config: {\n      provider,\n      adapter_required: true,\n      default_next_action: \"track_message_status\"\n    }\n  };\n\n  nextAction = config.default_next_action || \"send_whatsapp_provider_handoff\";\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-M\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      whatsapp_message: whatsappMessage,\n      provider_handoff: providerHandoff,\n      manual_review_handoff: manualReviewHandoff,\n      source_result: source,\n      error: null,\n      next_action: nextAction\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -240
+      ],
+      "id": "403d5ed5-d55e-4dde-8593-2cb1752c8874",
+      "name": "Prepare WhatsApp Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3cea5371-b3d5-4349-9fb2-a3d5014d0efe",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "a13aea7e-38ac-4bcb-b7ba-6b07d9aaff9d",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "2033a0c3-218f-404a-af5a-78123bc6d952",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "e9c14400-3d40-480d-9713-081b0daf24ba",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a5e52186-59df-4836-9b99-710b7caa0b73",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "0828a0a2-de4c-49b4-b2f4-2481c97064c9",
+              "name": "whatsapp_message",
+              "value": "={{ $json.whatsapp_message }}",
+              "type": "object"
+            },
+            {
+              "id": "b7ce80c3-5a92-4872-be75-58c471c82b96",
+              "name": "provider_handoff",
+              "value": "={{ $json.provider_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "aa40ec44-7983-497a-8aca-1a15677b20b5",
+              "name": "manual_review_handoff",
+              "value": "={{ $json.manual_review_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "d1f51199-7662-4bc1-9994-d4d98d831bcb",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "00df9ec8-6e63-46f3-a609-907af2ea49eb",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "ae687bc1-eede-4c41-bf8a-5345756e6c7c",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        -240
+      ],
+      "id": "4a1a315e-18f4-413f-a7cd-3ac73cf1ede1",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-O2",
+            "component_version": "v1",
+            "event_id": "evt_c2m_cloud_api",
+            "event_type": "approved_message",
+            "payload": {
+              "recipient_name": "Riya Sharma",
+              "recipient_phone": "+919999999999",
+              "message_body": "Hi Riya, thanks for reaching out. You can book a discovery call here: https://calendly.com/growthops/discovery-call",
+              "message_type": "scheduling_followup",
+              "context": "Approved scheduling message for qualified lead."
+            },
+            "approved_action": {
+              "approved": true,
+              "action": "prepare_whatsapp_message"
+            },
+            "metadata": {
+              "origin": "approval_response",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "prepare_whatsapp_message"
+          },
+          "config": {
+            "provider": "whatsapp_cloud_api",
+            "mode": "provider_handoff",
+            "message_format": "text",
+            "from_phone_number_id": "1234567890",
+            "business_account_id": "9876543210",
+            "requires_approval": true,
+            "approval_status_required": true,
+            "allowed_message_types": [
+              "scheduling_followup",
+              "lead_followup",
+              "support_update",
+              "manual_message"
+            ],
+            "default_next_action": "send_whatsapp_provider_handoff"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prepare WhatsApp Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare WhatsApp Message": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3bf6b56c-2081-40d7-a04f-745a2e929f3f",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "APuOu0AHaRA4enWi",
+  "tags": []
+}

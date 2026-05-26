@@ -1339,3 +1339,46 @@ C2-L v1 is built as the reusable scheduling handoff/router layer. Calendly, Cal.
 
 **Excluded by design:**  
 Email draft generation belongs to C4-E. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual Google Calendar creation belongs to a future Google Calendar adapter. Calendly/Cal.com webhook intake belongs to C2-C plus future provider adapter/runtime. Notifications belong to C2-I. Status tracking belongs to C5-W. Error logging belongs to C6-G.
+
+## C2-M Build Record - WhatsApp Message Automation
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-m-whatsapp-message-automation`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-m-core-whatsapp-message-automation-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-M_CORE_WhatsApp_Message_Automation_v1`
+- Prepares provider-agnostic WhatsApp message objects and handoffs
+- Supports WhatsApp Cloud API handoff
+- Supports Twilio WhatsApp handoff
+- Supports WATI handoff
+- Supports manual WhatsApp handoff
+- Enforces approval gate when configured
+- Enforces allowed message types when configured
+- Creates provider adapter handoff for provider sends
+- Creates C5-E manual review handoff for manual WhatsApp handling
+- Does not directly send WhatsApp messages or call provider APIs
+
+**Passed tests:**
+- WhatsApp Cloud API
+- Twilio WhatsApp
+- WATI handoff
+- Manual WhatsApp
+- Upstream failed
+- WhatsApp not requested
+- Missing provider
+- Missing recipient phone
+- Missing message body
+- Not approved
+
+**Implementation note:**  
+C2-M v1 is built as the reusable WhatsApp handoff/router layer. WhatsApp Cloud API, Twilio, and WATI are provider modes, not hard-coded component identities. Actual provider sends belong to future provider adapters.
+
+**Excluded by design:**  
+AI message drafting belongs to C4-E or a future message draft component. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual provider sends belong to future WhatsApp Cloud API/Twilio/WATI adapters. Status tracking belongs to C5-W. Error logging belongs to C6-G.

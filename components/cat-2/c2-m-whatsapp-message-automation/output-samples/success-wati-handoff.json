@@ -1,0 +1,59 @@
+﻿{
+  "success": true,
+  "component_id": "C2-M",
+  "component_version": "v1",
+  "event_id": "evt_c2m_wati",
+  "event_type": "approved_message",
+  "whatsapp_message": {
+    "provider": "wati",
+    "mode": "provider_handoff",
+    "status": "ready",
+    "message_format": "text",
+    "message_type": "support_update",
+    "recipient": {
+      "name": "Neha Kapoor",
+      "phone": "+917777777777"
+    },
+    "body": "Hi Neha, your onboarding call is confirmed. We will share the meeting details shortly.",
+    "context": "Approved onboarding update.",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": {
+    "next_component": "wati_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-M",
+      "component_version": "v1",
+      "event_id": "evt_c2m_wati",
+      "event_type": "whatsapp_provider_send_request",
+      "provider_payload": {
+        "provider": "wati",
+        "method": "POST",
+        "endpoint": "https://live-server.wati.io/api/v1/sendSessionMessage",
+        "phone": "+917777777777",
+        "body": {
+          "messageText": "Hi Neha, your onboarding call is confirmed. We will share the meeting details shortly."
+        }
+      },
+      "error": null,
+      "next_action": "send_whatsapp_message"
+    },
+    "config": {
+      "provider": "wati",
+      "adapter_required": true,
+      "default_next_action": "track_message_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2m_wati",
+    "event_type": "approved_message",
+    "success": true,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "error": null,
+  "next_action": "send_whatsapp_provider_handoff"
+}

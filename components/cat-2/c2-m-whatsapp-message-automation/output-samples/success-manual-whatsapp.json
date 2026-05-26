@@ -1,0 +1,61 @@
+﻿{
+  "success": true,
+  "component_id": "C2-M",
+  "component_version": "v1",
+  "event_id": "evt_c2m_manual",
+  "event_type": "message_draft",
+  "whatsapp_message": {
+    "provider": "manual",
+    "mode": "manual_handoff",
+    "status": "ready",
+    "message_format": "text",
+    "message_type": "manual_message",
+    "recipient": {
+      "name": "Dev Rao",
+      "phone": "+916666666666"
+    },
+    "body": "Hi Dev, thanks for your message. Please share two suitable times for a quick discovery call.",
+    "context": "Manual WhatsApp follow-up needed.",
+    "requires_approval": true,
+    "approval_status_required": false,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": null,
+  "manual_review_handoff": {
+    "next_component": "C5-E",
+    "input": {
+      "success": true,
+      "component_id": "C2-M",
+      "component_version": "v1",
+      "event_id": "evt_c2m_manual",
+      "event_type": "manual_whatsapp_message",
+      "whatsapp_message": {
+        "provider": "manual",
+        "recipient": {
+          "phone": "+916666666666"
+        },
+        "message_type": "manual_message"
+      },
+      "error": null,
+      "next_action": "manual_review"
+    },
+    "config": {
+      "queue_type": "manual_whatsapp_message",
+      "review_reason": "Manual WhatsApp message handling required.",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "ops",
+      "priority": "normal",
+      "allowed_actions": ["send_manually", "edit_message", "reject_message", "request_more_info"],
+      "default_next_action": "notify_reviewer"
+    }
+  },
+  "source_result": {
+    "component_id": "C4-M",
+    "event_id": "evt_c2m_manual",
+    "event_type": "message_draft",
+    "success": true,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "error": null,
+  "next_action": "manual_review"
+}

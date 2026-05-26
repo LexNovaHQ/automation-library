@@ -1,0 +1,26 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2m_missing_provider",
+    "event_type": "approved_message",
+    "payload": {
+      "recipient_phone": "+919999999999",
+      "message_body": "Hello"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_whatsapp_message"
+    },
+    "error": null,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "config": {
+    "mode": "provider_handoff",
+    "message_format": "text",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "default_next_action": "send_whatsapp_provider_handoff"
+  }
+}

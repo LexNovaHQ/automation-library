@@ -1,0 +1,28 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2m_missing_phone",
+    "event_type": "approved_message",
+    "payload": {
+      "recipient_name": "Riya Sharma",
+      "message_body": "Hello"
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_whatsapp_message"
+    },
+    "error": null,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "config": {
+    "provider": "whatsapp_cloud_api",
+    "mode": "provider_handoff",
+    "message_format": "text",
+    "from_phone_number_id": "1234567890",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "default_next_action": "send_whatsapp_provider_handoff"
+  }
+}

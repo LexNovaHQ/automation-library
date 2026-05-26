@@ -1,0 +1,72 @@
+﻿{
+  "success": true,
+  "component_id": "C2-M",
+  "component_version": "v1",
+  "event_id": "evt_c2m_cloud_api",
+  "event_type": "approved_message",
+  "whatsapp_message": {
+    "provider": "whatsapp_cloud_api",
+    "mode": "provider_handoff",
+    "status": "ready",
+    "message_format": "text",
+    "message_type": "scheduling_followup",
+    "recipient": {
+      "name": "Riya Sharma",
+      "phone": "+919999999999"
+    },
+    "body": "Hi Riya, thanks for reaching out. You can book a discovery call here: https://calendly.com/growthops/discovery-call",
+    "context": "Approved scheduling message for qualified lead.",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "prepared_at": "2026-05-25T00:00:00.000Z"
+  },
+  "provider_handoff": {
+    "next_component": "whatsapp_cloud_api_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C2-M",
+      "component_version": "v1",
+      "event_id": "evt_c2m_cloud_api",
+      "event_type": "whatsapp_provider_send_request",
+      "whatsapp_message": {
+        "provider": "whatsapp_cloud_api",
+        "message_type": "scheduling_followup",
+        "recipient": {
+          "phone": "+919999999999"
+        }
+      },
+      "provider_payload": {
+        "provider": "whatsapp_cloud_api",
+        "method": "POST",
+        "endpoint_template": "https://graph.facebook.com/vXX.X/{phone_number_id}/messages",
+        "phone_number_id": "1234567890",
+        "business_account_id": "9876543210",
+        "body": {
+          "messaging_product": "whatsapp",
+          "to": "919999999999",
+          "type": "text",
+          "text": {
+            "body": "Hi Riya, thanks for reaching out. You can book a discovery call here: https://calendly.com/growthops/discovery-call"
+          }
+        }
+      },
+      "error": null,
+      "next_action": "send_whatsapp_message"
+    },
+    "config": {
+      "provider": "whatsapp_cloud_api",
+      "adapter_required": true,
+      "default_next_action": "track_message_status"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2m_cloud_api",
+    "event_type": "approved_message",
+    "success": true,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "error": null,
+  "next_action": "send_whatsapp_provider_handoff"
+}

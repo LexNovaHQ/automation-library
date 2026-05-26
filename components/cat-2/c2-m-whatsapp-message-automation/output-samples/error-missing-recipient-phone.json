@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C2-M",
+  "component_version": "v1",
+  "event_id": "evt_c2m_missing_phone",
+  "event_type": "approved_message",
+  "whatsapp_message": null,
+  "provider_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2m_missing_phone",
+    "event_type": "approved_message",
+    "success": true,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "error": {
+    "code": "MISSING_RECIPIENT_PHONE",
+    "message": "input.payload.recipient_phone is required."
+  },
+  "next_action": "route_to_failure_log"
+}

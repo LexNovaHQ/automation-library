@@ -1,0 +1,36 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-O2",
+    "component_version": "v1",
+    "event_id": "evt_c2m_twilio",
+    "event_type": "approved_message",
+    "payload": {
+      "recipient_name": "Aman Mehta",
+      "recipient_phone": "+918888888888",
+      "message_body": "Hi Aman, your automation consult link is here: https://cal.com/growthops/automation-consult",
+      "message_type": "scheduling_followup",
+      "context": "Approved scheduling message for qualified lead."
+    },
+    "approved_action": {
+      "approved": true,
+      "action": "prepare_whatsapp_message"
+    },
+    "metadata": {
+      "origin": "approval_response",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "config": {
+    "provider": "twilio_whatsapp",
+    "mode": "provider_handoff",
+    "message_format": "text",
+    "from_whatsapp_number": "whatsapp:+14155238886",
+    "requires_approval": true,
+    "approval_status_required": true,
+    "allowed_message_types": ["scheduling_followup", "lead_followup", "support_update", "manual_message"],
+    "default_next_action": "send_whatsapp_provider_handoff"
+  }
+}

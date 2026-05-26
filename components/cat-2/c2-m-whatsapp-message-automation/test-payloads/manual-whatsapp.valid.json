@@ -1,0 +1,32 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C4-M",
+    "component_version": "v1",
+    "event_id": "evt_c2m_manual",
+    "event_type": "message_draft",
+    "payload": {
+      "recipient_name": "Dev Rao",
+      "recipient_phone": "+916666666666",
+      "message_body": "Hi Dev, thanks for your message. Please share two suitable times for a quick discovery call.",
+      "message_type": "manual_message",
+      "context": "Manual WhatsApp follow-up needed."
+    },
+    "metadata": {
+      "origin": "manual_review",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "prepare_whatsapp_message"
+  },
+  "config": {
+    "provider": "manual",
+    "mode": "manual_handoff",
+    "message_format": "text",
+    "requires_approval": true,
+    "approval_status_required": false,
+    "reviewer_email": "shwetabh.singh@lexnovahq.com",
+    "allowed_message_types": ["scheduling_followup", "lead_followup", "support_update", "manual_message"],
+    "default_next_action": "manual_review"
+  }
+}

@@ -1,0 +1,25 @@
+﻿{
+  "success": false,
+  "component_id": "C2-M",
+  "component_version": "v1",
+  "event_id": "evt_c2m_upstream_failed",
+  "event_type": "approved_message",
+  "whatsapp_message": null,
+  "provider_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-O2",
+    "event_id": "evt_c2m_upstream_failed",
+    "event_type": "approved_message",
+    "success": false,
+    "error": {
+      "code": "APPROVAL_FAILED",
+      "message": "Approval response failed."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-M will not prepare WhatsApp message when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}
