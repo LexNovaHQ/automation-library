@@ -1,0 +1,36 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c4t_unsupported_file",
+    "event_type": "file_upload",
+    "file": {
+      "file_id": "file_zip_001",
+      "filename": "archive.zip",
+      "mime_type": "application/zip",
+      "extension": "zip",
+      "size_bytes": 500000,
+      "source_url": "https://example.com/uploads/archive.zip",
+      "storage_provider": "temporary_upload"
+    },
+    "file_route": {
+      "file_category": "unknown",
+      "route_status": "manual_review_required"
+    },
+    "metadata": {
+      "origin": "form_upload",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "process_document"
+  },
+  "config": {
+    "document_goal": "Process document.",
+    "supported_extensions": ["pdf", "docx", "txt", "png", "jpg", "jpeg"],
+    "ocr_extensions": ["png", "jpg", "jpeg"],
+    "ocr_required_when_no_text": true,
+    "max_file_size_bytes": 10485760,
+    "default_next_action": "extract_fields"
+  }
+}

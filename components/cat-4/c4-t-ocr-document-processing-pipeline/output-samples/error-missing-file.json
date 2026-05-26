@@ -1,0 +1,23 @@
+﻿{
+  "success": false,
+  "component_id": "C4-T",
+  "component_version": "v1",
+  "event_id": "evt_c4t_missing_file",
+  "event_type": "file_upload",
+  "document_processing": null,
+  "c4b_handoff": null,
+  "ocr_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c4t_missing_file",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "process_document"
+  },
+  "error": {
+    "code": "MISSING_FILE_OBJECT",
+    "message": "input.file is required."
+  },
+  "next_action": "route_to_failure_log"
+}

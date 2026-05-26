@@ -1,0 +1,60 @@
+﻿{
+  "success": true,
+  "component_id": "C4-T",
+  "component_version": "v1",
+  "event_id": "evt_c4t_txt_ready",
+  "event_type": "file_upload",
+  "document_processing": {
+    "file_id": "file_txt_001",
+    "filename": "lead-note.txt",
+    "extension": "txt",
+    "mime_type": "text/plain",
+    "size_bytes": 8192,
+    "source_url": "https://example.com/uploads/lead-note.txt",
+    "storage_provider": "temporary_upload",
+    "file_category": "document",
+    "page_count": 1,
+    "text_available": true,
+    "extracted_text": "Name: Aman Mehta\nCompany: CartLift\nIssue: daily alert email stopped working\nRequested action: check Slack and email alert flow",
+    "source_text_method": "plain_text_upload",
+    "document_goal": "Prepare text document for extraction.",
+    "route_status": "text_ready",
+    "route_reason": "Document text is already available.",
+    "processed_at": "2026-05-26T00:00:00.000Z"
+  },
+  "c4b_handoff": {
+    "next_component": "C4-B",
+    "input": {
+      "success": true,
+      "component_id": "C4-T",
+      "component_version": "v1",
+      "event_id": "evt_c4t_txt_ready",
+      "event_type": "document_text_ready",
+      "payload": {
+        "raw_text": "Name: Aman Mehta\nCompany: CartLift\nIssue: daily alert email stopped working\nRequested action: check Slack and email alert flow",
+        "source": "lead-note.txt",
+        "file_id": "file_txt_001",
+        "filename": "lead-note.txt",
+        "document_goal": "Prepare text document for extraction."
+      },
+      "error": null,
+      "next_action": "extract_fields"
+    },
+    "config": {
+      "extraction_mode": "rules_plus_ai",
+      "extraction_goal": "Extract support ticket context from document text.",
+      "default_next_action": "validate_payload"
+    }
+  },
+  "ocr_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c4t_txt_ready",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "process_document"
+  },
+  "error": null,
+  "next_action": "extract_fields"
+}

@@ -1,0 +1,51 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-G",
+    "component_version": "v1",
+    "event_id": "evt_c4t_pdf_text_ready",
+    "event_type": "file_upload",
+    "file": {
+      "file_id": "file_pdf_text_001",
+      "filename": "client-brief.pdf",
+      "mime_type": "application/pdf",
+      "extension": "pdf",
+      "size_bytes": 524288,
+      "source_url": "https://example.com/uploads/client-brief.pdf",
+      "storage_provider": "temporary_upload"
+    },
+    "file_route": {
+      "file_category": "document",
+      "route_status": "routed"
+    },
+    "document": {
+      "text_available": true,
+      "extracted_text": "Client: GrowthOps Studio\nNeed: Lead intake automation\nBudget: $500\nTimeline: next 2 weeks\nContact: riya@example.com",
+      "page_count": 2,
+      "source_text_method": "upstream_text_extraction"
+    },
+    "metadata": {
+      "origin": "client_portal_upload",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "process_document"
+  },
+  "config": {
+    "document_goal": "Prepare document text for field extraction.",
+    "supported_extensions": ["pdf", "docx", "txt", "png", "jpg", "jpeg"],
+    "ocr_extensions": ["png", "jpg", "jpeg"],
+    "ocr_required_when_no_text": true,
+    "max_file_size_bytes": 10485760,
+    "extraction_target": {
+      "next_component": "C4-B",
+      "next_action": "extract_fields",
+      "extraction_goal": "Extract lead/contact and sales context fields from document text."
+    },
+    "ocr_target": {
+      "next_component": "ocr_adapter",
+      "next_action": "run_ocr"
+    },
+    "default_next_action": "extract_fields"
+  }
+}

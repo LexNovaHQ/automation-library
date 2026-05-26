@@ -1,0 +1,60 @@
+﻿{
+  "success": true,
+  "component_id": "C4-T",
+  "component_version": "v1",
+  "event_id": "evt_c4t_pdf_text_ready",
+  "event_type": "file_upload",
+  "document_processing": {
+    "file_id": "file_pdf_text_001",
+    "filename": "client-brief.pdf",
+    "extension": "pdf",
+    "mime_type": "application/pdf",
+    "size_bytes": 524288,
+    "source_url": "https://example.com/uploads/client-brief.pdf",
+    "storage_provider": "temporary_upload",
+    "file_category": "document",
+    "page_count": 2,
+    "text_available": true,
+    "extracted_text": "Client: GrowthOps Studio\nNeed: Lead intake automation\nBudget: $500\nTimeline: next 2 weeks\nContact: riya@example.com",
+    "source_text_method": "upstream_text_extraction",
+    "document_goal": "Prepare document text for field extraction.",
+    "route_status": "text_ready",
+    "route_reason": "Document text is already available.",
+    "processed_at": "2026-05-26T00:00:00.000Z"
+  },
+  "c4b_handoff": {
+    "next_component": "C4-B",
+    "input": {
+      "success": true,
+      "component_id": "C4-T",
+      "component_version": "v1",
+      "event_id": "evt_c4t_pdf_text_ready",
+      "event_type": "document_text_ready",
+      "payload": {
+        "raw_text": "Client: GrowthOps Studio\nNeed: Lead intake automation\nBudget: $500\nTimeline: next 2 weeks\nContact: riya@example.com",
+        "source": "client-brief.pdf",
+        "file_id": "file_pdf_text_001",
+        "filename": "client-brief.pdf",
+        "document_goal": "Prepare document text for field extraction."
+      },
+      "error": null,
+      "next_action": "extract_fields"
+    },
+    "config": {
+      "extraction_mode": "rules_plus_ai",
+      "extraction_goal": "Extract lead/contact and sales context fields from document text.",
+      "default_next_action": "validate_payload"
+    }
+  },
+  "ocr_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c4t_pdf_text_ready",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "process_document"
+  },
+  "error": null,
+  "next_action": "extract_fields"
+}

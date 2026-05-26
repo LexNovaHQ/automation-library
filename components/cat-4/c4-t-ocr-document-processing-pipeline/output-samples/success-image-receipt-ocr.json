@@ -1,0 +1,64 @@
+﻿{
+  "success": true,
+  "component_id": "C4-T",
+  "component_version": "v1",
+  "event_id": "evt_c4t_image_receipt",
+  "event_type": "file_upload",
+  "document_processing": {
+    "file_id": "file_img_receipt_001",
+    "filename": "receipt.png",
+    "extension": "png",
+    "mime_type": "image/png",
+    "size_bytes": 734003,
+    "source_url": "https://example.com/uploads/receipt.png",
+    "storage_provider": "temporary_upload",
+    "file_category": "image",
+    "page_count": 1,
+    "text_available": false,
+    "extracted_text": null,
+    "source_text_method": null,
+    "document_goal": "Prepare uploaded receipt image for OCR.",
+    "route_status": "ocr_required",
+    "route_reason": "No usable text is available and OCR is required/configured.",
+    "processed_at": "2026-05-26T00:00:00.000Z"
+  },
+  "c4b_handoff": null,
+  "ocr_handoff": {
+    "next_component": "ocr_adapter",
+    "input": {
+      "success": true,
+      "component_id": "C4-T",
+      "component_version": "v1",
+      "event_id": "evt_c4t_image_receipt",
+      "event_type": "ocr_request",
+      "file": {
+        "file_id": "file_img_receipt_001",
+        "filename": "receipt.png",
+        "mime_type": "image/png",
+        "extension": "png",
+        "size_bytes": 734003,
+        "source_url": "https://example.com/uploads/receipt.png",
+        "storage_provider": "temporary_upload"
+      },
+      "error": null,
+      "next_action": "run_ocr"
+    },
+    "config": {
+      "ocr_provider": "external_ocr_adapter",
+      "output_next_component": "C4-B",
+      "output_next_action": "extract_fields",
+      "extraction_goal": "Extract receipt fields from OCR text.",
+      "default_next_action": "extract_fields"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c4t_image_receipt",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "process_document"
+  },
+  "error": null,
+  "next_action": "run_ocr"
+}

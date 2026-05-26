@@ -1,0 +1,223 @@
+{
+  "name": "C4-T_CORE_OCR_Document_Processing_Pipeline_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        -160
+      ],
+      "id": "95a90808-47dd-4bcc-8472-81445ae8c5ea",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction normalizeExtension(file) {\n  const explicit = normalizeString(file.extension).toLowerCase().replace(/^\\./, \"\");\n  if (explicit) return explicit;\n\n  const filename = normalizeString(file.filename);\n  const parts = filename.split(\".\");\n  if (parts.length > 1) return parts.pop().toLowerCase();\n\n  return \"\";\n}\n\nfunction normalizeList(list) {\n  return Array.isArray(list)\n    ? list.map(item => normalizeString(item).toLowerCase().replace(/^\\./, \"\")).filter(Boolean)\n    : [];\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C4-T\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        document_processing: null,\n        c4b_handoff: null,\n        ocr_handoff: null,\n        manual_review_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C4-T will not process document when upstream action failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"process_document\") {\n  return fail({\n    code: \"DOCUMENT_PROCESSING_NOT_REQUESTED\",\n    message: \"source.next_action is not process_document.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!source.file || typeof source.file !== \"object\") {\n  return fail({\n    code: \"MISSING_FILE_OBJECT\",\n    message: \"input.file is required.\"\n  });\n}\n\nif (!source.file.filename) {\n  return fail({\n    code: \"MISSING_FILENAME\",\n    message: \"input.file.filename is required.\"\n  });\n}\n\nconst file = source.file;\nconst extension = normalizeExtension(file);\nconst mimeType = normalizeString(file.mime_type).toLowerCase();\nconst sizeBytes = Number(file.size_bytes || 0);\n\nif (!extension) {\n  return fail({\n    code: \"MISSING_FILE_EXTENSION\",\n    message: \"File extension could not be determined.\"\n  });\n}\n\nconst supportedExtensions = normalizeList(config.supported_extensions);\nconst ocrExtensions = normalizeList(config.ocr_extensions);\nconst maxFileSizeBytes = Number(config.max_file_size_bytes || 0);\n\nif (supportedExtensions.length > 0 && !supportedExtensions.includes(extension)) {\n  return fail({\n    code: \"UNSUPPORTED_FILE_EXTENSION\",\n    message: \"File extension is not supported by C4-T.\",\n    details: [\n      {\n        filename: file.filename,\n        extension,\n        supported_extensions: supportedExtensions\n      }\n    ]\n  });\n}\n\nif (maxFileSizeBytes > 0 && sizeBytes > maxFileSizeBytes) {\n  return fail({\n    code: \"FILE_TOO_LARGE\",\n    message: \"File exceeds configured max_file_size_bytes.\",\n    details: [\n      {\n        filename: file.filename,\n        size_bytes: sizeBytes,\n        max_file_size_bytes: maxFileSizeBytes\n      }\n    ]\n  });\n}\n\nconst documentInput = source.document || {};\nconst extractedText = normalizeString(documentInput.extracted_text);\nconst textAvailable = documentInput.text_available === true && extractedText.length > 0;\nconst pageCount = Number(documentInput.page_count || 1);\nconst ocrRequiredWhenNoText = config.ocr_required_when_no_text === true;\nconst shouldRunOcr = !textAvailable && ocrRequiredWhenNoText && ocrExtensions.includes(extension);\n\nconst documentProcessingBase = {\n  file_id: file.file_id || null,\n  filename: file.filename,\n  extension,\n  mime_type: mimeType || null,\n  size_bytes: sizeBytes,\n  source_url: file.source_url || null,\n  storage_provider: file.storage_provider || null,\n  file_category: source.file_route?.file_category || null,\n  page_count: pageCount,\n  text_available: textAvailable,\n  extracted_text: textAvailable ? extractedText : null,\n  source_text_method: documentInput.source_text_method || null,\n  document_goal: config.document_goal || null,\n  processed_at: nowIso()\n};\n\nif (textAvailable) {\n  const extractionTarget = config.extraction_target || {};\n  const c4bHandoff = {\n    next_component: extractionTarget.next_component || \"C4-B\",\n    input: {\n      success: true,\n      component_id: \"C4-T\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"document_text_ready\",\n      payload: {\n        raw_text: extractedText,\n        source: file.filename,\n        file_id: file.file_id || null,\n        filename: file.filename,\n        document_goal: config.document_goal || null\n      },\n      document_processing: {\n        ...documentProcessingBase,\n        route_status: \"text_ready\",\n        route_reason: \"Document text is already available.\"\n      },\n      metadata: {\n        source_component: source.component_id || null,\n        original_event_type: source.event_type || null,\n        origin: source.metadata?.origin || null,\n        environment: source.metadata?.environment || null,\n        processed_at: documentProcessingBase.processed_at\n      },\n      error: null,\n      next_action: extractionTarget.next_action || \"extract_fields\"\n    },\n    config: {\n      extraction_mode: \"rules_plus_ai\",\n      extraction_goal: extractionTarget.extraction_goal || \"Extract structured fields from document text.\",\n      client_ai_profile: config.client_ai_profile || {\n        client_profile: {\n          client_name: \"Default Client\"\n        },\n        extraction_rules: {\n          required_fields: [],\n          optional_fields: [],\n          missing_required_field_action: \"manual_review\",\n          allow_inference: false,\n          never_infer_fields: [],\n          low_confidence_action: \"manual_review\",\n          manual_review_confidence_threshold: 0.75\n        }\n      },\n      llm: config.llm || {\n        provider: \"groq\",\n        endpoint: \"https://api.groq.com/openai/v1/chat/completions\",\n        model: \"llama-3.3-70b-versatile\",\n        temperature: 0.1,\n        max_tokens: 800\n      },\n      default_next_action: \"validate_payload\"\n    }\n  };\n\n  return [\n    {\n      json: {\n        success: true,\n        component_id: \"C4-T\",\n        component_version: \"v1\",\n        event_id: source.event_id || null,\n        event_type: source.event_type || null,\n        document_processing: {\n          ...documentProcessingBase,\n          route_status: \"text_ready\",\n          route_reason: \"Document text is already available.\"\n        },\n        c4b_handoff: c4bHandoff,\n        ocr_handoff: null,\n        manual_review_handoff: null,\n        source_result: source,\n        error: null,\n        next_action: config.default_next_action || \"extract_fields\"\n      }\n    }\n  ];\n}\n\nif (shouldRunOcr) {\n  const ocrTarget = config.ocr_target || {};\n\n  const ocrHandoff = {\n    next_component: ocrTarget.next_component || \"ocr_adapter\",\n    input: {\n      success: true,\n      component_id: \"C4-T\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: \"ocr_request\",\n      file: {\n        ...file,\n        extension,\n        mime_type: mimeType || file.mime_type || null\n      },\n      document_processing: {\n        ...documentProcessingBase,\n        route_status: \"ocr_required\",\n        route_reason: \"No usable text is available and OCR is required/configured.\"\n      },\n      source_result: source,\n      error: null,\n      next_action: ocrTarget.next_action || \"run_ocr\"\n    },\n    config: {\n      ocr_provider: config.ocr_provider || \"external_ocr_adapter\",\n      output_next_component: config.extraction_target?.next_component || \"C4-B\",\n      output_next_action: config.extraction_target?.next_action || \"extract_fields\",\n      extraction_goal: config.extraction_target?.extraction_goal || \"Extract structured fields from OCR text.\",\n      default_next_action: \"extract_fields\"\n    }\n  };\n\n  return [\n    {\n      json: {\n        success: true,\n        component_id: \"C4-T\",\n        component_version: \"v1\",\n        event_id: source.event_id || null,\n        event_type: source.event_type || null,\n        document_processing: {\n          ...documentProcessingBase,\n          route_status: \"ocr_required\",\n          route_reason: \"No usable text is available and OCR is required/configured.\"\n        },\n        c4b_handoff: null,\n        ocr_handoff: ocrHandoff,\n        manual_review_handoff: null,\n        source_result: source,\n        error: null,\n        next_action: config.default_next_action || \"run_ocr\"\n      }\n    }\n  ];\n}\n\nconst manualReviewHandoff = {\n  next_component: \"C5-E\",\n  input: {\n    success: true,\n    component_id: \"C4-T\",\n    component_version: \"v1\",\n    event_id: source.event_id || null,\n    event_type: \"document_processing_review\",\n    document_processing: {\n      ...documentProcessingBase,\n      route_status: \"manual_review_required\",\n      route_reason: \"No text available and OCR route is not configured for this file.\"\n    },\n    source_result: source,\n    error: null,\n    next_action: \"manual_review\"\n  },\n  config: {\n    queue_type: \"document_processing_review\",\n    review_reason: \"Document could not be processed automatically.\",\n    reviewer_email: config.reviewer_email || \"shwetabh.singh@lexnovahq.com\",\n    owner: \"ops\",\n    priority: \"normal\",\n    allowed_actions: [\"run_ocr_manually\", \"extract_text_manually\", \"reject_file\", \"request_new_file\"],\n    default_next_action: \"notify_reviewer\"\n  }\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C4-T\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      document_processing: {\n        ...documentProcessingBase,\n        route_status: \"manual_review_required\",\n        route_reason: \"No text available and OCR route is not configured for this file.\"\n      },\n      c4b_handoff: null,\n      ocr_handoff: null,\n      manual_review_handoff: manualReviewHandoff,\n      source_result: source,\n      error: null,\n      next_action: \"manual_review\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -160
+      ],
+      "id": "08f43ca5-9b8d-454a-9020-d8f616f277d5",
+      "name": "Process Document"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2523e5a1-9000-4a1f-bb00-ab5fd5c7f7be",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "e40d844d-dde1-456f-91fb-531305e8e707",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "985a6f04-afa1-4bb6-84fe-eab87a178ffb",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "43eed50c-82a5-499f-83e2-2fd6690982ea",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "97cdf2d9-5b84-4a99-a41c-e8b58c49d1c5",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "7701cead-d727-4f5b-b263-721797215b7a",
+              "name": "document_processing",
+              "value": "={{ $json.document_processing }}",
+              "type": "object"
+            },
+            {
+              "id": "dd960889-6369-48a6-8efb-0def17597682",
+              "name": "c4b_handoff",
+              "value": "={{ $json.c4b_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "64e0513a-83f0-418c-8d23-54fefe84f66d",
+              "name": "ocr_handoff",
+              "value": "={{ $json.ocr_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "a8362a5c-4ba9-42fd-9bc5-60ae16af8599",
+              "name": "manual_review_handoff",
+              "value": "={{ $json.manual_review_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "5a4ab52e-c7ef-497f-b7b6-e8f8cf11f3d4",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "2c8c150b-c3ae-4ff8-8f3c-0f2fb130e266",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "84912c17-2111-4d3c-aea1-2a8d9c9cd563",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        -160
+      ],
+      "id": "3d8e251b-c0fa-4359-810a-c482087c66ad",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-G",
+            "component_version": "v1",
+            "event_id": "evt_c4t_pdf_text_ready",
+            "event_type": "file_upload",
+            "file": {
+              "file_id": "file_pdf_text_001",
+              "filename": "client-brief.pdf",
+              "mime_type": "application/pdf",
+              "extension": "pdf",
+              "size_bytes": 524288,
+              "source_url": "https://example.com/uploads/client-brief.pdf",
+              "storage_provider": "temporary_upload"
+            },
+            "file_route": {
+              "file_category": "document",
+              "route_status": "routed"
+            },
+            "document": {
+              "text_available": true,
+              "extracted_text": "Client: GrowthOps Studio\nNeed: Lead intake automation\nBudget: $500\nTimeline: next 2 weeks\nContact: riya@example.com",
+              "page_count": 2,
+              "source_text_method": "upstream_text_extraction"
+            },
+            "metadata": {
+              "origin": "client_portal_upload",
+              "environment": "test"
+            },
+            "error": null,
+            "next_action": "process_document"
+          },
+          "config": {
+            "document_goal": "Prepare document text for field extraction.",
+            "supported_extensions": [
+              "pdf",
+              "docx",
+              "txt",
+              "png",
+              "jpg",
+              "jpeg"
+            ],
+            "ocr_extensions": [
+              "png",
+              "jpg",
+              "jpeg"
+            ],
+            "ocr_required_when_no_text": true,
+            "max_file_size_bytes": 10485760,
+            "extraction_target": {
+              "next_component": "C4-B",
+              "next_action": "extract_fields",
+              "extraction_goal": "Extract lead/contact and sales context fields from document text."
+            },
+            "ocr_target": {
+              "next_component": "ocr_adapter",
+              "next_action": "run_ocr"
+            },
+            "default_next_action": "extract_fields"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Process Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Document": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5c1bfea4-255a-4b55-973e-960dd45cf88f",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "LNx4iMrpVQGW2ORK",
+  "tags": []
+}

@@ -1,0 +1,26 @@
+﻿{
+  "success": false,
+  "component_id": "C4-T",
+  "component_version": "v1",
+  "event_id": "evt_c4t_upstream_failed",
+  "event_type": "file_upload",
+  "document_processing": null,
+  "c4b_handoff": null,
+  "ocr_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-G",
+    "event_id": "evt_c4t_upstream_failed",
+    "event_type": "file_upload",
+    "success": false,
+    "error": {
+      "code": "FILE_ROUTING_FAILED",
+      "message": "File routing failed."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C4-T will not process document when upstream action failed."
+  },
+  "next_action": "route_to_failure_log"
+}

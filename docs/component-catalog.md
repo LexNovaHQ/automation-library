@@ -1466,3 +1466,81 @@ C2-Q v1 is built as the reusable publishing handoff/router layer. LinkedIn, Word
 
 **Excluded by design:**  
 AI content generation belongs to C4-D. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Actual publishing belongs to future LinkedIn/WordPress/Webflow/X-Twitter adapters. Publish status tracking belongs to C5-W or a future publish status component. Error logging belongs to C6-G.
+
+## C4-T Build Record - OCR / Document Processing Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-t-ocr-document-processing-pipeline`  
+**Last tested:** 2026-05-26  
+
+**Workflow files:**
+- `workflows/c4-t-core-ocr-document-processing-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-T_CORE_OCR_Document_Processing_Pipeline_v1`
+- Processes routed document/image uploads after C2-G
+- Detects when document text is already available
+- Creates C4-B extraction handoff when text is ready
+- Creates OCR adapter handoff when OCR is required
+- Creates C5-E manual review handoff when no automatic processing route is available
+- Enforces supported extensions and max file size
+- Does not directly OCR files, extract structured fields, validate payloads, or store files permanently
+
+**Passed tests:**
+- PDF text ready
+- PDF needs OCR
+- Image receipt OCR
+- TXT ready
+- Upstream failed
+- Document processing not requested
+- Missing file
+- Unsupported extension
+- Oversized file
+
+**Implementation note:**  
+C4-T v1 is built as the reusable document processing router. OCR providers are adapter targets, not hard-coded component identities. Actual OCR execution belongs to future OCR adapters. Field extraction belongs to C4-B.
+
+**Excluded by design:**  
+File upload routing belongs to C2-G. Actual OCR execution belongs to future OCR adapters. Field extraction belongs to C4-B. Payload validation belongs to C2-F. CSV/Excel parsing belongs to C2-N. File storage belongs to a future storage adapter. Manual review queue creation belongs to C5-E. Error logging belongs to C6-G.
+
+## C4-T Build Record - OCR / Document Processing Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-t-ocr-document-processing-pipeline`  
+**Last tested:** 2026-05-26  
+
+**Workflow files:**
+- `workflows/c4-t-core-ocr-document-processing-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-T_CORE_OCR_Document_Processing_Pipeline_v1`
+- Processes routed document/image uploads after C2-G
+- Detects when document text is already available
+- Creates C4-B extraction handoff when text is ready
+- Creates OCR adapter handoff when OCR is required
+- Creates C5-E manual review handoff when no automatic processing route is available
+- Enforces supported extensions and max file size
+- Does not directly OCR files, extract structured fields, validate payloads, or store files permanently
+
+**Passed tests:**
+- PDF text ready
+- PDF needs OCR
+- Image receipt OCR
+- TXT ready
+- Upstream failed
+- Document processing not requested
+- Missing file
+- Unsupported extension
+- Oversized file
+
+**Implementation note:**  
+C4-T v1 is built as the reusable document processing router. OCR providers are adapter targets, not hard-coded component identities. Actual OCR execution belongs to future OCR adapters. Field extraction belongs to C4-B.
+
+**Excluded by design:**  
+File upload routing belongs to C2-G. Actual OCR execution belongs to future OCR adapters. Field extraction belongs to C4-B. Payload validation belongs to C2-F. CSV/Excel parsing belongs to C2-N. File storage belongs to a future storage adapter. Manual review queue creation belongs to C5-E. Error logging belongs to C6-G.
