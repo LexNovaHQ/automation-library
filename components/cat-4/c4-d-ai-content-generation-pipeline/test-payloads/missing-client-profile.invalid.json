@@ -1,0 +1,29 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4d_missing_profile",
+    "event_type": "content_request",
+    "payload": {
+      "content_brief": "Create content."
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_content_draft"
+  },
+  "config": {
+    "content_type": "linkedin_post",
+    "platform": "linkedin",
+    "content_goal": "Create content.",
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

@@ -1,0 +1,72 @@
+﻿{
+  "success": true,
+  "component_id": "C4-D",
+  "component_version": "v1",
+  "event_id": "evt_c4d_ad_copy_risky",
+  "event_type": "content_request",
+  "content_draft": {
+    "title": "Lead automation without the chaos",
+    "body": "Headline: Stop letting good leads disappear between your form and your CRM.\n\nBody: Build a cleaner lead intake workflow that captures submissions, updates your CRM, and alerts your team when follow-up is needed.\n\nCTA: Ask for a workflow map before implementation.",
+    "platform": "ads",
+    "content_type": "ad_copy",
+    "cta": "Ask for a workflow map before implementation.",
+    "sections": ["headline", "body", "CTA"],
+    "claims_used": [],
+    "personalization_used": ["lead automation context"],
+    "assumptions": [],
+    "risk_flags": ["prohibited performance claim requested and safely rewritten"],
+    "approval_required": true,
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4m_handoff": {
+    "next_component": "C4-M",
+    "input": {
+      "success": true,
+      "component_id": "C4-D",
+      "component_version": "v1",
+      "event_id": "evt_c4d_ad_copy_risky",
+      "event_type": "ai_content_draft",
+      "ai_result": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "task_type": "content_draft",
+        "status": "completed",
+        "parsed_json": {
+          "draft_title": "Lead automation without the chaos",
+          "draft_summary": "Content draft generated for ad_copy on ads: Lead automation without the chaos",
+          "content_type": "ad_copy",
+          "platform": "ads",
+          "risk_flags": ["prohibited performance claim requested and safely rewritten"],
+          "human_approval_required": true
+        }
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "draft_type": "content",
+      "draft_status": "needs_review",
+      "approval_type": "content_review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "marketing",
+      "priority": "high",
+      "default_next_action": "request_approval"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4d_ad_copy_risky",
+    "event_type": "content_request",
+    "success": true,
+    "next_action": "generate_content_draft"
+  },
+  "error": null,
+  "next_action": "package_draft_for_approval"
+}

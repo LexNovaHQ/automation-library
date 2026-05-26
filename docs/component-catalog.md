@@ -1262,3 +1262,39 @@ C2-G v1 is built as the reusable file upload routing layer. Actual file receivin
 
 **Excluded by design:**  
 Webhook/front-door receiving belongs to C2-C. CSV/Excel parsing belongs to C2-N. OCR/document processing belongs to C4-T. Field extraction belongs to C4-B. Validation belongs to C2-F. Manual review queue creation belongs to C5-E. Error logging belongs to C6-G.
+
+## C4-D Build Record - AI Content Generation Pipeline
+
+**Status:** Built v1.0  
+**Location:** `components/cat-4/c4-d-ai-content-generation-pipeline`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c4-d-core-ai-content-generation-pipeline-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C4-D_CORE_AI_Content_Generation_Pipeline_v1`
+- Generates client-configured content drafts from content brief, source context, client profile, voice rules, content rules, platform rules, and risk boundaries
+- Calls Groq through OpenAI-compatible chat completions
+- Enforces enabled content types when configured
+- Returns structured `content_draft`
+- Creates C4-M approval handoff for content review
+- Does not publish content, send messages, update tools, or act autonomously
+
+**Passed tests:**
+- LinkedIn post
+- Blog draft
+- Risky ad copy
+- Upstream failed
+- Content generation not requested
+- Missing client profile
+- Missing content brief
+
+**Implementation note:**  
+C4-D v1 is built as a client-configurable content draft processor, not a publishing tool and not an autonomous agent. It produces structured content drafts and approval handoff objects only. Approval, publishing, status tracking, and error logging belong to downstream components.
+
+**Excluded by design:**  
+Generic LLM call belongs to C2-K. Email draft generation belongs to C4-E. Draft approval packaging belongs to C4-M. Human approval belongs to C2-O. Approval response capture belongs to C2-O2. Publishing belongs to C2-Q. Status tracking belongs to C5-W. Error logging belongs to C6-G.

@@ -1,0 +1,21 @@
+﻿{
+  "success": false,
+  "component_id": "C4-D",
+  "component_version": "v1",
+  "event_id": "evt_c4d_missing_brief",
+  "event_type": "content_request",
+  "content_draft": null,
+  "c4m_handoff": null,
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4d_missing_brief",
+    "event_type": "content_request",
+    "success": true,
+    "next_action": "generate_content_draft"
+  },
+  "error": {
+    "code": "MISSING_CONTENT_BRIEF",
+    "message": "input.payload.content_brief, brief, or topic is required."
+  },
+  "next_action": "route_to_failure_log"
+}

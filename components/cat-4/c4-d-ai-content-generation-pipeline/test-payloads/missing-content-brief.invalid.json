@@ -1,0 +1,37 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4d_missing_brief",
+    "event_type": "content_request",
+    "payload": {
+      "topic": "lead automation"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_content_draft"
+  },
+  "config": {
+    "content_type": "linkedin_post",
+    "platform": "linkedin",
+    "content_goal": "Create content.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "content_rules": {
+        "enabled_content_types": ["linkedin_post"]
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile"
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

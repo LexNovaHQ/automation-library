@@ -1,0 +1,81 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4d_linkedin_post",
+    "event_type": "content_request",
+    "payload": {
+      "content_brief": "Create a LinkedIn post explaining why ecommerce teams miss leads when form submissions, CRM updates, and team alerts are not connected.",
+      "topic": "lead intake automation",
+      "source_context": "The client helps Shopify brands automate lead intake, CRM updates, abandoned cart follow-up, and team notifications.",
+      "source": "manual_content_brief"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_content_draft"
+  },
+  "config": {
+    "content_type": "linkedin_post",
+    "platform": "linkedin",
+    "content_goal": "Educate ecommerce founders about missed lead risk and introduce workflow mapping as a practical next step.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio",
+        "business_type": "Shopify automation agency",
+        "primary_customer_type": "Shopify store owners and ecommerce operators"
+      },
+      "voice_profile": {
+        "tone": ["clear", "educational", "practical"],
+        "style": "short paragraphs, no hype, no aggressive sales language",
+        "reading_level": "simple business English",
+        "phrases_to_use": ["workflow map", "clean setup", "review before build"],
+        "phrases_to_avoid": ["game-changing", "revolutionary", "guaranteed ROI"]
+      },
+      "offer_profile": {
+        "primary_offer_name": "Lead Intake + CRM Automation System",
+        "primary_offer_description": "A workflow that captures leads, validates payloads, removes duplicates, updates CRM records, and alerts the team.",
+        "main_outcome": "fewer missed leads and faster follow-up"
+      },
+      "content_rules": {
+        "enabled_content_types": ["linkedin_post", "blog_draft", "newsletter", "short_script"],
+        "preferred_tone": ["clear", "educational", "practical"],
+        "preferred_length": "short",
+        "preferred_structure": "hook, problem, practical insight, soft CTA",
+        "topics_allowed": ["Shopify automation", "lead intake", "CRM workflows", "abandoned cart workflows"],
+        "topics_avoided": ["guaranteed growth hacks", "fake case studies", "legal or financial advice"],
+        "cta_style": "soft CTA to ask for a workflow map",
+        "external_claims_allowed": false,
+        "approval_required": true,
+        "platform_rules": {
+          "linkedin": "short, practical, founder/operator tone",
+          "blog": "educational and structured",
+          "newsletter": "clear and useful",
+          "ad_copy": "no hard guarantees"
+        }
+      },
+      "risk_boundaries": {
+        "forbidden_claims": ["guaranteed revenue", "guaranteed ROI", "instant growth"],
+        "roi_or_performance_claims_allowed": false,
+        "testimonials_allowed": false,
+        "competitor_comparisons_allowed": false,
+        "manual_review_triggers": ["performance claim", "uncertain fact", "external claim"]
+      },
+      "approval_rules": {
+        "default_policy": "approval_required_before_external_action",
+        "primary_reviewer_email": "shwetabh.singh@lexnovahq.com"
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.4,
+      "max_tokens": 900
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}

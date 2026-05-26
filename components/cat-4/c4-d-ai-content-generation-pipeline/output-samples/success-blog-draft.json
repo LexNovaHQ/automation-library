@@ -1,0 +1,71 @@
+﻿{
+  "success": true,
+  "component_id": "C4-D",
+  "component_version": "v1",
+  "event_id": "evt_c4d_blog_draft",
+  "event_type": "content_request",
+  "content_draft": {
+    "title": "How small ecommerce teams can reduce missed leads",
+    "body": "Small ecommerce teams often lose leads in the space between form submission and follow-up.\n\nThe issue is usually not the form itself. The issue is what happens after the form is submitted.\n\n## The common breakdown\nA lead submits a form. Someone needs to copy the data into a CRM, check whether it is a duplicate, decide who should respond, and notify the team. When this is manual, delays happen.\n\n## A cleaner workflow\nA connected lead intake workflow can:\n\n- capture the form submission\n- validate required fields\n- check for duplicate records\n- update the CRM\n- alert the right person\n- keep a basic status trail\n\n## Start with the map\nBefore choosing tools, map the workflow. Define what comes in, what needs to be checked, where the record should go, who should be notified, and what happens if something fails.\n\nThat small map prevents messy automation later.",
+    "platform": "blog",
+    "content_type": "blog_draft",
+    "cta": "Review the workflow before building the automation.",
+    "sections": ["intro", "common breakdown", "cleaner workflow", "workflow map CTA"],
+    "claims_used": [],
+    "personalization_used": ["ecommerce lead intake context"],
+    "assumptions": [],
+    "risk_flags": [],
+    "approval_required": true,
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "finish_reason": "stop"
+  },
+  "c4m_handoff": {
+    "next_component": "C4-M",
+    "input": {
+      "success": true,
+      "component_id": "C4-D",
+      "component_version": "v1",
+      "event_id": "evt_c4d_blog_draft",
+      "event_type": "ai_content_draft",
+      "ai_result": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "task_type": "content_draft",
+        "status": "completed",
+        "parsed_json": {
+          "draft_title": "How small ecommerce teams can reduce missed leads",
+          "draft_summary": "Content draft generated for blog_draft on blog: How small ecommerce teams can reduce missed leads",
+          "content_type": "blog_draft",
+          "platform": "blog",
+          "human_approval_required": true
+        }
+      },
+      "error": null,
+      "next_action": "request_approval"
+    },
+    "config": {
+      "draft_type": "content",
+      "draft_status": "needs_review",
+      "approval_type": "content_review",
+      "reviewer_email": "shwetabh.singh@lexnovahq.com",
+      "owner": "marketing",
+      "priority": "normal",
+      "default_next_action": "request_approval"
+    }
+  },
+  "source_result": {
+    "component_id": "C2-F",
+    "event_id": "evt_c4d_blog_draft",
+    "event_type": "content_request",
+    "success": true,
+    "next_action": "generate_content_draft"
+  },
+  "error": null,
+  "next_action": "package_draft_for_approval"
+}

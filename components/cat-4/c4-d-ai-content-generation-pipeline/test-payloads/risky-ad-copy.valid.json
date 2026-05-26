@@ -1,0 +1,66 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-F",
+    "component_version": "v1",
+    "event_id": "evt_c4d_ad_copy_risky",
+    "event_type": "content_request",
+    "payload": {
+      "content_brief": "Write ad copy saying this automation guarantees more revenue instantly.",
+      "topic": "lead automation ads",
+      "source_context": "Client provides workflow automation services.",
+      "source": "manual_content_brief"
+    },
+    "metadata": {
+      "origin": "manual_test",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "generate_content_draft"
+  },
+  "config": {
+    "content_type": "ad_copy",
+    "platform": "ads",
+    "content_goal": "Create safe ad copy without prohibited claims.",
+    "client_ai_profile": {
+      "client_profile": {
+        "client_name": "GrowthOps Studio"
+      },
+      "voice_profile": {
+        "tone": ["clear", "direct"],
+        "phrases_to_avoid": ["guaranteed ROI", "instant growth"]
+      },
+      "content_rules": {
+        "enabled_content_types": ["ad_copy"],
+        "preferred_tone": ["clear", "direct"],
+        "preferred_length": "short",
+        "preferred_structure": "headline, body, CTA",
+        "topics_allowed": ["lead automation", "CRM workflows"],
+        "topics_avoided": ["guaranteed growth hacks"],
+        "cta_style": "soft CTA",
+        "external_claims_allowed": false,
+        "approval_required": true,
+        "platform_rules": {
+          "ad_copy": "no hard guarantees"
+        }
+      },
+      "risk_boundaries": {
+        "forbidden_claims": ["guaranteed revenue", "guaranteed ROI", "instant growth"],
+        "roi_or_performance_claims_allowed": false,
+        "manual_review_triggers": ["performance claim", "prohibited claim requested"]
+      },
+      "approval_rules": {
+        "default_policy": "approval_required_before_external_action",
+        "primary_reviewer_email": "shwetabh.singh@lexnovahq.com"
+      }
+    },
+    "llm": {
+      "provider": "groq",
+      "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+      "model": "llama-3.3-70b-versatile",
+      "temperature": 0.3,
+      "max_tokens": 800
+    },
+    "default_next_action": "package_draft_for_approval"
+  }
+}
