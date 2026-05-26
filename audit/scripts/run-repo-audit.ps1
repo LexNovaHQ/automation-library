@@ -425,6 +425,7 @@ $SummaryLines.Add("- audit/reports/json-validation.csv")
 $SummaryLines.Add("- audit/reports/catalog-consistency.md")
 $SummaryLines.Add("- audit/reports/duplicate-component-ids.md")
 $SummaryLines.Add("- audit/reports/classification-summary.md")
+$SummaryLines.Add("- audit/reports/classification-consistency.md")
 $SummaryLines.Add("- audit/reports/git-status.txt")
 
 $SummaryLines | Set-Content -Encoding UTF8 $SummaryMd
@@ -437,11 +438,21 @@ $ClassificationCsv = Join-Path $AuditRoot "config\component-classification.csv"
 if ((Test-Path $ClassificationScript) -and (Test-Path $ClassificationCsv)) {
   & $ClassificationScript | Out-Null
 }
+
+# Generate classification consistency report if checker exists
+$ClassificationConsistencyScript = Join-Path $ScriptsDir "check-classification-consistency.ps1"
+
+if (Test-Path $ClassificationConsistencyScript) {
+  & $ClassificationConsistencyScript | Out-Null
+}
 Write-Host "Audit complete."
 Write-Host "Summary: $SummaryMd"
 Write-Host "Inventory: $InventoryCsv"
 Write-Host "Completeness: $CompletenessCsv"
 Write-Host "JSON validation: $JsonValidationCsv"
+
+
+
 
 
 
