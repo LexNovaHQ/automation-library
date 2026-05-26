@@ -1,0 +1,48 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2g_pdf_upload",
+    "event_type": "file_upload",
+    "file": {
+      "file_id": "file_pdf_001",
+      "filename": "client-brief.pdf",
+      "mime_type": "application/pdf",
+      "extension": "pdf",
+      "size_bytes": 524288,
+      "source_url": "https://example.com/uploads/client-brief.pdf",
+      "storage_provider": "temporary_upload"
+    },
+    "metadata": {
+      "origin": "client_portal_upload",
+      "environment": "test",
+      "uploaded_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "route_file_upload"
+  },
+  "config": {
+    "max_file_size_bytes": 10485760,
+    "allowed_extensions": ["csv", "xlsx", "xls", "pdf", "docx", "txt", "png", "jpg", "jpeg"],
+    "blocked_extensions": ["exe", "bat", "cmd", "js", "vbs", "scr"],
+    "route_rules": {
+      "spreadsheet": {
+        "extensions": ["csv", "xlsx", "xls"],
+        "next_component": "C2-N",
+        "next_action": "parse_spreadsheet_rows"
+      },
+      "document": {
+        "extensions": ["pdf", "docx", "txt"],
+        "next_component": "C4-T",
+        "next_action": "process_document"
+      },
+      "image": {
+        "extensions": ["png", "jpg", "jpeg"],
+        "next_component": "C4-T",
+        "next_action": "process_document"
+      }
+    },
+    "default_next_action": "route_file"
+  }
+}

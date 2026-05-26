@@ -1,0 +1,29 @@
+﻿{
+  "success": false,
+  "component_id": "C2-G",
+  "component_version": "v1",
+  "event_id": "evt_c2g_blocked_file",
+  "event_type": "file_upload",
+  "file_route": null,
+  "downstream_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2g_blocked_file",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "route_file_upload"
+  },
+  "error": {
+    "code": "BLOCKED_FILE_EXTENSION",
+    "message": "File extension is blocked.",
+    "details": [
+      {
+        "filename": "installer.exe",
+        "extension": "exe",
+        "blocked_extensions": ["exe", "bat", "cmd", "js", "vbs", "scr"]
+      }
+    ]
+  },
+  "next_action": "route_to_failure_log"
+}

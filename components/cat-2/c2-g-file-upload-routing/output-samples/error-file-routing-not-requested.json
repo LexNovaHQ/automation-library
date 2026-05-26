@@ -1,0 +1,22 @@
+﻿{
+  "success": false,
+  "component_id": "C2-G",
+  "component_version": "v1",
+  "event_id": "evt_c2g_not_requested",
+  "event_type": "file_upload",
+  "file_route": null,
+  "downstream_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2g_not_requested",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "validate_payload"
+  },
+  "error": {
+    "code": "FILE_ROUTING_NOT_REQUESTED",
+    "message": "source.next_action is not route_file_upload."
+  },
+  "next_action": "route_to_failure_log"
+}

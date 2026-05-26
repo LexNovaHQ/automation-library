@@ -1,0 +1,22 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2g_missing_file",
+    "event_type": "file_upload",
+    "metadata": {
+      "origin": "website_upload",
+      "environment": "test"
+    },
+    "error": null,
+    "next_action": "route_file_upload"
+  },
+  "config": {
+    "max_file_size_bytes": 10485760,
+    "allowed_extensions": ["csv", "xlsx"],
+    "blocked_extensions": ["exe"],
+    "route_rules": {},
+    "default_next_action": "route_file"
+  }
+}

@@ -1225,3 +1225,40 @@ C4-B v1 is built as a client-configurable extraction processor, not a classifier
 
 **Excluded by design:**  
 Generic LLM call belongs to C2-K. Classification belongs to C4-A. Validation belongs to C2-F. Lead qualification belongs to C4-L. Conditional routing belongs to C2-B. Manual review queue creation belongs to C5-E. Writes belong to C2-A. Notifications belong to C2-I. Error logging belongs to C6-G.
+
+## C2-G Build Record - File Upload Routing
+
+**Status:** Built v1.0  
+**Location:** `components/cat-2/c2-g-file-upload-routing`  
+**Last tested:** 2026-05-25  
+
+**Workflow files:**
+- `workflows/c2-g-core-file-upload-routing-v1.json`
+
+**Test payloads:** Present  
+**Output samples:** Present  
+
+**Implemented architecture:**
+- Core reusable workflow: `C2-G_CORE_File_Upload_Routing_v1`
+- Routes uploaded files using extension, MIME type, file size, blocked extension rules, allowed extension rules, and route rules
+- Supports spreadsheet, document, and image routing
+- Creates C2-N handoff for spreadsheet files
+- Creates C4-T handoff for document/image processing
+- Creates manual review handoff when no matching route rule exists
+- Does not parse CSV/Excel rows, OCR documents, extract fields, validate records, or store files permanently
+
+**Passed tests:**
+- CSV upload
+- PDF upload
+- Image upload
+- Blocked extension
+- Oversized file
+- Upstream failed
+- File routing not requested
+- Missing file
+
+**Implementation note:**  
+C2-G v1 is built as the reusable file upload routing layer. Actual file receiving happens before C2-G through a webhook, form upload, email attachment trigger, drive picker, or parent workflow. C2-G only decides where the file should go next.
+
+**Excluded by design:**  
+Webhook/front-door receiving belongs to C2-C. CSV/Excel parsing belongs to C2-N. OCR/document processing belongs to C4-T. Field extraction belongs to C4-B. Validation belongs to C2-F. Manual review queue creation belongs to C5-E. Error logging belongs to C6-G.

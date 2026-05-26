@@ -1,0 +1,67 @@
+﻿{
+  "success": true,
+  "component_id": "C2-G",
+  "component_version": "v1",
+  "event_id": "evt_c2g_csv_upload",
+  "event_type": "file_upload",
+  "file_route": {
+    "file_id": "file_csv_001",
+    "filename": "leads.csv",
+    "extension": "csv",
+    "mime_type": "text/csv",
+    "size_bytes": 24576,
+    "source_url": "https://example.com/uploads/leads.csv",
+    "storage_provider": "temporary_upload",
+    "file_category": "spreadsheet",
+    "route_status": "routed",
+    "route_reason": "Matched spreadsheet route for .csv.",
+    "routed_at": "2026-05-25T00:00:00.000Z"
+  },
+  "downstream_handoff": {
+    "next_component": "C2-N",
+    "input": {
+      "success": true,
+      "component_id": "C2-G",
+      "component_version": "v1",
+      "event_id": "evt_c2g_csv_upload",
+      "event_type": "file_upload",
+      "file": {
+        "file_id": "file_csv_001",
+        "filename": "leads.csv",
+        "mime_type": "text/csv",
+        "extension": "csv",
+        "size_bytes": 24576,
+        "source_url": "https://example.com/uploads/leads.csv",
+        "storage_provider": "temporary_upload"
+      },
+      "file_route": {
+        "file_category": "spreadsheet",
+        "route_status": "routed"
+      },
+      "metadata": {
+        "source_component": "C2-C",
+        "original_event_type": "file_upload",
+        "origin": "website_upload",
+        "uploaded_at": "2026-05-25T00:00:00.000Z"
+      },
+      "rows": [],
+      "error": null,
+      "next_action": "parse_spreadsheet_rows"
+    },
+    "config": {
+      "source_type": "spreadsheet",
+      "source_name": "leads.csv",
+      "default_next_action": "parse_spreadsheet_rows"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2g_csv_upload",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "route_file_upload"
+  },
+  "error": null,
+  "next_action": "route_file"
+}

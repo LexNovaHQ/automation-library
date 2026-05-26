@@ -1,0 +1,25 @@
+﻿{
+  "success": false,
+  "component_id": "C2-G",
+  "component_version": "v1",
+  "event_id": "evt_c2g_upstream_failed",
+  "event_type": "file_upload",
+  "file_route": null,
+  "downstream_handoff": null,
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2g_upstream_failed",
+    "event_type": "file_upload",
+    "success": false,
+    "error": {
+      "code": "UPLOAD_FAILED",
+      "message": "File upload did not complete."
+    }
+  },
+  "error": {
+    "code": "UPSTREAM_ACTION_FAILED",
+    "message": "C2-G will not route file when upstream upload failed."
+  },
+  "next_action": "route_to_failure_log"
+}

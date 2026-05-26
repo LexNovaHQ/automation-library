@@ -1,0 +1,66 @@
+﻿{
+  "success": true,
+  "component_id": "C2-G",
+  "component_version": "v1",
+  "event_id": "evt_c2g_pdf_upload",
+  "event_type": "file_upload",
+  "file_route": {
+    "file_id": "file_pdf_001",
+    "filename": "client-brief.pdf",
+    "extension": "pdf",
+    "mime_type": "application/pdf",
+    "size_bytes": 524288,
+    "source_url": "https://example.com/uploads/client-brief.pdf",
+    "storage_provider": "temporary_upload",
+    "file_category": "document",
+    "route_status": "routed",
+    "route_reason": "Matched document route for .pdf.",
+    "routed_at": "2026-05-25T00:00:00.000Z"
+  },
+  "downstream_handoff": {
+    "next_component": "C4-T",
+    "input": {
+      "success": true,
+      "component_id": "C2-G",
+      "component_version": "v1",
+      "event_id": "evt_c2g_pdf_upload",
+      "event_type": "file_upload",
+      "file": {
+        "file_id": "file_pdf_001",
+        "filename": "client-brief.pdf",
+        "mime_type": "application/pdf",
+        "extension": "pdf",
+        "size_bytes": 524288,
+        "source_url": "https://example.com/uploads/client-brief.pdf",
+        "storage_provider": "temporary_upload"
+      },
+      "file_route": {
+        "file_category": "document",
+        "route_status": "routed"
+      },
+      "metadata": {
+        "source_component": "C2-C",
+        "original_event_type": "file_upload",
+        "origin": "client_portal_upload",
+        "uploaded_at": "2026-05-25T00:00:00.000Z"
+      },
+      "error": null,
+      "next_action": "process_document"
+    },
+    "config": {
+      "source_type": "document",
+      "source_name": "client-brief.pdf",
+      "default_next_action": "process_document"
+    }
+  },
+  "manual_review_handoff": null,
+  "source_result": {
+    "component_id": "C2-C",
+    "event_id": "evt_c2g_pdf_upload",
+    "event_type": "file_upload",
+    "success": true,
+    "next_action": "route_file_upload"
+  },
+  "error": null,
+  "next_action": "route_file"
+}

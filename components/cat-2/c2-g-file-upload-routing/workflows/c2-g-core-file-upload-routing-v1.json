@@ -1,0 +1,232 @@
+{
+  "name": "C2-G_CORE_File_Upload_Routing_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -208
+      ],
+      "id": "5b13e968-2141-4664-8771-363da46f848d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json || {};\n\nfunction nowIso() {\n  return new Date().toISOString();\n}\n\nfunction normalizeString(value) {\n  if (value === undefined || value === null) return \"\";\n  return String(value).trim();\n}\n\nfunction normalizeExtension(file) {\n  const explicit = normalizeString(file.extension).toLowerCase().replace(/^\\./, \"\");\n  if (explicit) return explicit;\n\n  const filename = normalizeString(file.filename);\n  const parts = filename.split(\".\");\n  if (parts.length > 1) return parts.pop().toLowerCase();\n\n  return \"\";\n}\n\nfunction normalizeList(list) {\n  return Array.isArray(list)\n    ? list.map(item => normalizeString(item).toLowerCase().replace(/^\\./, \"\")).filter(Boolean)\n    : [];\n}\n\nfunction findRoute(extension, routeRules) {\n  if (!routeRules || typeof routeRules !== \"object\") return null;\n\n  for (const [category, rule] of Object.entries(routeRules)) {\n    const extensions = normalizeList(rule.extensions);\n    if (extensions.includes(extension)) {\n      return {\n        file_category: category,\n        next_component: rule.next_component || null,\n        next_action: rule.next_action || null,\n        rule\n      };\n    }\n  }\n\n  return null;\n}\n\nfunction fail({ code, message, details = [] }) {\n  return [\n    {\n      json: {\n        success: false,\n        component_id: \"C2-G\",\n        component_version: \"v1\",\n        event_id: input.input?.event_id || null,\n        event_type: input.input?.event_type || null,\n        file_route: null,\n        downstream_handoff: null,\n        manual_review_handoff: null,\n        source_result: input.input || {},\n        error: {\n          code,\n          message,\n          details\n        },\n        next_action: \"route_to_failure_log\"\n      }\n    }\n  ];\n}\n\nif (!input || Object.keys(input).length === 0) {\n  return fail({\n    code: \"EMPTY_INPUT\",\n    message: \"Input object is empty.\"\n  });\n}\n\nif (!input.input || typeof input.input !== \"object\") {\n  return fail({\n    code: \"MISSING_INPUT_OBJECT\",\n    message: \"Input must include an input object.\"\n  });\n}\n\nconst source = input.input;\nconst config = input.config || {};\n\nif (source.success !== true) {\n  return fail({\n    code: \"UPSTREAM_ACTION_FAILED\",\n    message: \"C2-G will not route file when upstream upload failed.\",\n    details: [\n      {\n        upstream_component: source.component_id || null,\n        upstream_error: source.error || null\n      }\n    ]\n  });\n}\n\nif (source.next_action !== \"route_file_upload\") {\n  return fail({\n    code: \"FILE_ROUTING_NOT_REQUESTED\",\n    message: \"source.next_action is not route_file_upload.\",\n    details: [{ next_action: source.next_action || null }]\n  });\n}\n\nif (!source.file || typeof source.file !== \"object\") {\n  return fail({\n    code: \"MISSING_FILE_OBJECT\",\n    message: \"input.file is required.\"\n  });\n}\n\nif (!source.file.filename) {\n  return fail({\n    code: \"MISSING_FILENAME\",\n    message: \"input.file.filename is required.\"\n  });\n}\n\nconst file = source.file;\nconst extension = normalizeExtension(file);\nconst mimeType = normalizeString(file.mime_type).toLowerCase();\nconst sizeBytes = Number(file.size_bytes || 0);\n\nif (!extension) {\n  return fail({\n    code: \"MISSING_FILE_EXTENSION\",\n    message: \"File extension could not be determined.\"\n  });\n}\n\nconst blockedExtensions = normalizeList(config.blocked_extensions);\nconst allowedExtensions = normalizeList(config.allowed_extensions);\nconst maxFileSizeBytes = Number(config.max_file_size_bytes || 0);\n\nif (blockedExtensions.includes(extension)) {\n  return fail({\n    code: \"BLOCKED_FILE_EXTENSION\",\n    message: \"File extension is blocked.\",\n    details: [\n      {\n        filename: file.filename,\n        extension,\n        blocked_extensions: blockedExtensions\n      }\n    ]\n  });\n}\n\nif (allowedExtensions.length > 0 && !allowedExtensions.includes(extension)) {\n  return fail({\n    code: \"UNSUPPORTED_FILE_EXTENSION\",\n    message: \"File extension is not in allowed_extensions.\",\n    details: [\n      {\n        filename: file.filename,\n        extension,\n        allowed_extensions: allowedExtensions\n      }\n    ]\n  });\n}\n\nif (maxFileSizeBytes > 0 && sizeBytes > maxFileSizeBytes) {\n  return fail({\n    code: \"FILE_TOO_LARGE\",\n    message: \"File exceeds configured max_file_size_bytes.\",\n    details: [\n      {\n        filename: file.filename,\n        size_bytes: sizeBytes,\n        max_file_size_bytes: maxFileSizeBytes\n      }\n    ]\n  });\n}\n\nconst route = findRoute(extension, config.route_rules);\n\nif (!route || !route.next_component || !route.next_action) {\n  const fileRoute = {\n    file_id: file.file_id || null,\n    filename: file.filename,\n    extension,\n    mime_type: mimeType || null,\n    size_bytes: sizeBytes,\n    source_url: file.source_url || null,\n    storage_provider: file.storage_provider || null,\n    file_category: \"unknown\",\n    route_status: \"manual_review_required\",\n    route_reason: \"No matching route rule found.\",\n    routed_at: nowIso()\n  };\n\n  const manualReviewHandoff = {\n    next_component: \"C5-E\",\n    input: {\n      success: true,\n      component_id: \"C2-G\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      file_route: fileRoute,\n      source_result: source,\n      error: null,\n      next_action: \"manual_review\"\n    },\n    config: {\n      queue_type: \"file_routing_review\",\n      review_reason: \"No matching route rule found for uploaded file.\",\n      reviewer_email: config.reviewer_email || \"shwetabh.singh@lexnovahq.com\",\n      owner: \"ops\",\n      priority: \"normal\",\n      allowed_actions: [\"route_to_spreadsheet_parser\", \"route_to_document_processor\", \"reject_file\", \"request_new_file\"],\n      default_next_action: \"notify_reviewer\"\n    }\n  };\n\n  return [\n    {\n      json: {\n        success: true,\n        component_id: \"C2-G\",\n        component_version: \"v1\",\n        event_id: source.event_id || null,\n        event_type: source.event_type || null,\n        file_route: fileRoute,\n        downstream_handoff: null,\n        manual_review_handoff: manualReviewHandoff,\n        source_result: source,\n        error: null,\n        next_action: \"manual_review\"\n      }\n    }\n  ];\n}\n\nconst fileRoute = {\n  file_id: file.file_id || null,\n  filename: file.filename,\n  extension,\n  mime_type: mimeType || null,\n  size_bytes: sizeBytes,\n  source_url: file.source_url || null,\n  storage_provider: file.storage_provider || null,\n  file_category: route.file_category,\n  route_status: \"routed\",\n  route_reason: `Matched ${route.file_category} route for .${extension}.`,\n  routed_at: nowIso()\n};\n\nlet downstreamInput = {\n  success: true,\n  component_id: \"C2-G\",\n  component_version: \"v1\",\n  event_id: source.event_id || null,\n  event_type: source.event_type || null,\n  file: {\n    ...file,\n    extension,\n    mime_type: mimeType || file.mime_type || null\n  },\n  file_route: fileRoute,\n  metadata: {\n    source_component: source.component_id || null,\n    original_event_type: source.event_type || null,\n    origin: source.metadata?.origin || null,\n    uploaded_at: source.metadata?.uploaded_at || null,\n    routed_at: fileRoute.routed_at\n  },\n  error: null,\n  next_action: route.next_action\n};\n\nif (route.next_component === \"C2-N\") {\n  downstreamInput.rows = source.rows || [];\n  downstreamInput.metadata.filename = file.filename;\n}\n\nconst downstreamHandoff = {\n  next_component: route.next_component,\n  input: downstreamInput,\n  config: route.rule.config || {\n    source_type: route.file_category,\n    source_name: file.filename,\n    default_next_action: route.next_action\n  }\n};\n\nreturn [\n  {\n    json: {\n      success: true,\n      component_id: \"C2-G\",\n      component_version: \"v1\",\n      event_id: source.event_id || null,\n      event_type: source.event_type || null,\n      file_route: fileRoute,\n      downstream_handoff: downstreamHandoff,\n      manual_review_handoff: null,\n      source_result: source,\n      error: null,\n      next_action: config.default_next_action || \"route_file\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -208
+      ],
+      "id": "fa2cf2a5-84d5-4fa6-90fb-2af5a58ea566",
+      "name": "Route Uploaded File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75e07103-0b0d-4055-b9e9-1dccf6e36cc4",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "71819209-79cc-4315-8174-5e8616074c3e",
+              "name": "component_id",
+              "value": "={{ $json.component_id }}",
+              "type": "string"
+            },
+            {
+              "id": "fa84dbb5-efde-45d8-be2a-456946d8e425",
+              "name": "component_version",
+              "value": "={{ $json.component_version }}",
+              "type": "string"
+            },
+            {
+              "id": "16612ccd-69db-4a1a-9e5a-9e6d7f58eeed",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d653187c-b515-46b2-aab0-caebdbcd9406",
+              "name": "event_type",
+              "value": "={{ $json.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "de6c195b-59d0-4290-a395-27880f83da40",
+              "name": "file_route",
+              "value": "={{ $json.file_route }}",
+              "type": "object"
+            },
+            {
+              "id": "d2534a4c-fbe9-4d07-8359-fec0ace4b9ea",
+              "name": "downstream_handoff",
+              "value": "={{ $json.downstream_handoff }}",
+              "type": "object"
+            },
+            {
+              "id": "b35c4307-3931-48f0-96db-e191b79ce4ef",
+              "name": "manual_review_handoff",
+              "value": "={{ $json.manual_review_handoff }}",
+              "type": "string"
+            },
+            {
+              "id": "51ad4f95-2b2b-49e9-9373-29f1b706e6f9",
+              "name": "source_result",
+              "value": "={{ $json.source_result }}",
+              "type": "object"
+            },
+            {
+              "id": "dbac7474-b243-46f8-8538-172fc654421f",
+              "name": "error",
+              "value": "={{ $json.error }}",
+              "type": "object"
+            },
+            {
+              "id": "3d89c826-ba3e-4448-a46e-89e7d8e664d6",
+              "name": "next_action",
+              "value": "={{ $json.next_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        128
+      ],
+      "id": "574c2bc5-e0be-4d18-a289-f9795970129b",
+      "name": "Final Output Contract"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "input": {
+            "success": true,
+            "component_id": "C2-C",
+            "component_version": "v1",
+            "event_id": "evt_c2g_csv_upload",
+            "event_type": "file_upload",
+            "file": {
+              "file_id": "file_csv_001",
+              "filename": "leads.csv",
+              "mime_type": "text/csv",
+              "extension": "csv",
+              "size_bytes": 24576,
+              "source_url": "https://example.com/uploads/leads.csv",
+              "storage_provider": "temporary_upload"
+            },
+            "metadata": {
+              "origin": "website_upload",
+              "environment": "test",
+              "uploaded_at": "2026-05-25T00:00:00.000Z"
+            },
+            "error": null,
+            "next_action": "route_file_upload"
+          },
+          "config": {
+            "max_file_size_bytes": 10485760,
+            "allowed_extensions": [
+              "csv",
+              "xlsx",
+              "xls",
+              "pdf",
+              "docx",
+              "txt",
+              "png",
+              "jpg",
+              "jpeg"
+            ],
+            "blocked_extensions": [
+              "exe",
+              "bat",
+              "cmd",
+              "js",
+              "vbs",
+              "scr"
+            ],
+            "route_rules": {
+              "spreadsheet": {
+                "extensions": [
+                  "csv",
+                  "xlsx",
+                  "xls"
+                ],
+                "next_component": "C2-N",
+                "next_action": "parse_spreadsheet_rows"
+              },
+              "document": {
+                "extensions": [
+                  "pdf",
+                  "docx",
+                  "txt"
+                ],
+                "next_component": "C4-T",
+                "next_action": "process_document"
+              },
+              "image": {
+                "extensions": [
+                  "png",
+                  "jpg",
+                  "jpeg"
+                ],
+                "next_component": "C4-T",
+                "next_action": "process_document"
+              }
+            },
+            "default_next_action": "route_file"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Route Uploaded File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Uploaded File": {
+      "main": [
+        [
+          {
+            "node": "Final Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c9b1379d-7dbf-452f-9bcb-6c1e76fd02a5",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "i6q6WT4oFHqf8Om7",
+  "tags": []
+}

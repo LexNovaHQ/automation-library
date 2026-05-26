@@ -1,0 +1,38 @@
+﻿{
+  "input": {
+    "success": true,
+    "component_id": "C2-C",
+    "component_version": "v1",
+    "event_id": "evt_c2g_oversized_file",
+    "event_type": "file_upload",
+    "file": {
+      "file_id": "file_large_001",
+      "filename": "large-client-export.csv",
+      "mime_type": "text/csv",
+      "extension": "csv",
+      "size_bytes": 52428800,
+      "source_url": "https://example.com/uploads/large-client-export.csv",
+      "storage_provider": "temporary_upload"
+    },
+    "metadata": {
+      "origin": "website_upload",
+      "environment": "test",
+      "uploaded_at": "2026-05-25T00:00:00.000Z"
+    },
+    "error": null,
+    "next_action": "route_file_upload"
+  },
+  "config": {
+    "max_file_size_bytes": 10485760,
+    "allowed_extensions": ["csv", "xlsx", "xls", "pdf", "docx", "txt", "png", "jpg", "jpeg"],
+    "blocked_extensions": ["exe", "bat", "cmd", "js", "vbs", "scr"],
+    "route_rules": {
+      "spreadsheet": {
+        "extensions": ["csv", "xlsx", "xls"],
+        "next_component": "C2-N",
+        "next_action": "parse_spreadsheet_rows"
+      }
+    },
+    "default_next_action": "route_file"
+  }
+}
