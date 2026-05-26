@@ -424,12 +424,25 @@ $SummaryLines.Add("- audit/reports/build-completeness.md")
 $SummaryLines.Add("- audit/reports/json-validation.csv")
 $SummaryLines.Add("- audit/reports/catalog-consistency.md")
 $SummaryLines.Add("- audit/reports/duplicate-component-ids.md")
+$SummaryLines.Add("- audit/reports/classification-summary.md")
 $SummaryLines.Add("- audit/reports/git-status.txt")
 
 $SummaryLines | Set-Content -Encoding UTF8 $SummaryMd
 
+
+# Generate classification summary if classification config exists
+$ClassificationScript = Join-Path $ScriptsDir "generate-classification-summary.ps1"
+$ClassificationCsv = Join-Path $AuditRoot "config\component-classification.csv"
+
+if ((Test-Path $ClassificationScript) -and (Test-Path $ClassificationCsv)) {
+  & $ClassificationScript | Out-Null
+}
 Write-Host "Audit complete."
 Write-Host "Summary: $SummaryMd"
 Write-Host "Inventory: $InventoryCsv"
 Write-Host "Completeness: $CompletenessCsv"
 Write-Host "JSON validation: $JsonValidationCsv"
+
+
+
+

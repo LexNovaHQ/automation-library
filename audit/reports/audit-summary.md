@@ -1,6 +1,6 @@
 ﻿# Repo Audit Summary
 
-Generated: 2026-05-26 22:11:17
+Generated: 2026-05-26 22:22:52
 
 ## Counts
 
@@ -37,4 +37,5 @@ None.
 - audit/reports/json-validation.csv
 - audit/reports/catalog-consistency.md
 - audit/reports/duplicate-component-ids.md
+- audit/reports/classification-summary.md
 - audit/reports/git-status.txt
