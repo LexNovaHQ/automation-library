@@ -1,0 +1,15 @@
+﻿ D components/cat-4/c4-a-ai-agent-workflow-executor/README.md
+ D components/cat-4/c4-a-ai-agent-workflow-executor/output-samples/.gitkeep
+ D components/cat-4/c4-a-ai-agent-workflow-executor/test-payloads/.gitkeep
+ D components/cat-4/c4-a-ai-agent-workflow-executor/workflows/.gitkeep
+ D components/cat-4/c4-b-ai-classification-pipeline/README.md
+ D components/cat-4/c4-b-ai-classification-pipeline/output-samples/.gitkeep
+ D components/cat-4/c4-b-ai-classification-pipeline/test-payloads/.gitkeep
+ D components/cat-4/c4-b-ai-classification-pipeline/workflows/.gitkeep
+ D components/cat-4/c4-d-ai-extraction-parser/README.md
+ D components/cat-4/c4-d-ai-extraction-parser/output-samples/.gitkeep
+ D components/cat-4/c4-d-ai-extraction-parser/test-payloads/.gitkeep
+ D components/cat-4/c4-d-ai-extraction-parser/workflows/.gitkeep
+ M docs/component-catalog.md
+?? audit/
+?? docs/component-catalog.backup-before-audit-cleanup.md
