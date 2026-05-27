@@ -1,8 +1,8 @@
 ﻿ M audit/config/component-classification.csv
  M audit/reports/classification-summary.md
  M client-config/questionnaires/README.md
-?? client-config/examples/ai-profile-response.example.json
-?? client-config/questionnaires/ai-profile-compatibility-map.md
-?? client-config/questionnaires/cfg-004-ai-profile-compatibility-pack/
-?? client-config/questionnaires/cfg-004a-client-facing-ai-customization-form/
-?? client-config/questionnaires/client-facing-ai-customization-form.md
+?? client-config/examples/credential-readiness-response.example.json
+?? client-config/questionnaires/cfg-005-credential-collection-checklist/
+?? client-config/questionnaires/cfg-005a-client-facing-credential-checklist/
+?? client-config/questionnaires/client-facing-credential-checklist.md
+?? client-config/questionnaires/credential-collection-checklist.md

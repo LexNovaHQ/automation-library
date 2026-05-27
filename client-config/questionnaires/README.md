@@ -12,6 +12,7 @@ These questionnaires feed:
 - template selection
 - adapter gap scoping
 - AI profile compatibility mapping
+- credential readiness checks
 
 ## Current Questionnaires
 
@@ -87,6 +88,28 @@ Purpose:
 - captures voice, tone, output rules, forbidden claims, risk boundaries, and examples
 - populates `CFG-001.ai_profile`
 
+### CFG-005 - Credential Collection Checklist
+
+File:
+
+- `credential-collection-checklist.md`
+
+Purpose:
+
+- internal credential and access-readiness checklist
+- captures tool access, OAuth/API keys, permissions, test data, security limits, and implementation blockers
+
+### CFG-005A - Client-Facing Credential Checklist
+
+File:
+
+- `client-facing-credential-checklist.md`
+
+Purpose:
+
+- simplified version clients can fill
+- identifies access availability and restrictions before implementation
+
 ## Future Questionnaires
 
-- CFG-005 Credential Collection Checklist
+- CFG-006 Template Config Generator

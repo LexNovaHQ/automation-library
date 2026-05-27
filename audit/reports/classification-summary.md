@@ -1,12 +1,12 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-27 11:28:28
+Generated: 2026-05-27 11:43:22
 
 ## Layer Type Counts
 
 | Layer Type | Count |
 |---|---:|
-| CLIENT_CONFIG_ASSET | 9 |
+| CLIENT_CONFIG_ASSET | 10 |
 | COMPONENT_ADAPTER | 5 |
 | CORE_COMPONENT | 20 |
 | HANDOFF_ONLY_CORE | 5 |
@@ -18,15 +18,15 @@ Generated: 2026-05-27 11:28:28
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 37 |
+| BUILT | 39 |
 | DEFERRED_ADAPTER | 11 |
-| NOT_BUILT | 31 |
+| NOT_BUILT | 30 |
 
 ## Priority Counts
 
 | Priority | Count |
 |---|---:|
-| P0 | 49 |
+| P0 | 50 |
 | P1 | 13 |
 | P2 | 11 |
 | P3 | 6 |
@@ -42,7 +42,8 @@ Generated: 2026-05-27 11:28:28
 | CFG-003A | Client-Facing Tool Stack Form | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-004 | AI Profile Compatibility Pack | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-004A | Client-Facing AI Customization Form | CLIENT_CONFIG_ASSET | BUILT |
-| CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | NOT_BUILT |
+| CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | BUILT |
+| CFG-005A | Client-Facing Credential Checklist | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-006 | Template Config Generator | CLIENT_CONFIG_ASSET | NOT_BUILT |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | BUILT |
@@ -96,6 +97,8 @@ Generated: 2026-05-27 11:28:28
 | CFG-003A | Client-Facing Tool Stack Form | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-004 | AI Profile Compatibility Pack | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-004A | Client-Facing AI Customization Form | CLIENT_CONFIG_ASSET | config_asset |
+| CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | config_asset |
+| CFG-005A | Client-Facing Credential Checklist | CLIENT_CONFIG_ASSET | config_asset |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |
