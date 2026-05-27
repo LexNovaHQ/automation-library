@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-26 22:34:39
+Generated: 2026-05-27 10:53:53
 
 ## Layer Type Counts
 
@@ -18,9 +18,9 @@ Generated: 2026-05-26 22:34:39
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 30 |
+| BUILT | 31 |
 | DEFERRED_ADAPTER | 11 |
-| NOT_BUILT | 35 |
+| NOT_BUILT | 34 |
 
 ## Priority Counts
 
@@ -35,7 +35,7 @@ Generated: 2026-05-26 22:34:39
 
 | ID | Name | Layer Type | Readiness |
 |---|---|---|---|
-| CFG-001 | Client Profile Schema | CLIENT_CONFIG_ASSET | NOT_BUILT |
+| CFG-001 | Client Profile Schema | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-002 | Workflow Discovery Questionnaire | CLIENT_CONFIG_ASSET | NOT_BUILT |
 | CFG-003 | Tool Stack Questionnaire | CLIENT_CONFIG_ASSET | NOT_BUILT |
 | CFG-004 | AI Customization Questionnaire | CLIENT_CONFIG_ASSET | NOT_BUILT |
@@ -86,6 +86,7 @@ Generated: 2026-05-26 22:34:39
 
 | ID | Name | Layer Type | Execution Level |
 |---|---|---|---|
+| CFG-001 | Client Profile Schema | CLIENT_CONFIG_ASSET | config_asset |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |

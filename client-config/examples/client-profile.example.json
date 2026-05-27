@@ -1,0 +1,235 @@
+﻿{
+  "schema_version": "v1",
+  "client_identity": {
+    "client_id": "growthops_studio",
+    "client_name": "GrowthOps Studio",
+    "primary_contact_name": "Riya Sharma",
+    "primary_contact_email": "riya@example.com",
+    "primary_region": "US",
+    "timezone": "America/New_York",
+    "website": "https://example.com"
+  },
+  "business_context": {
+    "industry": "ecommerce automation",
+    "business_model": "service_agency",
+    "offer": "Workflow automation setup for ecommerce teams",
+    "positioning": "Practical automation partner for lean ecommerce operators",
+    "target_customers": [
+      "small ecommerce teams",
+      "DTC operators",
+      "Shopify store owners"
+    ],
+    "common_pain_points": [
+      "missed leads",
+      "slow follow-up",
+      "manual CRM updates",
+      "broken notification handoffs"
+    ],
+    "default_success_metric": "qualified leads followed up within 15 minutes"
+  },
+  "tool_stack": {
+    "form_provider": "tally",
+    "crm": "hubspot",
+    "database": "google_sheets",
+    "email_provider": "gmail",
+    "calendar_provider": "google_calendar",
+    "notification_channels": [
+      "email",
+      "slack"
+    ],
+    "payment_provider": "stripe",
+    "file_storage": "google_drive",
+    "publishing_platforms": [
+      "linkedin",
+      "manual"
+    ]
+  },
+  "workflow_preferences": {
+    "dedupe_strategy": "email_and_company",
+    "manual_review_on_low_confidence": true,
+    "approval_required_before_external_send": true,
+    "status_tracking_required": true,
+    "default_failure_action": "manual_review",
+    "default_next_action_after_success": "notify_owner"
+  },
+  "approval_rules": {
+    "email_drafts": {
+      "required": true,
+      "approver_role": "owner",
+      "approver_email": "riya@example.com",
+      "allowed_actions": [
+        "approve",
+        "edit",
+        "reject",
+        "request_more_info"
+      ],
+      "sla_hours": 24
+    },
+    "ai_outputs": {
+      "required": true,
+      "approver_role": "owner",
+      "approver_email": "riya@example.com",
+      "allowed_actions": [
+        "approve",
+        "edit",
+        "reject"
+      ],
+      "sla_hours": 24
+    },
+    "payments": {
+      "required": true,
+      "approver_role": "finance",
+      "approver_email": "finance@example.com",
+      "allowed_actions": [
+        "approve",
+        "reject",
+        "manual_review"
+      ],
+      "sla_hours": 12
+    },
+    "publishing": {
+      "required": true,
+      "approver_role": "marketing",
+      "approver_email": "marketing@example.com",
+      "allowed_actions": [
+        "approve",
+        "edit",
+        "reject"
+      ],
+      "sla_hours": 24
+    },
+    "crm_updates": {
+      "required": false,
+      "approver_role": "owner",
+      "approver_email": "riya@example.com",
+      "allowed_actions": [
+        "approve",
+        "reject"
+      ],
+      "sla_hours": 24
+    }
+  },
+  "communication": {
+    "primary_email": "riya@example.com",
+    "notification_email": "alerts@example.com",
+    "escalation_email": "owner@example.com",
+    "slack_channel": "#new-leads",
+    "teams_channel": "",
+    "whatsapp_number": "",
+    "daily_digest_time": "18:00",
+    "notification_rules": {
+      "new_qualified_lead": [
+        "email",
+        "slack"
+      ],
+      "workflow_error": [
+        "email"
+      ],
+      "approval_required": [
+        "email"
+      ]
+    }
+  },
+  "ai_profile": {
+    "voice": {
+      "tone": "clear, concise, practical",
+      "style": "operator-first, not fluffy",
+      "reading_level": "simple business English",
+      "format_preferences": [
+        "short paragraphs",
+        "specific next action",
+        "no hype"
+      ]
+    },
+    "business_context": {
+      "offer": "Workflow automation setup for ecommerce teams",
+      "target_customer": "lean ecommerce operators who need faster lead handling",
+      "positioning": "practical automation partner",
+      "common_pain_points": [
+        "missed leads",
+        "slow follow-up",
+        "manual CRM updates"
+      ]
+    },
+    "output_rules": {
+      "preferred_cta": "Book a quick workflow review",
+      "forbidden_claims": [
+        "guaranteed revenue",
+        "fully replaces your team",
+        "legal advice"
+      ],
+      "must_include": [
+        "specific workflow issue",
+        "clear next step"
+      ],
+      "must_avoid": [
+        "generic automation buzzwords",
+        "overpromising"
+      ],
+      "default_output_format": "structured_json"
+    },
+    "risk_boundaries": {
+      "never_send_without_approval": true,
+      "manual_review_confidence_threshold": 0.75,
+      "allow_inference": false,
+      "never_infer_fields": [
+        "email",
+        "phone",
+        "payment_amount",
+        "legal_status"
+      ],
+      "sensitive_topics": [
+        "payment disputes",
+        "legal claims",
+        "health data"
+      ]
+    },
+    "examples": {
+      "good_outputs": [
+        "This lead looks qualified because they mention slow lead follow-up and already use HubSpot."
+      ],
+      "bad_outputs": [
+        "We guarantee this automation will double your revenue."
+      ]
+    }
+  },
+  "data_rules": {
+    "required_fields": [
+      "name",
+      "email",
+      "company"
+    ],
+    "sensitive_fields": [
+      "phone",
+      "payment_status",
+      "deal_value"
+    ],
+    "never_infer_fields": [
+      "email",
+      "phone",
+      "payment_amount"
+    ],
+    "missing_required_field_action": "manual_review",
+    "retention_days": 90,
+    "pii_redaction_required": true
+  },
+  "deployment": {
+    "environment": "production",
+    "automation_platform": "n8n",
+    "n8n_instance": "client_workspace",
+    "status_table": "google_sheets",
+    "error_log_table": "google_sheets",
+    "credential_profile": "growthops_prod",
+    "workspace_isolation_required": true
+  },
+  "assembly_preferences": {
+    "default_build_environment": "n8n",
+    "preferred_output_format": "stepwise_build_instructions",
+    "allow_custom_adapter_builds": true,
+    "manual_review_default": true,
+    "prefer_existing_components": true,
+    "adapter_gap_action": "flag_and_scope_custom_build",
+    "documentation_required": true,
+    "assembly_engine_notes": "Assembly engine should prefer existing built components and flag missing live adapters before final build."
+  }
+}

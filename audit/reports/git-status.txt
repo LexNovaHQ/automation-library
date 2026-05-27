@@ -1,10 +1,6 @@
-﻿ M audit/reports/audit-summary.md
- M audit/reports/build-completeness.md
- M audit/reports/catalog-consistency.md
+﻿ M audit/config/component-classification.csv
  M audit/reports/classification-summary.md
- M audit/reports/component-inventory.md
- M audit/reports/duplicate-component-ids.md
- M audit/reports/git-status.txt
- M audit/scripts/run-repo-audit.ps1
-?? audit/reports/classification-consistency.md
-?? audit/scripts/check-classification-consistency.ps1
+ M client-config/schemas/README.md
+?? client-config/examples/client-profile.example.json
+?? client-config/schemas/cfg-001-client-profile-schema/
+?? client-config/schemas/client-profile-schema.json

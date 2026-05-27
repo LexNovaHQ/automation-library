@@ -1,0 +1,641 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automation-library.local/schemas/client-profile-schema.json",
+  "title": "Client Profile Schema",
+  "description": "Master client operating profile used by reusable automation templates, client configuration assets, AI components, and the future ChatGPT Assembly Engine.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "client_identity",
+    "business_context",
+    "tool_stack",
+    "workflow_preferences",
+    "approval_rules",
+    "communication",
+    "ai_profile",
+    "data_rules",
+    "deployment",
+    "assembly_preferences"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "client_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client_id",
+        "client_name",
+        "primary_contact_name",
+        "primary_contact_email",
+        "timezone"
+      ],
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Stable machine-safe client identifier."
+        },
+        "client_name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "primary_contact_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primary_contact_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "primary_region": {
+          "type": "string",
+          "description": "Primary operating region or market."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone string, e.g. America/New_York."
+        },
+        "website": {
+          "type": "string"
+        }
+      }
+    },
+    "business_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "industry",
+        "business_model",
+        "offer",
+        "target_customers"
+      ],
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "business_model": {
+          "type": "string",
+          "examples": [
+            "agency",
+            "consulting",
+            "saas",
+            "ecommerce",
+            "service_business",
+            "marketplace"
+          ]
+        },
+        "offer": {
+          "type": "string",
+          "description": "What the client sells or delivers."
+        },
+        "positioning": {
+          "type": "string"
+        },
+        "target_customers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "common_pain_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "default_success_metric": {
+          "type": "string",
+          "description": "Primary success metric for automations."
+        }
+      }
+    },
+    "tool_stack": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "form_provider": {
+          "type": "string",
+          "examples": [
+            "tally",
+            "google_forms",
+            "typeform",
+            "jotform",
+            "fillout",
+            "custom_webhook",
+            "none"
+          ]
+        },
+        "crm": {
+          "type": "string",
+          "examples": [
+            "hubspot",
+            "airtable",
+            "google_sheets",
+            "notion",
+            "pipedrive",
+            "gohighlevel",
+            "salesforce",
+            "zoho",
+            "none"
+          ]
+        },
+        "database": {
+          "type": "string",
+          "examples": [
+            "google_sheets",
+            "airtable",
+            "notion",
+            "supabase",
+            "postgres",
+            "none"
+          ]
+        },
+        "email_provider": {
+          "type": "string",
+          "examples": [
+            "gmail",
+            "outlook_m365",
+            "smtp",
+            "sendgrid",
+            "mailgun",
+            "none"
+          ]
+        },
+        "calendar_provider": {
+          "type": "string",
+          "examples": [
+            "google_calendar",
+            "outlook_calendar",
+            "calendly",
+            "cal_com",
+            "none"
+          ]
+        },
+        "notification_channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "examples": [
+              "email",
+              "slack",
+              "teams",
+              "whatsapp",
+              "sms"
+            ]
+          }
+        },
+        "payment_provider": {
+          "type": "string",
+          "examples": [
+            "stripe",
+            "razorpay",
+            "paypal",
+            "wise",
+            "manual",
+            "none"
+          ]
+        },
+        "file_storage": {
+          "type": "string",
+          "examples": [
+            "google_drive",
+            "dropbox",
+            "onedrive",
+            "temporary_upload",
+            "none"
+          ]
+        },
+        "publishing_platforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "examples": [
+              "linkedin",
+              "wordpress",
+              "webflow",
+              "x_twitter",
+              "manual"
+            ]
+          }
+        }
+      }
+    },
+    "workflow_preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manual_review_on_low_confidence",
+        "approval_required_before_external_send",
+        "status_tracking_required",
+        "default_failure_action"
+      ],
+      "properties": {
+        "dedupe_strategy": {
+          "type": "string",
+          "examples": [
+            "email",
+            "email_and_company",
+            "email_domain_and_company",
+            "phone",
+            "custom"
+          ]
+        },
+        "manual_review_on_low_confidence": {
+          "type": "boolean"
+        },
+        "approval_required_before_external_send": {
+          "type": "boolean"
+        },
+        "status_tracking_required": {
+          "type": "boolean"
+        },
+        "default_failure_action": {
+          "type": "string",
+          "enum": [
+            "manual_review",
+            "retry",
+            "route_to_failure_log",
+            "stop"
+          ]
+        },
+        "default_next_action_after_success": {
+          "type": "string"
+        }
+      }
+    },
+    "approval_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "email_drafts": {
+          "$ref": "#/$defs/approvalRule"
+        },
+        "ai_outputs": {
+          "$ref": "#/$defs/approvalRule"
+        },
+        "payments": {
+          "$ref": "#/$defs/approvalRule"
+        },
+        "publishing": {
+          "$ref": "#/$defs/approvalRule"
+        },
+        "crm_updates": {
+          "$ref": "#/$defs/approvalRule"
+        }
+      }
+    },
+    "communication": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "notification_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "escalation_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "slack_channel": {
+          "type": "string"
+        },
+        "teams_channel": {
+          "type": "string"
+        },
+        "whatsapp_number": {
+          "type": "string"
+        },
+        "daily_digest_time": {
+          "type": "string",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+        },
+        "notification_rules": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "ai_profile": {
+      "type": "object",
+      "description": "Embedded AI profile used by C4 AI components and the future Assembly Engine.",
+      "additionalProperties": false,
+      "required": [
+        "voice",
+        "output_rules",
+        "risk_boundaries"
+      ],
+      "properties": {
+        "voice": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tone": {
+              "type": "string"
+            },
+            "style": {
+              "type": "string"
+            },
+            "reading_level": {
+              "type": "string"
+            },
+            "format_preferences": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "business_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "offer": {
+              "type": "string"
+            },
+            "target_customer": {
+              "type": "string"
+            },
+            "positioning": {
+              "type": "string"
+            },
+            "common_pain_points": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "output_rules": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "preferred_cta": {
+              "type": "string"
+            },
+            "forbidden_claims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "must_include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "must_avoid": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "default_output_format": {
+              "type": "string"
+            }
+          }
+        },
+        "risk_boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "never_send_without_approval",
+            "manual_review_confidence_threshold",
+            "allow_inference"
+          ],
+          "properties": {
+            "never_send_without_approval": {
+              "type": "boolean"
+            },
+            "manual_review_confidence_threshold": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "allow_inference": {
+              "type": "boolean"
+            },
+            "never_infer_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sensitive_topics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "examples": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "good_outputs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "bad_outputs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "data_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_fields",
+        "never_infer_fields",
+        "missing_required_field_action"
+      ],
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensitive_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "never_infer_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_required_field_action": {
+          "type": "string",
+          "enum": [
+            "manual_review",
+            "reject",
+            "request_more_info"
+          ]
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pii_redaction_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "type": "string",
+          "enum": [
+            "development",
+            "test",
+            "staging",
+            "production"
+          ]
+        },
+        "automation_platform": {
+          "type": "string",
+          "examples": [
+            "n8n",
+            "make",
+            "zapier",
+            "custom"
+          ]
+        },
+        "n8n_instance": {
+          "type": "string"
+        },
+        "status_table": {
+          "type": "string"
+        },
+        "error_log_table": {
+          "type": "string"
+        },
+        "credential_profile": {
+          "type": "string"
+        },
+        "workspace_isolation_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "assembly_preferences": {
+      "type": "object",
+      "description": "Preferences used by the future ChatGPT Project/GPT Assembly Engine.",
+      "additionalProperties": false,
+      "required": [
+        "default_build_environment",
+        "prefer_existing_components",
+        "adapter_gap_action",
+        "documentation_required"
+      ],
+      "properties": {
+        "default_build_environment": {
+          "type": "string",
+          "examples": [
+            "n8n",
+            "make",
+            "zapier",
+            "custom"
+          ]
+        },
+        "preferred_output_format": {
+          "type": "string",
+          "examples": [
+            "stepwise_build_instructions",
+            "workflow_json",
+            "implementation_plan",
+            "client_handoff_pack"
+          ]
+        },
+        "allow_custom_adapter_builds": {
+          "type": "boolean"
+        },
+        "manual_review_default": {
+          "type": "boolean"
+        },
+        "prefer_existing_components": {
+          "type": "boolean"
+        },
+        "adapter_gap_action": {
+          "type": "string",
+          "enum": [
+            "flag_and_scope_custom_build",
+            "manual_handoff",
+            "reject_template_fit",
+            "use_generic_rest_adapter"
+          ]
+        },
+        "documentation_required": {
+          "type": "boolean"
+        },
+        "assembly_engine_notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "approvalRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "approver_role",
+        "allowed_actions"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "approver_role": {
+          "type": "string"
+        },
+        "approver_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "allowed_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "edit",
+              "reject",
+              "request_more_info",
+              "manual_review"
+            ]
+          }
+        },
+        "sla_hours": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}
