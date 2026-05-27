@@ -1,1 +1,1 @@
-﻿ M docs/process/assembly-pipeline.md
+﻿ M docs/architecture/platform-architecture-classification.md

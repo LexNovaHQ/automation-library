@@ -2,303 +2,243 @@
 
 ## Purpose
 
-This document defines the operating classification for the automation-library repository.
+This document defines the operating classification model for the automation-library repo.
 
-The old view treated every folder as a "component." The new platform view separates reusable workflow logic, tool-specific execution, independent connectors, sellable template glue, and client configuration assets.
+It explains what each layer type means and how files should be classified.
 
-This prevents numbering confusion and makes the repo usable for real client automation work.
+This document does not define build order. Build order is controlled by docs/roadmap/universal-automation-roadmap.md.
+
+Component readiness is controlled by udit/config/component-classification.csv.
 
 ---
 
-## Master Classification
+## Source of Truth
+
+The machine-readable source of truth is udit/config/component-classification.csv.
+
+This CSV controls component ID, component name, folder path, layer type, readiness, execution level, adapter relationship, provider, priority, template readiness, dependencies, usage, and notes.
+
+Human-readable docs must not override the CSV.
+
+---
+
+## Layer Types
 
 | Layer Type | Meaning | Example |
 |---|---|---|
-| `CORE_COMPONENT` | Tool-agnostic reusable workflow logic engine | Form Intake, Validation, Dedupe, Classification |
-| `COMPONENT_ADAPTER` | Provider/tool-specific adapter attached to a core component | Google Calendar adapter for Scheduling |
-| `INDEPENDENT_ADAPTER` | Reusable connector used across many components/templates | Generic REST, Gmail Send, Slack Send |
-| `TEMPLATE_GLUE` | Sellable workflow assembly connecting multiple components/adapters | Lead Intake to Qualification to Follow-up |
-| `CLIENT_CONFIG_ASSET` | Questionnaire/schema/config used to customize workflows per client | Client profile schema, workflow questionnaire |
-| `SCAFFOLD_ONLY` | Folder exists but component is not built | README-only scaffold |
-| `DEFERRED_ADAPTER` | Adapter intentionally not built yet but expected later | Stripe live adapter, WhatsApp Cloud API send adapter |
-| `HANDOFF_ONLY_CORE` | Built core that prepares handoff objects but does not execute provider API calls | Payment, Scheduling, WhatsApp, Publishing handoff routers |
+| CORE_COMPONENT | Tool-agnostic reusable workflow logic | Form Intake, Validation, Dedupe, Classification |
+| COMPONENT_ADAPTER | Provider/tool-specific adapter attached to a core component | Google Sheets Write Adapter under C2-A family |
+| INDEPENDENT_ADAPTER | Reusable connector used across multiple components/templates | Gmail Send, Slack Send, Generic REST |
+| HANDOFF_ONLY_CORE | Built core that prepares a handoff object but does not execute live provider API action | Payment, Scheduling, WhatsApp, Publishing handoff routers |
+| DEFERRED_ADAPTER | Adapter intentionally planned but not built yet | Stripe live adapter, Slack live adapter |
+| TEMPLATE_GLUE | Sellable workflow assembly connecting multiple components/adapters | Lead Intake to Qualification to Follow-up |
+| CLIENT_CONFIG_ASSET | Questionnaire/schema/config/generator used to customize workflows per client | Client profile schema, workflow questionnaire |
+| SCAFFOLD_ONLY | Folder exists but is not built | README-only component placeholder |
+| DIAGNOSTIC_CORE | Diagnostic/fixing workflow logic | Workflow audit checker, API auth debugger |
+| AGENTIC_CORE | Controlled AI agent execution layer | Agent workflow executor, tool permission guard |
 
 ---
 
 ## 1. Core Component
 
-A `CORE_COMPONENT` is a reusable workflow logic engine.
+A CORE_COMPONENT is reusable workflow logic.
 
-It answers:
+It answers: what job does this workflow part perform?
 
-```text
-What job does this workflow part perform?
-It must be:
-
-provider-neutral
-client-configurable
-reusable across templates
-deterministic where possible
-tested with payloads and output samples
+A core component must be provider-neutral, reusable across templates, configurable by client/job profile, independently testable, and documented with payloads and output samples.
 
 Examples:
 
-C2-E Form Intake Pipeline
-C2-F Payload Validation Layer
-C2-D Deduplication / Merge Engine
-C2-B Conditional Routing Engine
-C4-A AI Classification Pipeline
-C4-B AI Extraction Parser
-C5-W Automation Status Control Table
-C6-G Error Log / Retry Queue
+- C2-E Form Intake Pipeline
+- C2-F Payload Validation Layer
+- C2-D Deduplication / Merge Engine
+- C2-B Conditional Routing Engine
+- C4-A AI Classification Pipeline
+- C4-B AI Extraction Parser
+- C5-W Automation Status Control Table
+- C6-G Error Log / Retry Queue
 
-A core component should not be named after a single vendor unless its core job is specifically vendor execution.
+Rule: a core component should not be named after a single vendor unless its core job is specifically vendor execution.
 
-2. Component Adapter
+---
 
-A COMPONENT_ADAPTER is a provider/tool-specific execution adapter attached to a core component.
+## 2. Component Adapter
 
-It answers:
+A COMPONENT_ADAPTER is a provider/tool-specific adapter attached to a core component family.
 
-Which tool/provider performs this core action?
+It answers: which tool/provider performs this core action?
 
-Example:
+Example core family: C2-A Data Sync Pipeline.
 
-Core: C2-L Calendar / Scheduling Automation
+Attached component adapters:
 
-Attached adapters:
-- Google Calendar Create Event Adapter
-- Outlook Calendar Adapter
-- Calendly Webhook Adapter
-- Cal.com Adapter
+- C2-A1 Google Sheets Write Adapter
+- C2-A2 Airtable Write Adapter
+- C2-A3 HubSpot Contact Write Adapter
 
-Another example:
+Rule: component adapters should not contain unrelated business logic. They should execute a provider-specific action behind a stable core contract.
 
-Core: C2-H Payment-on-Intake Flow
+---
 
-Attached adapters:
-- Stripe Payment Link Adapter
-- Razorpay Payment Link Adapter
-- PayPal Invoice Adapter
-- Wise Manual Payment Adapter
+## 3. Independent Adapter
 
-Adapters should:
-
-accept standardized handoff objects from the core component
-execute the provider-specific action
-return a standard result object
-preserve source metadata
-fail safely into error/retry/manual-review paths
-3. Independent Adapter
-
-An INDEPENDENT_ADAPTER is a reusable connector not owned by one core component.
-
-It answers:
-
-What external system connector can be reused across many workflows?
+An INDEPENDENT_ADAPTER is a reusable connector that can be used across many components/templates.
 
 Examples:
 
-Generic REST API Adapter
-Gmail Send Adapter
-Gmail Inbox Trigger Adapter
-Slack Send Adapter
-Google Drive File Adapter
-Notion Database Adapter
-OAuth Credential Test Adapter
+- ADP-REST Generic REST API Adapter
+- ADP-WEBHOOK-SEND Generic Webhook Sender
+- ADP-GMAIL-SEND Gmail Send Adapter
+- ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter
+- ADP-SLACK-SEND Slack Send Adapter
+- ADP-GDRIVE Google Drive File Adapter
+- ADP-PDF PDF Text Extraction Adapter
 
-Why independent?
+Rule: independent adapters should be built when a provider action is useful across multiple categories.
 
-Because a Slack send adapter can be used by:
+---
 
-C2-I Notification
-C2-O Approval Gate
-C2-J Digest Builder
-C6-G Error Alerting
-C5-W Status Alerting
+## 4. Handoff-Only Core
 
-Therefore it should not be trapped under only one component.
-
-4. Template Glue
-
-A TEMPLATE_GLUE workflow connects multiple core components and adapters into a client-ready automation.
-
-It answers:
-
-How do the reusable parts connect for a real business use case?
-
-Example:
-
-Lead Intake to Qualification to Follow-up
-
-C2-E Form Intake
-→ C2-F Validation
-→ C2-D Dedupe
-→ C4-L Lead Qualification
-→ C2-A1 Google Sheets Write
-→ C4-E Email Draft
-→ C4-M Draft Approval Package
-→ C2-O Approval Gate
-→ C2-I Notification
-→ C5-W Status
-→ C6-G Error/Retry
-
-Template glue is the commercial layer. It is what becomes:
-
-Upwork portfolio item
-Fiverr package
-client demo workflow
-reusable deployment template
-
-Template glue should not duplicate core component logic. It should orchestrate existing components.
-
-5. Client Config Asset
-
-A CLIENT_CONFIG_ASSET captures client-specific variables.
+A HANDOFF_ONLY_CORE is a built reusable core that prepares a structured action/handoff object but does not execute the live provider-specific action yet.
 
 Examples:
 
-Client profile schema
-Workflow discovery questionnaire
-Tool stack questionnaire
-Credential checklist
-Template config generator
-Client config validator
-AI customization questionnaire
+- C2-H Payment-on-Intake Flow
+- C2-L Calendar / Scheduling Automation
+- C2-M WhatsApp Message Automation
+- C2-Q Publishing Adapter Family
+- C4-T OCR / Document Processing Pipeline
 
-Client config assets let one template work across many clients without rewriting the workflow.
+Rule: do not pretend handoff-only cores are live adapters.
 
-6. Handoff-Only Core
+---
 
-A HANDOFF_ONLY_CORE is a built core component that prepares a clean provider handoff but does not execute the external provider API.
+## 5. Deferred Adapter
 
-Examples:
-
-C2-H Payment-on-Intake Flow
-C2-L Calendar / Scheduling Automation
-C2-M WhatsApp Message Automation
-C2-Q Publishing Adapter Family
-C4-T OCR / Document Processing Pipeline
-
-These are valid built components. They are not broken.
-
-They return objects like:
-
-provider_handoff
-calendar_event_handoff
-ocr_handoff
-platform_handoff
-manual_review_handoff
-
-Live provider execution belongs to attached adapters.
-
-7. Scaffold-Only
-
-A SCAFFOLD_ONLY folder exists but is not built.
-
-Typical signs:
-
-README present
-0 workflow JSON files
-0 test payload JSON files
-0 output sample JSON files
-
-Scaffold-only folders are not broken builds. They are placeholders.
-
-They must not be sold as built components.
-
-8. Deferred Adapter
-
-A DEFERRED_ADAPTER is an adapter intentionally postponed until required by a template or client job.
+A DEFERRED_ADAPTER is an adapter that is expected but intentionally not built yet.
 
 Examples:
 
-Google Calendar Create Event Adapter
-WhatsApp Cloud API Send Adapter
-Stripe Payment Link Adapter
-Razorpay Payment Link Adapter
-LinkedIn Publishing Adapter
-OCR.space Adapter
-PDF Parser Adapter
+- ADP-GMAIL-SEND
+- ADP-SLACK-SEND
+- ADP-STRIPE-LINK
+- ADP-RAZORPAY-LINK
+- ADP-GDRIVE
+- ADP-PDF
 
-Deferred adapters may be built during template phase or client delivery.
+Rule: if a workflow needs a deferred adapter, the assembly must mark it as an adapter gap, manual handoff, custom build need, or blocker.
 
-Naming Rules Going Forward
-Core components
-C2-L Calendar / Scheduling Automation
-C4-B AI Extraction Parser
-C6-G Error Log / Retry Queue
-Component adapters
+---
 
-Use parent core ID plus adapter suffix when tightly attached:
+## 6. Template Glue
 
-C2-L1 Google Calendar Create Event Adapter
-C2-L2 Calendly Webhook Adapter
-C2-H1 Stripe Payment Link Adapter
-C2-H2 Razorpay Payment Link Adapter
-Independent adapters
+TEMPLATE_GLUE is a sellable workflow assembly.
 
-Use a non-core namespace:
+It connects core components, component adapters, independent adapters, client config, dashboard/status/error layers, and AI add-ons where applicable.
 
-ADP-REST Generic REST API Adapter
-ADP-GMAIL-SEND Gmail Send Adapter
-ADP-SLACK-SEND Slack Send Adapter
-ADP-NOTION-DB Notion Database Adapter
-Template glue
+Rule: templates come after the core/adapter foundation. Templates should not hardcode provider-specific logic that belongs in adapters.
 
-Use a template namespace:
+---
 
-TPL-P0-001 Lead Intake Qualification Follow-up
-TPL-P0-002 Form CRM Alert
-TPL-P0-003 CSV CRM Import
-Client config assets
+## 7. Client Config Asset
 
-Use a config namespace:
+CLIENT_CONFIG_ASSET includes reusable intake, schema, questionnaire, profile, and config-generator files.
 
-CFG-001 Client Profile Schema
-CFG-002 Workflow Discovery Questionnaire
-CFG-003 Template Config Generator
-Build Decision Rule
+Examples:
 
-Before building anything, classify it:
+- CFG-001 Client Profile Schema
+- CFG-002 Workflow Discovery Questionnaire
+- CFG-003 Tool Stack Questionnaire
+- CFG-004 AI Profile Compatibility Pack
+- CFG-005 Credential Collection Checklist
+- CFG-006 Template Config Generator Spec
 
-Is it a CORE_COMPONENT?
-Is it a COMPONENT_ADAPTER?
-Is it an INDEPENDENT_ADAPTER?
-Is it TEMPLATE_GLUE?
-Is it CLIENT_CONFIG_ASSET?
-Is it SCAFFOLD_ONLY / DEFERRED_ADAPTER?
+Rule: client config assets define customization inputs. They do not execute workflows.
 
-If classification is unclear, do not build until the architecture is clarified.
+---
 
-Commercial Rule
+## 8. Scaffold-Only
 
-For Upwork/Fiverr:
+SCAFFOLD_ONLY means a folder exists but the component is not built.
 
-BUILT_CORE + BUILT_ADAPTER
-= safest to sell immediately
+A scaffold usually has README/placeholder folders but no workflow JSON, test payloads, or output samples.
 
-HANDOFF_ONLY_CORE + DEFERRED_ADAPTER
-= sell only with custom adapter scope
+Rule: scaffold-only components are not broken builds. They are placeholders and should not be sold as built.
 
-SCAFFOLD_ONLY
-= do not sell as built
+---
 
-TEMPLATE_GLUE
-= portfolio/demo/sellable workflow layer
+## 9. Diagnostic Core
 
-CLIENT_CONFIG_ASSET
-= makes templates reusable across clients
-Current Repo Baseline
+DIAGNOSTIC_CORE is reusable logic for fixing, debugging, auditing, and reliability work.
 
-As of Audit v1.1:
+Examples:
 
-Built components: 30
-Scaffold-only components: 23
-Broken builds: 0
-Catalog mismatches for built components: 0
-Invalid JSON files: 0
-Duplicate active component IDs: 0
-Duplicate catalog records: 0
+- C6-A Workflow Audit Checker
+- C6-B Error Pattern Library
+- C6-C API Auth / Webhook Health Debugger
+- C6-D Data Mapping Diagnostic
+- C6-E Integration Health Check
+- C6-F Handoff Documentation Pack
+- C6-G Error Log / Retry Queue
 
-The active built component library is clean.
+Rule: diagnostic cores power Category 6 fixing/debugging offers and should produce client-readable findings, not only technical logs.
+
+---
+
+## 10. Agentic Core
+
+AGENTIC_CORE is the future controlled AI agent layer.
+
+Examples:
+
+- AGT-001 Controlled Agent Workflow Executor
+- AGT-002 Tool Permission / Action Policy Guard
+- AGT-003 Agent Memory + State Store
+- AGT-004 Human-in-the-Loop Agent Approval Gate
+- AGT-005 Agent Run Log + Replay Viewer
+
+Rule: agentic components come after core automation, adapters, dashboards, approvals, and error logging are mature.
+
+Agents must be approval-first where external actions are involved, tool-permission limited, logged, replayable where possible, safe on low confidence, and reversible where possible.
+
+---
+
+## Build Artifact Rules
+
+A workflow component should not be marked BUILT unless it has README, workflow JSON or executable spec, test payloads, output samples, and a classification CSV record.
+
+A config asset/spec may be marked BUILT if it has README/spec, schema/questionnaire/example files where applicable, and a classification CSV record.
+
+A deferred adapter should remain DEFERRED_ADAPTER until real adapter artifacts exist.
+
+---
+
+## Folder Strategy
+
+Current repo structure remains category-based until the foundation is proven.
+
+Later target structure:
+
+- components/core/
+- components/component-adapters/
+- components/scaffolds/
+- adapters/independent/
+- templates/
+- client-config/
+
+Do not restructure folders before the roadmap says so.
+
+---
+
+## Relationship to Other Docs
+
+| Doc | Role |
+|---|---|
+| docs/README.md | Docs index and source-of-truth rules |
+| docs/roadmap/universal-automation-roadmap.md | Build order and strategy |
+| docs/process/assembly-pipeline.md | Post-foundation assembly discipline |
+| docs/catalog/component-catalog.md | Human-readable component catalog |
+| docs/catalog/component-readiness-matrix.md | Readiness snapshot |
+| udit/config/component-classification.csv | Machine-readable source of truth |
+| udit/reports/* | Generated reports |
