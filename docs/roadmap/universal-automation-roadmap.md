@@ -2,278 +2,301 @@
 
 ## Purpose
 
-This roadmap defines the build path from the current component library into a universal automation platform for client delivery, Upwork/Fiverr work, and reusable templates.
+This roadmap defines the build order for the automation-library repo.
 
-The repo is currently a clean component library. The next platform stage requires:
+The goal is to build a practical freelance-ready automation library for Upwork/Fiverr/client delivery, without turning the repo into a confusing universal-platform project too early.
 
-```text
-template glue
-live adapters
-client configuration assets
-monitoring/reliability controls
-deployment/credential discipline
-Current Baseline
+---
 
-Audit v1.1 confirmed:
+## Locked Strategy
 
-Built components: 30
-Scaffold-only placeholders: 23
-Broken builds: 0
-Catalog mismatches: 0
-Invalid JSON files: 0
-Duplicate component IDs: 0
-Duplicate catalog records: 0
+The repo will not move into template glue first.
+
+The locked build order is:
+
+1. Complete Category 2 universal automation core and adapters
+2. Build Category 1 outreach / sequence infrastructure
+3. Build Category 3 onboarding / payment / document delivery infrastructure
+4. Finish Category 6 fixing / debugging / reliability infrastructure
+5. Use Category 5 dashboards as add-ons across every category
+6. Then build controlled AI agents / AI add-ons
+7. Use AI add-ons as free bonuses for the first 5-10 jobs
+8. Build template glue after the core/adapter foundation is ready
+9. Restructure the repo only after the foundation is proven
+
+---
+
+## Current Baseline
+
+Latest audit baseline:
+
+| Metric | Count |
+|---|---:|
+| Components found | 53 |
+| Built components | 30 |
+| Scaffold-only components | 23 |
+| Broken builds | 0 |
+| Catalog mismatches | 0 |
+| Invalid JSON files | 0 |
+| Duplicate component IDs | 0 |
+| Classification rows | 80 |
+| Classification FAIL issues | 0 |
+| Classification WARN issues | 0 |
 
 Current strength:
 
-intake
-→ validate
-→ dedupe
-→ route
-→ classify/extract/generate
-→ approve
-→ notify
-→ write
-→ status/error/manual-review
+- intake
+- validation
+- dedupe
+- routing
+- AI classification / extraction / generation
+- approval
+- notification
+- CRM/sheet writing
+- status tracking
+- error logging
+- manual review
+- client config layer
 
 Current gap:
 
-live provider adapters
-template glue workflows
-client config generator
-deployment/security layer
-Phase 0 — Architecture Lock
+- parent data sync router
+- live provider adapters
+- outreach sequence infrastructure
+- onboarding/payment/document delivery infrastructure
+- fixing/debugging components beyond C6-G
+- dashboard add-ons beyond base status/manual review/error logs
+- controlled AI agent layer
+- template glue
 
-Status: In progress.
+---
 
-Deliverables:
+## Phase 1 - Category 2 Universal Automation Core + Adapters
 
-docs/architecture/platform-architecture-classification.md
-docs/catalog/component-readiness-matrix.md
-docs/roadmap/universal-automation-roadmap.md
+### Objective
 
-Goal:
+Complete the reusable automation base layer that every other category depends on.
 
-Create a stable classification model before restructuring folders or building new platform layers.
-Phase 1 — Documentation + Audit Upgrade
-Objective
+### Build Order
 
-Make the repo self-explanatory and audit-safe.
+| Order | Component / Adapter | Classification | Why |
+|---:|---|---|---|
+| 1 | C2-A Parent Data Sync Router | Core router | Gives templates one write abstraction instead of hardcoding Sheets/Airtable/HubSpot. |
+| 2 | ADP-REST Generic REST API Adapter | Independent adapter | Universal fallback for unsupported tools. |
+| 3 | ADP-WEBHOOK-SEND Generic Webhook Sender | Independent adapter | Needed for webhook/API sync jobs. |
+| 4 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents auth/credential failures before build. |
+| 5 | ADP-GMAIL-SEND Gmail Send Adapter | Independent adapter | Needed for Cat 1, Cat 2, Cat 3, and AI email workflows. |
+| 6 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Independent adapter | Needed for inbound email and reply workflows. |
+| 7 | ADP-SLACK-SEND Slack Send Adapter | Independent adapter | Needed for team alerts, status, and error notifications. |
+| 8 | ADP-GDRIVE Google Drive File Adapter | Independent adapter | Needed for file routing, onboarding, document delivery. |
+| 9 | ADP-PDF PDF Text Extraction Adapter | Independent adapter | Needed for document workflows and extraction jobs. |
+| 10 | ADP-NOTION-DB Notion Database Adapter | Independent adapter | Useful for SMB, creator, agency, and internal ops workflows. |
 
-Tasks
-1. Create architecture classification docs
-2. Create component readiness matrix
-3. Update component catalog with classification metadata
-4. Patch audit script to read/report classification
-5. Commit documentation and audit baseline
-Exit Criteria
-Audit can report:
-- built core components
-- built adapters
-- handoff-only cores
-- scaffold-only components
-- deferred adapters
-- template glue not built
-- broken builds
-- catalog mismatches
-Phase 2 — Repo Restructure
-Objective
+Optional later Category 2 adapters:
 
-Restructure safely around the new architecture without breaking references.
+- ADP-PIPEDRIVE
+- ADP-GHL
+- ADP-GCAL-CREATE
+- ADP-STRIPE-LINK
+- ADP-RAZORPAY-LINK
 
-Target structure
-components/
-  core/
-  component-adapters/
+---
 
-adapters/
-  independent/
+## Phase 2 - Category 1 Outreach / Sequence Infrastructure
 
-templates/
-  p0/
-  p1/
-  p2/
+Category 1 should support manual-approved outreach ops, not spam automation.
 
-client-config/
-  schemas/
-  questionnaires/
-  examples/
+Build targets:
 
-docs/
-  platform-architecture-classification.md
-  component-readiness-matrix.md
-  universal-automation-roadmap.md
+| Component / Adapter | Classification | Notes |
+|---|---|---|
+| C1-E Multi-Step Sequence Engine | Core | Follow-ups, delays, reply states, stop conditions. |
+| C1-F Reply Detection / Inbox State Classifier | Core + adapter dependent | Uses Gmail inbox/reply events. |
+| C1-G Campaign Suppression + Compliance Guard | Core | Outreach-specific compliance layer over C2-P. |
+| C1-H Sequence Performance Tracker | Dashboard/core bridge | Shows sent, replied, bounced, opted out, follow-up due. |
+| ADP-GMAIL-SEND | Adapter | Required for controlled sending. |
+| ADP-GMAIL-INBOX | Adapter | Required for reply tracking. |
 
-audit/
-  scripts/
-  reports/
-  config/
-Rule
+Commercial use:
 
-Do not move all folders in one step.
+- lead list to approved email drafts
+- manual-approved cold outreach workflow
+- follow-up sequence setup
+- reply tracking
+- opt-out/suppression flow
+- campaign status dashboard
 
-Move in controlled batches:
+---
 
-1. docs and matrix
-2. audit script support
-3. templates folder
-4. adapters folder
-5. one category of components at a time
-Exit Criteria
-Audit passes after every move.
-No duplicate component IDs.
-No catalog mismatches for built items.
-No invalid JSON.
-Phase 3 — P0 Build Set
+## Phase 3 - Category 3 Onboarding / Payment / Document Delivery
 
-P0 is the highest ROI / highest demand layer.
+Build targets:
 
-P0 Template Glue
-ID    Template    Demand
-P0-001    Lead Intake to Qualification to Follow-up Glue    Very High
-P0-002    Form Submission to CRM Update to Team Alert Glue    Very High
-P0-003    CSV/Excel Cleanup to CRM Import Glue    Very High
-P0-004    Webhook to Normalize to API Sync Glue    Very High
-P0-005    AI Email Draft to Approval to Send Glue    Very High
-P0-006    Inbound Email to Extract to CRM Update Glue    Very High
-P0 Independent Adapters
-ID    Adapter    Demand
-P0-007    Generic REST API Adapter    Very High
-P0-008    Generic Webhook Sender    Very High
-P0-009    OAuth Credential Test Adapter    Very High
-P0-010    Gmail Send Adapter    Very High
-P0-011    Gmail Inbox Trigger Adapter    Very High
-P0-012    Slack Send Adapter    Very High
-P0-013    Google Drive File Adapter    Very High
-P0-014    Notion Database Adapter    Very High
-P0-015    Pipedrive or GoHighLevel Adapter    Very High
-P0-016    PDF Text Extraction Adapter    Very High
-P0 Core/Router Builds
-ID    Build    Demand
-P0-017    C2-A Parent Data Sync Router    Very High
-P0 Client Config Assets
-ID    Asset    Demand
-P0-018    Client Profile Schema    Very High
-P0-019    Workflow Discovery Questionnaire    Very High
-P0-020    Tool Stack Questionnaire    Very High
-P0-021    AI Customization Questionnaire    Very High
-P0-022    Credential Collection Checklist    Very High
-P0-023    Template Config Generator    Very High
-Phase 4 — P1 Build Set
+| Component / Adapter | Classification | Notes |
+|---|---|---|
+| C3-E Document / Invoice Generation | Core + adapter dependent | Needs document/PDF generation. |
+| C3-H Payment to Onboarding | Core glue | Payment event or payment confirmation triggers onboarding. |
+| C3-I Welcome Sequence / Reminder Scheduler | Core | Welcome emails, reminders, follow-up tasks. |
+| C3-F Delivery Tracking / Approval Status Workflow | Core | Tracks onboarding and delivery completion. |
+| C3-M Client Handoff Pack Builder | Core | Final delivery docs, links, instructions, status. |
+| ADP-STRIPE-LINK | Adapter | Payment links/invoices for global clients. |
+| ADP-RAZORPAY-LINK | Adapter | India-facing payment workflows. |
+| ADP-GDOC-GEN | Adapter | Google Docs generation. |
+| ADP-PDF-GEN | Adapter | PDF generation/export. |
+| ADP-GCAL-CREATE | Adapter | Calendar event creation. |
 
-P1 expands production readiness.
+Commercial use:
 
-P1 Template Glue
-Support Ticket Triage
-Document Intake to OCR to Field Extraction
-Daily Digest / Management Report
-Error Monitoring + Retry Workflow
-Payment-on-Intake Automation
-Appointment Booking Follow-up
-Invoice/Receipt Processing
-P1 Adapters
-Google Calendar Create Event Adapter
-Outlook/M365 Send Adapter
-Outlook Inbox Trigger Adapter
-Stripe Payment Link Adapter
-Razorpay Payment Link Adapter
-OCR.space Adapter
-DOCX Parser Adapter
-ClickUp Adapter
-Supabase/Postgres Adapter
-Airtable Generic Adapter
-n8n Workflow Control Adapter
-P1 Client/Platform Assets
-Client Config Validator
-Client Handoff Pack Generator
-Approval Audit Trail
-Retry Policy Engine
-Global Run Log
-Dead Letter Queue
-Phase 5 — P2 Build Set
+- payment received to onboarding workflow
+- invoice generation workflow
+- client onboarding workflow
+- welcome email/CRM setup
+- delivery tracker
+- handoff pack
 
-P2 expands platform coverage.
+---
 
-P2 Adapters
-WhatsApp Cloud API Send Adapter
-Twilio WhatsApp Adapter
-WATI Adapter
-Calendly Webhook Adapter
-PayPal Invoice Adapter
-Webflow CMS Adapter
-WordPress Publish Adapter
-Microsoft Teams Send Adapter
-Payment Status Webhook Adapter
-Google Vision OCR Adapter
-AWS Textract Adapter
-P2 Workflows
-Content Draft to Approval to Publish Handoff
-Approval-Based WhatsApp Follow-up
-No-show Reminder / Meeting Reminder
-Payment Reminder Engine
-Client Onboarding Intake
-Phase 6 — P3 Build Set
+## Phase 4 - Category 6 Fixing / Debugging / Reliability
 
-P3 is expansion and long-tail coverage.
+This is commercially important because many early freelance jobs are fixing jobs, not full builds.
 
-LinkedIn Publish Adapter
-X/Twitter Publish Adapter
-Instagram/Facebook Adapter
-Buffer/SocialBee Adapter
-Salesforce Adapter
-Zoho Adapter
-YouTube Adapter
-Advanced RAG Layer
-Full client dashboard
-Advanced usage/cost monitoring
-Commercial Build Rule
+Build targets:
 
-Do not build adapters randomly.
+| Component | Classification | Notes |
+|---|---|---|
+| C6-A Workflow Audit Checker | Diagnostic core | Checklist/SOP for broken workflow jobs. |
+| C6-B Error Pattern Library | Diagnostic core | Reusable failure taxonomy. |
+| C6-C API Auth / Webhook Health Debugger | Diagnostic adapter/core | Auth, webhook, API health checks. |
+| C6-D Data Mapping Diagnostic | Diagnostic core | Payload/schema/mapping mismatch analysis. |
+| C6-E Integration Health Check | Diagnostic core | Overall integration state. |
+| C6-F Handoff Documentation Pack | Docs core | Fix report and client handoff. |
+| C6-G Error Log / Retry Queue | Core | Already built; supports every category. |
+| C6-H Credential / Auth Failure Classifier | Diagnostic core | Works with OAuth/API debugging. |
+| C6-I Retry Policy Builder | Diagnostic core | Converts failure analysis into retry/manual-review rules. |
+| C6-K Client Fix Handoff Pack Generator | Docs core | High-value deliverable for fixing jobs. |
+| C6-L n8n Import/Export Validator | Diagnostic adapter | Checks workflow JSON before delivery/import. |
 
-Build order should be:
+Commercial use:
 
-1. P0 template glue
-2. adapters required by P0 templates
-3. client config assets
-4. P1 reliability layer
-5. P1/P2 adapters based on actual job demand
-Upwork/Fiverr Selling Rule
-Safe to sell immediately
-BUILT_CORE + BUILT_ADAPTER workflows
+- fix broken n8n workflow
+- debug webhook/API auth
+- repair data mapping
+- add retry/error handling
+- workflow audit and documentation
 
-Examples:
+---
 
-Form intake to Sheets/Airtable/HubSpot
-CSV cleanup to CRM import
-Webhook intake to validation/routing
-Email notification workflows
-Approval workflow packaging
-Sell with custom integration scope
-HANDOFF_ONLY_CORE + DEFERRED_ADAPTER workflows
+## Phase 5 - Dashboard Add-Ons
 
-Examples:
+Category 5 is not a heavy standalone build phase right now.
 
-Live Stripe/Razorpay payment link creation
-Live WhatsApp sending
-Live Google Calendar event creation
-Live WordPress/Webflow publishing
-OCR execution
-Do not sell as already built
-SCAFFOLD_ONLY components
-Immediate Next Step After Phase 1
+Dashboards are add-ons across Category 1, Category 2, Category 3, and Category 6.
 
-After committing the three docs, update:
+Every serious workflow should include:
 
-docs/catalog/component-catalog.md
+- status table
+- manual review queue
+- error log / retry queue
 
-Add classification metadata to each built component record.
+Dashboard add-on targets:
 
-Then update audit to optionally read:
+| Dashboard Add-On | Category Supported | Priority | Notes |
+|---|---|---:|---|
+| C5-W Automation Status Control Table | All | Built | Base status/control table. |
+| C5-E Manual Review Queue | Cat 2 / Cat 4 / Cat 6 | Built | Approval/review queue. |
+| C6-G Error Log / Retry Queue | All | Built | Error/retry visibility. |
+| C1-H Sequence Performance Tracker | Cat 1 | P1 | Outreach tracking. |
+| C3-F Onboarding / Delivery Tracker | Cat 3 | P1 | Client delivery tracking. |
+| C6-K Client Fix Handoff Pack Generator | Cat 6 | P1 | Fix summary / what broke / what changed. |
 
-docs/catalog/component-readiness-matrix.md
+---
 
-or a future structured version:
+## Phase 6 - Controlled AI Add-Ons / Agentic Layer
 
-audit/config/component-classification.csv
+AI agents are not the first build phase.
 
+They are built after the practical automation foundation is ready.
 
+Initial AI add-ons should be small, controlled, approval-first, and useful as free bonuses for the first 5-10 jobs.
+
+Initial AI add-ons:
+
+| Add-On | Use Case | Boundary |
+|---|---|---|
+| AI lead scorer | Cat 1 / Cat 2 | No autonomous sending. |
+| AI inbox triage | Cat 1 / Cat 2 | Manual approval for external actions. |
+| AI CRM note generator | Cat 2 / Cat 3 | No invented facts. |
+| AI email draft assistant | Cat 1 / Cat 2 / Cat 3 | Approval-first. |
+| AI document summary/extraction assistant | Cat 3 / Cat 4 | Low confidence routes to manual review. |
+| AI error summarizer | Cat 6 | Diagnostic only; no destructive action. |
+| AI daily digest assistant | Cat 5 add-on | Summary only. |
+| AI next-action recommender | All | Recommendation only unless approved. |
+
+Later agentic components:
+
+| Component | Classification | Timing |
+|---|---|---|
+| AGT-001 Controlled Agent Workflow Executor | Agentic core | Later |
+| AGT-002 Tool Permission / Action Policy Guard | Agent safety core | Later |
+| AGT-003 Agent Memory + State Store | Agent core + adapter | Later |
+| AGT-004 Human-in-the-Loop Agent Approval Gate | Agent/core bridge | Later |
+| AGT-005 Agent Run Log + Replay Viewer | Diagnostic/core | Later |
+
+Do not build fully autonomous agents until action permissions, run logs, approval gates, and rollback/retry logic are mature.
+
+---
+
+## Phase 7 - Template Glue
+
+Template glue comes after the core/adapter foundation.
+
+Templates should assemble existing components and adapters. They should not compensate for missing adapters by hardcoding provider-specific logic.
+
+Initial template candidates after foundation:
+
+- TPL-P0-001 Lead Intake to Qualification to Follow-up
+- TPL-P0-002 Form Submission to CRM Update to Team Alert
+- TPL-P0-003 CSV/Excel Cleanup to CRM Import
+- TPL-P0-004 Webhook to Normalize to API Sync
+- TPL-P0-005 AI Email Draft to Approval to Send
+- TPL-P0-006 Inbound Email to Extract to CRM Update
+
+---
+
+## Phase 8 - Repo Restructure
+
+Do not fully restructure the repo yet.
+
+Final restructure happens after:
+
+- Category 2 foundation
+- Category 1
+- Category 3
+- Category 6
+- dashboard add-ons
+- initial AI add-ons
+
+Target later structure:
+
+- components/core/
+- components/component-adapters/
+- components/scaffolds/
+- adapters/independent/
+- templates/
+- client-config/
+
+---
+
+## Next Build
+
+The next technical build is:
+
+`C2-A - Parent Data Sync Router`
+
+This completes the existing C2-A family:
+
+- C2-A1 Google Sheets Write Adapter
+- C2-A2 Airtable Write Adapter
+- C2-A3 HubSpot Contact Write Adapter
+
+Future templates should call C2-A instead of hardcoding C2-A1/C2-A2/C2-A3 directly.
