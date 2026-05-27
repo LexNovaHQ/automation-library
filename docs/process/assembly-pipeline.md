@@ -1,4 +1,4 @@
-# Lex Nova HQ — Assembly Pipeline
+﻿# Lex Nova HQ â€” Assembly Pipeline
 
 **Version:** v1.0  
 **Last updated:** 2026-05-24  
@@ -12,7 +12,7 @@ This is the canonical 7-step process used for every template build and every pai
 
 **The core principle:** every reusable pattern is a component, not template-specific logic. Templates and client deliveries are *assemblies* of pre-built components, not bespoke builds from scratch.
 
-**"We build, we don't grunt."** Every hour invested in this process compounds — components built today reduce time on every future engagement that uses them.
+**"We build, we don't grunt."** Every hour invested in this process compounds â€” components built today reduce time on every future engagement that uses them.
 
 ---
 
@@ -29,11 +29,11 @@ Before touching any tool, write down what the buyer is actually trying to achiev
 
 **Output of Step 1:** a bulleted list of buyer outcomes in plain language. No technical detail yet.
 
-**Discipline:** never skip this step. Engineering brain wants to jump to "let me wire up the webhook" — resist. The buyer outcome list is what you'll validate against in Step 7.
+**Discipline:** never skip this step. Engineering brain wants to jump to "let me wire up the webhook" â€” resist. The buyer outcome list is what you'll validate against in Step 7.
 
 ---
 
-### Step 2: Map Outcomes → Components
+### Step 2: Map Outcomes â†’ Components
 
 For each buyer outcome from Step 1, identify which components from `component-catalog.md` deliver that outcome.
 
@@ -42,7 +42,7 @@ For each buyer outcome from Step 1, identify which components from `component-ca
 - Scan the Backing-Templates table at the bottom for matching patterns
 - For each outcome, list the component IDs needed
 
-**Example mapping (for Template #1 — Lead Capture → CRM → AI Follow-up):**
+**Example mapping (for Template #1 â€” Lead Capture â†’ CRM â†’ AI Follow-up):**
 
 | Buyer Outcome | Components |
 |---|---|
@@ -60,19 +60,19 @@ For each buyer outcome from Step 1, identify which components from `component-ca
 
 Check each component in your list against its status in `component-catalog.md`:
 
-- ✅ **Done** → ready to assemble
-- 🟡 **Partial** → needs generalization work before assembly
-- ❌ **Not done** → must be built before this template can be assembled
+- âœ… **Done** â†’ ready to assemble
+- ðŸŸ¡ **Partial** â†’ needs generalization work before assembly
+- âŒ **Not done** â†’ must be built before this template can be assembled
 
-**Rule:** if any required component is ❌ Not done, build it as a standalone component FIRST. Do not build it inside the template. This is the discipline that makes the library work.
+**Rule:** if any required component is âŒ Not done, build it as a standalone component FIRST. Do not build it inside the template. This is the discipline that makes the library work.
 
-**Output of Step 3:** a gap list — components to build before assembly can proceed.
+**Output of Step 3:** a gap list â€” components to build before assembly can proceed.
 
 **If gaps exist:**
 1. Pause template assembly
 2. Build each gap component as a standalone, generalized, documented module in `components/[category]/[component-id]/`
 3. Test the component independently with sample data
-4. Update its status in `component-catalog.md` to ✅ Done
+4. Update its status in `component-catalog.md` to âœ… Done
 5. Return to Step 4
 
 **If no gaps exist:** proceed to Step 4.
@@ -86,7 +86,7 @@ Open n8n. Create a new workflow named after the template or client engagement (e
 For each component in your dependency list:
 1. Open the component's source workflow (in `components/[category]/[component-id]/workflow.json`)
 2. Import or copy the relevant nodes into your new workflow
-3. Do NOT modify the component logic at this stage — clone-and-place only
+3. Do NOT modify the component logic at this stage â€” clone-and-place only
 
 **Rule:** components are cloned, not referenced. n8n doesn't support library imports the way code does, so each workflow is self-contained. The discipline is that the cloned nodes match the source component exactly.
 
@@ -100,8 +100,8 @@ Connect the components according to the data flow from Step 2. This is where buy
 
 **Wiring discipline:**
 - Use n8n's native connector lines for happy-path flow
-- For branching, use C2-B (Conditional Routing Engine) — don't write inline IF nodes if a Conditional Routing pattern exists
-- For error paths, attach C6-D (Schema/Payload Validator) — don't write inline error handlers
+- For branching, use C2-B (Conditional Routing Engine) â€” don't write inline IF nodes if a Conditional Routing pattern exists
+- For error paths, attach C6-D (Schema/Payload Validator) â€” don't write inline error handlers
 - Document each connection's purpose in n8n node sticky notes
 
 **Output of Step 5:** a wired but uncalibrated workflow. Inputs and outputs at each component boundary are clearly labeled but not yet bound to real client data.
@@ -117,11 +117,11 @@ This is where the template becomes either:
 **For portfolio demos:**
 - Use plausible fake company data
 - Use sandbox accounts for any third-party services
-- Use Claude/OpenAI API keys from your own budget (per locked Phase 2 tooling decision — small Phase 2 portfolio API budget)
+- Use Claude/OpenAI API keys from your own budget (per locked Phase 2 tooling decision â€” small Phase 2 portfolio API budget)
 - Capture screenshots and a Loom video walkthrough
 
 **For client deliveries:**
-- Client provides their own API keys and credentials (standard model — client pays for their own AI/tooling)
+- Client provides their own API keys and credentials (standard model â€” client pays for their own AI/tooling)
 - Configure webhooks to client's actual endpoints
 - Map fields to client's actual schema (their CRM field names, their CSV columns, their form fields)
 - Set timezone, currency, language preferences
@@ -136,7 +136,7 @@ This is where the template becomes either:
 - Run end-to-end with realistic test data
 - Verify every buyer outcome from Step 1 is achieved
 - Test failure modes: malformed data, network timeouts, rate limits, missing credentials
-- For client deliveries, run the test with the client watching (Zoom screen share) — catches expectation mismatches early
+- For client deliveries, run the test with the client watching (Zoom screen share) â€” catches expectation mismatches early
 
 **Document:**
 - Add sticky notes inside n8n explaining what each component does at a buyer-outcome level
@@ -152,9 +152,9 @@ This is where the template becomes either:
 
 ---
 
-## Worked Example: Template #1 — Lead Capture → CRM → AI Follow-up
+## Worked Example: Template #1 â€” Lead Capture â†’ CRM â†’ AI Follow-up
 
-**Step 1 — Buyer Outcomes:**
+**Step 1 â€” Buyer Outcomes:**
 - When a lead submits the contact form, capture their data
 - Score the lead (qualified vs. nurture vs. disqualified)
 - Add to CRM with appropriate tag
@@ -162,36 +162,36 @@ This is where the template becomes either:
 - Notify sales rep via Slack if lead is qualified
 - If unqualified, add to long-term nurture sequence
 
-**Step 2 — Component Map:**
-- Form intake → C2-E (Form Intake Pipeline) + C2-C (Webhook Trigger)
-- Lead scoring → C4-L (Lead Qualification Agent)
-- Conditional routing → C2-B (Conditional Routing Engine)
-- CRM sync → C2-A (Data Sync Pipeline)
-- AI email gen → C2-K (LLM-in-Workflow Adapter) + C4-D (AI Content Generation Pipeline)
-- Sequence for nurture → C1-E (Multi-Step Sequence Engine)
-- Notification → C2-I (Notification & Alert Engine)
+**Step 2 â€” Component Map:**
+- Form intake â†’ C2-E (Form Intake Pipeline) + C2-C (Webhook Trigger)
+- Lead scoring â†’ C4-L (Lead Qualification Agent)
+- Conditional routing â†’ C2-B (Conditional Routing Engine)
+- CRM sync â†’ C2-A (Data Sync Pipeline)
+- AI email gen â†’ C2-K (LLM-in-Workflow Adapter) + C4-D (AI Content Generation Pipeline)
+- Sequence for nurture â†’ C1-E (Multi-Step Sequence Engine)
+- Notification â†’ C2-I (Notification & Alert Engine)
 
-**Step 3 — Gap Check (against component-catalog.md):**
-- C2-E ✅, C2-C ✅, C4-L ✅, C2-B ✅, C2-A ✅, C2-K ✅, C4-D ✅, C2-I ✅
-- C1-E 🟡 Partial — needs generalization for non-cold-outbound use cases
+**Step 3 â€” Gap Check (against component-catalog.md):**
+- C2-E âœ…, C2-C âœ…, C4-L âœ…, C2-B âœ…, C2-A âœ…, C2-K âœ…, C4-D âœ…, C2-I âœ…
+- C1-E ðŸŸ¡ Partial â€” needs generalization for non-cold-outbound use cases
 
-**Action:** Promote C1-E from 🟡 → ✅ by generalizing it OR substitute with a simpler scheduled-message pattern for portfolio demo. **Choice:** for Template #1 portfolio, use simpler scheduled-message pattern; flag C1-E generalization as a Tier 2 build priority.
+**Action:** Promote C1-E from ðŸŸ¡ â†’ âœ… by generalizing it OR substitute with a simpler scheduled-message pattern for portfolio demo. **Choice:** for Template #1 portfolio, use simpler scheduled-message pattern; flag C1-E generalization as a Tier 2 build priority.
 
-**Step 4 — Clone:**
+**Step 4 â€” Clone:**
 - Create new n8n workflow `Template-1_Lead-Capture-CRM-AI-Follow-up`
-- Clone in nodes for each ✅ component
+- Clone in nodes for each âœ… component
 
-**Step 5 — Wire:**
-- Form webhook → C4-L scoring → C2-B routing → (qualified path) C2-K+C4-D email gen → C2-A CRM write → C2-I Slack notify
-- (Unqualified path) → C2-A CRM write with nurture tag → scheduled-message sequence
+**Step 5 â€” Wire:**
+- Form webhook â†’ C4-L scoring â†’ C2-B routing â†’ (qualified path) C2-K+C4-D email gen â†’ C2-A CRM write â†’ C2-I Slack notify
+- (Unqualified path) â†’ C2-A CRM write with nurture tag â†’ scheduled-message sequence
 
-**Step 6 — Configure (portfolio demo):**
+**Step 6 â€” Configure (portfolio demo):**
 - Sample form URL (Typeform or n8n-hosted)
 - Sandbox HubSpot CRM
 - Claude API key (own budget)
 - Demo Slack workspace
 
-**Step 7 — Test + Document + Deploy:**
+**Step 7 â€” Test + Document + Deploy:**
 - Submit 5 test leads (qualified, unqualified, edge cases)
 - Verify all 6 buyer outcomes achieved
 - Loom walkthrough recorded
@@ -207,7 +207,7 @@ This is where the template becomes either:
 | New buyer outcome that doesn't match any of the 5 saved templates | Run the full 7-step pipeline from scratch |
 | Buyer outcome matches a saved template exactly | Start from `templates/[template-id]/workflow.json`, apply Steps 6-7 only |
 | Mostly matches a template but with a unique twist | Start from saved template, apply Steps 2-3 to identify the gap, build the gap component, then Steps 5-7 |
-| Diagnostic engagement (Offering #6) | Use C6-A Diagnostic Checklist as the starting "template" — the engagement IS a structured walk through C6-A |
+| Diagnostic engagement (Offering #6) | Use C6-A Diagnostic Checklist as the starting "template" â€” the engagement IS a structured walk through C6-A |
 
 ---
 
@@ -215,9 +215,9 @@ This is where the template becomes either:
 
 1. **Components are atomic.** A component does one thing well. If it does two things, split it.
 
-2. **Templates are assemblies.** A template never contains logic that should be a component. If you find yourself writing template-specific business logic, stop — extract it as a component first.
+2. **Templates are assemblies.** A template never contains logic that should be a component. If you find yourself writing template-specific business logic, stop â€” extract it as a component first.
 
-3. **Test components independently.** Before assembling, every ✅ component should run on its own with sample data. If it can't, it's not ✅.
+3. **Test components independently.** Before assembling, every âœ… component should run on its own with sample data. If it can't, it's not âœ….
 
 4. **Document at the component level, not the template level.** Templates assemble; components implement. Documentation lives with the thing being implemented.
 
@@ -236,8 +236,8 @@ This is where the template becomes either:
 | Writing client-specific logic inside a template | Locks you into bespoke rebuilds every engagement | Extract as a configurable component with parameters |
 | Skipping the catalog update after building something new | Library decays into a folder of files no one can find | Update catalog FIRST, then write code |
 | Cloning a template and modifying inline for a new client | Diverges your sources of truth | Clone components from the library, not from a previous template instance |
-| Building a component "good enough" for one use case | When the second use case arrives, you rebuild | Generalize at component creation time — name parameters, externalize config |
-| Letting "Partial" components stay partial forever | Phantom inventory — looks like you have it but you don't | Schedule 🟡 → ✅ work; status it on the catalog with target date |
+| Building a component "good enough" for one use case | When the second use case arrives, you rebuild | Generalize at component creation time â€” name parameters, externalize config |
+| Letting "Partial" components stay partial forever | Phantom inventory â€” looks like you have it but you don't | Schedule ðŸŸ¡ â†’ âœ… work; status it on the catalog with target date |
 
 ---
 
@@ -249,4 +249,5 @@ This is where the template becomes either:
 
 ---
 
-**This document is the canonical process reference. Every template build and every paid client engagement follows this sequence — no exceptions.**
+**This document is the canonical process reference. Every template build and every paid client engagement follows this sequence â€” no exceptions.**
+

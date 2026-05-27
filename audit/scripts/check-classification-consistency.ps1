@@ -3,7 +3,7 @@
 $RepoRoot = (Get-Location).Path
 $ClassificationPath = Join-Path $RepoRoot "audit\config\component-classification.csv"
 $InventoryPath = Join-Path $RepoRoot "audit\reports\component-inventory.csv"
-$CatalogPath = Join-Path $RepoRoot "docs\component-catalog.md"
+$CatalogPath = Join-Path $RepoRoot "docs\catalog\component-catalog.md"
 $ReportPath = Join-Path $RepoRoot "audit\reports\classification-consistency.md"
 
 if (!(Test-Path $ClassificationPath)) {
@@ -198,3 +198,4 @@ Get-Content $ReportPath
 if ($FailCount -gt 0) {
   exit 1
 }
+

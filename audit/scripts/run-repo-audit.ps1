@@ -8,7 +8,7 @@ $AuditRoot = Join-Path $RepoRoot "audit"
 $ScriptsDir = Join-Path $AuditRoot "scripts"
 $ReportsDir = Join-Path $AuditRoot "reports"
 $ComponentsDir = Join-Path $RepoRoot "components"
-$CatalogPath = Join-Path $RepoRoot "docs\component-catalog.md"
+$CatalogPath = Join-Path $RepoRoot "docs\catalog\component-catalog.md"
 
 New-Item -ItemType Directory -Force $ScriptsDir | Out-Null
 New-Item -ItemType Directory -Force $ReportsDir | Out-Null
@@ -450,6 +450,7 @@ Write-Host "Summary: $SummaryMd"
 Write-Host "Inventory: $InventoryCsv"
 Write-Host "Completeness: $CompletenessCsv"
 Write-Host "JSON validation: $JsonValidationCsv"
+
 
 
 

@@ -48,9 +48,9 @@ Status: In progress.
 
 Deliverables:
 
-docs/platform-architecture-classification.md
-docs/component-readiness-matrix.md
-docs/universal-automation-roadmap.md
+docs/architecture/platform-architecture-classification.md
+docs/catalog/component-readiness-matrix.md
+docs/roadmap/universal-automation-roadmap.md
 
 Goal:
 
@@ -264,15 +264,16 @@ Immediate Next Step After Phase 1
 
 After committing the three docs, update:
 
-docs/component-catalog.md
+docs/catalog/component-catalog.md
 
 Add classification metadata to each built component record.
 
 Then update audit to optionally read:
 
-docs/component-readiness-matrix.md
+docs/catalog/component-readiness-matrix.md
 
 or a future structured version:
 
 audit/config/component-classification.csv
+
 

@@ -1,7 +1,17 @@
-﻿ M audit/config/component-classification.csv
- M audit/reports/classification-summary.md
- M client-config/generators/README.md
-?? client-config/examples/adapter-gap-report.example.json
-?? client-config/examples/assembly-recommendation.example.json
-?? client-config/examples/template-config.example.json
-?? client-config/generators/template-config-generator/
+﻿ M audit/scripts/check-classification-consistency.ps1
+ M audit/scripts/run-repo-audit.ps1
+ M audit/scripts/update-component-catalog-classification.ps1
+ D docs/assembly-pipeline.md
+ D docs/component-catalog.md
+ D docs/component-readiness-matrix.md
+ D docs/platform-architecture-classification.md
+ D docs/universal-automation-roadmap.md
+?? audit/deferred-scripts/
+?? audit/reports/documentation-cleanup-map.csv
+?? audit/reports/documentation-cleanup-map.md
+?? audit/reports/documentation-inventory.csv
+?? docs/README.md
+?? docs/architecture/
+?? docs/catalog/
+?? docs/process/
+?? docs/roadmap/

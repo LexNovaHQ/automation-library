@@ -1,7 +1,7 @@
 ﻿$ErrorActionPreference = "Stop"
 
 $RepoRoot = (Get-Location).Path
-$CatalogPath = Join-Path $RepoRoot "docs\component-catalog.md"
+$CatalogPath = Join-Path $RepoRoot "docs\catalog\component-catalog.md"
 $ClassificationPath = Join-Path $RepoRoot "audit\config\component-classification.csv"
 $ReportPath = Join-Path $RepoRoot "audit\reports\catalog-classification-update.md"
 
@@ -139,3 +139,4 @@ $report.Add("Rows not marked as `BUILT` or not using a component ID beginning wi
 $report | Set-Content -Encoding UTF8 $ReportPath
 
 Get-Content $ReportPath
+
