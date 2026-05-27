@@ -1,253 +1,399 @@
-﻿# Lex Nova HQ â€” Assembly Pipeline
-
-**Version:** v1.0  
-**Last updated:** 2026-05-24  
-**Locked decision:** D86-A (hybrid template-first approach + 7-step assembly process)
-
----
+﻿# Assembly Pipeline
 
 ## Purpose
 
-This is the canonical 7-step process used for every template build and every paid client engagement. It is the operational discipline that converts the component library (see `component-catalog.md`) into shipped work.
+This document defines how to assemble reusable components, adapters, client configuration, and dashboard/error controls into a real client workflow or template.
 
-**The core principle:** every reusable pattern is a component, not template-specific logic. Templates and client deliveries are *assemblies* of pre-built components, not bespoke builds from scratch.
+This is not the build roadmap.
 
-**"We build, we don't grunt."** Every hour invested in this process compounds â€” components built today reduce time on every future engagement that uses them.
+The roadmap is controlled by:
 
----
+`docs/roadmap/universal-automation-roadmap.md`
 
-## The 7 Steps
-
-### Step 1: Identify Buyer Outcomes
-
-Before touching any tool, write down what the buyer is actually trying to achieve. Use the buyer's own language, not technical jargon.
-
-**Examples of buyer outcomes:**
-- "When a lead fills out my contact form, I want them added to my CRM and an AI-generated follow-up email sent within 5 minutes."
-- "When my accountant uploads a bank statement PDF, I want the transactions extracted into a Google Sheet and categorized."
-- "When a client signs my contract, I want them automatically billed and given access to a portal with their documents."
-
-**Output of Step 1:** a bulleted list of buyer outcomes in plain language. No technical detail yet.
-
-**Discipline:** never skip this step. Engineering brain wants to jump to "let me wire up the webhook" â€” resist. The buyer outcome list is what you'll validate against in Step 7.
+The assembly pipeline applies after the required core components and adapters are available.
 
 ---
 
-### Step 2: Map Outcomes â†’ Components
+## Core Rule
 
-For each buyer outcome from Step 1, identify which components from `component-catalog.md` deliver that outcome.
+Do not build missing core logic inside a client workflow or template.
 
-**How to map:**
-- Open `component-catalog.md`
-- Scan the Backing-Templates table at the bottom for matching patterns
-- For each outcome, list the component IDs needed
+If a required component or adapter is missing, build it as a reusable component/adapter first, then return to assembly.
 
-**Example mapping (for Template #1 â€” Lead Capture â†’ CRM â†’ AI Follow-up):**
+Templates and client deliveries should be assemblies of reusable parts, not bespoke one-off workflows.
 
-| Buyer Outcome | Components |
+---
+
+## Assembly Inputs
+
+A real assembly should use:
+
+- client profile
+- workflow discovery response
+- tool stack response
+- AI profile / compatibility map
+- credential readiness response
+- component classification CSV
+- component catalog
+- roadmap
+- available components/adapters
+- dashboard/status/error requirements
+
+Primary config assets:
+
+- CFG-001 Client Profile Schema
+- CFG-002 Workflow Discovery Questionnaire
+- CFG-003 Tool Stack Questionnaire
+- CFG-004 AI Profile Compatibility Pack
+- CFG-005 Credential Collection Checklist
+- CFG-006 Template Config Generator Spec
+
+---
+
+## Assembly Outputs
+
+Each assembly should produce:
+
+- selected template or custom workflow type
+- required components
+- required adapters
+- deferred/missing adapters
+- manual handoffs
+- credential blockers
+- dashboard/status requirements
+- AI add-ons, if any
+- test plan
+- implementation steps
+- client handoff notes
+
+---
+
+## Step 1 - Capture Buyer Outcome
+
+Write the buyer outcome in plain language before technical mapping.
+
+Examples:
+
+- When a lead fills out my form, add them to my CRM and notify my team.
+- When a client pays, start onboarding and send the welcome pack.
+- When an n8n workflow fails, identify what broke and document the fix.
+- When an email arrives, extract the useful details and update the CRM.
+
+Output:
+
+- buyer outcome list
+- success definition
+- failure definition
+
+Do not start from tools. Start from outcome.
+
+---
+
+## Step 2 - Convert Outcome Into Workflow Shape
+
+Map the outcome into a workflow shape.
+
+Common shapes:
+
+| Workflow Shape | Typical Category |
 |---|---|
-| "When a lead fills out my form..." | C2-E (Form Intake Pipeline), C2-C (Webhook Trigger) |
-| "...add them to my CRM..." | C2-A (Data Sync Pipeline) |
-| "...with auto-qualification..." | C4-L (Lead Qualification Agent), C2-B (Conditional Routing) |
-| "...and send an AI-generated follow-up..." | C2-K (LLM-in-Workflow Adapter), C4-D (AI Content Generation) |
-| "...within 5 minutes." | C2-I (Notification & Alert Engine for timing/alerts) |
+| Form / webhook to CRM / sheet | Cat 2 |
+| Lead intake to qualification to follow-up | Cat 2 / Cat 1 |
+| Outreach sequence with approval and suppression | Cat 1 |
+| Payment to onboarding | Cat 3 |
+| File/document to extraction | Cat 3 / Cat 4 |
+| Broken workflow diagnosis and fix report | Cat 6 |
+| AI draft to approval | Cat 4 / Cat 2 |
+| Status/error monitoring | Cat 5 / Cat 6 |
 
-**Output of Step 2:** a component dependency list. Every outcome has at least one component backing it.
+Output:
 
----
-
-### Step 3: Identify Gaps
-
-Check each component in your list against its status in `component-catalog.md`:
-
-- âœ… **Done** â†’ ready to assemble
-- ðŸŸ¡ **Partial** â†’ needs generalization work before assembly
-- âŒ **Not done** â†’ must be built before this template can be assembled
-
-**Rule:** if any required component is âŒ Not done, build it as a standalone component FIRST. Do not build it inside the template. This is the discipline that makes the library work.
-
-**Output of Step 3:** a gap list â€” components to build before assembly can proceed.
-
-**If gaps exist:**
-1. Pause template assembly
-2. Build each gap component as a standalone, generalized, documented module in `components/[category]/[component-id]/`
-3. Test the component independently with sample data
-4. Update its status in `component-catalog.md` to âœ… Done
-5. Return to Step 4
-
-**If no gaps exist:** proceed to Step 4.
+- workflow shape
+- primary category
+- secondary categories
+- likely dashboard add-on
 
 ---
 
-### Step 4: Clone Components into New Workflow
+## Step 3 - Select Components
 
-Open n8n. Create a new workflow named after the template or client engagement (e.g., `Template-1_Lead-Capture-CRM-AI-Follow-up` or `Client-Acme_Onboarding-System`).
+For each workflow step, select reusable components.
 
-For each component in your dependency list:
-1. Open the component's source workflow (in `components/[category]/[component-id]/workflow.json`)
-2. Import or copy the relevant nodes into your new workflow
-3. Do NOT modify the component logic at this stage â€” clone-and-place only
+Examples:
 
-**Rule:** components are cloned, not referenced. n8n doesn't support library imports the way code does, so each workflow is self-contained. The discipline is that the cloned nodes match the source component exactly.
-
-**Output of Step 4:** new workflow file with all required component nodes present but not yet wired.
-
----
-
-### Step 5: Wire Components Together
-
-Connect the components according to the data flow from Step 2. This is where buyer-outcome-level routing logic is applied.
-
-**Wiring discipline:**
-- Use n8n's native connector lines for happy-path flow
-- For branching, use C2-B (Conditional Routing Engine) â€” don't write inline IF nodes if a Conditional Routing pattern exists
-- For error paths, attach C6-D (Schema/Payload Validator) â€” don't write inline error handlers
-- Document each connection's purpose in n8n node sticky notes
-
-**Output of Step 5:** a wired but uncalibrated workflow. Inputs and outputs at each component boundary are clearly labeled but not yet bound to real client data.
-
----
-
-### Step 6: Configure for Specific Context
-
-This is where the template becomes either:
-- A **portfolio demo** (configured with demo data for showcase)
-- A **client delivery** (configured with the client's actual credentials, endpoints, and data)
-
-**For portfolio demos:**
-- Use plausible fake company data
-- Use sandbox accounts for any third-party services
-- Use Claude/OpenAI API keys from your own budget (per locked Phase 2 tooling decision â€” small Phase 2 portfolio API budget)
-- Capture screenshots and a Loom video walkthrough
-
-**For client deliveries:**
-- Client provides their own API keys and credentials (standard model â€” client pays for their own AI/tooling)
-- Configure webhooks to client's actual endpoints
-- Map fields to client's actual schema (their CRM field names, their CSV columns, their form fields)
-- Set timezone, currency, language preferences
-
-**Output of Step 6:** a context-bound, ready-to-run workflow.
-
----
-
-### Step 7: Test, Document, Deploy
-
-**Test:**
-- Run end-to-end with realistic test data
-- Verify every buyer outcome from Step 1 is achieved
-- Test failure modes: malformed data, network timeouts, rate limits, missing credentials
-- For client deliveries, run the test with the client watching (Zoom screen share) â€” catches expectation mismatches early
-
-**Document:**
-- Add sticky notes inside n8n explaining what each component does at a buyer-outcome level
-- Create a brief Loom walkthrough (2-5 min) showing the workflow running end-to-end
-- For client deliveries: write a 1-page SOP for the client team explaining how to use, monitor, and troubleshoot the system
-- For portfolio: write a 1-paragraph case study describing buyer outcomes solved
-
-**Deploy:**
-- For portfolio: save workflow file to `templates/[template-id]/workflow.json` + add to portfolio listing
-- For client deliveries: export workflow file, deliver to client's n8n instance, run handoff call
-
-**Output of Step 7:** tested + documented + deployed workflow. Done.
-
----
-
-## Worked Example: Template #1 â€” Lead Capture â†’ CRM â†’ AI Follow-up
-
-**Step 1 â€” Buyer Outcomes:**
-- When a lead submits the contact form, capture their data
-- Score the lead (qualified vs. nurture vs. disqualified)
-- Add to CRM with appropriate tag
-- If qualified, send AI-generated personalized follow-up email within 5 minutes
-- Notify sales rep via Slack if lead is qualified
-- If unqualified, add to long-term nurture sequence
-
-**Step 2 â€” Component Map:**
-- Form intake â†’ C2-E (Form Intake Pipeline) + C2-C (Webhook Trigger)
-- Lead scoring â†’ C4-L (Lead Qualification Agent)
-- Conditional routing â†’ C2-B (Conditional Routing Engine)
-- CRM sync â†’ C2-A (Data Sync Pipeline)
-- AI email gen â†’ C2-K (LLM-in-Workflow Adapter) + C4-D (AI Content Generation Pipeline)
-- Sequence for nurture â†’ C1-E (Multi-Step Sequence Engine)
-- Notification â†’ C2-I (Notification & Alert Engine)
-
-**Step 3 â€” Gap Check (against component-catalog.md):**
-- C2-E âœ…, C2-C âœ…, C4-L âœ…, C2-B âœ…, C2-A âœ…, C2-K âœ…, C4-D âœ…, C2-I âœ…
-- C1-E ðŸŸ¡ Partial â€” needs generalization for non-cold-outbound use cases
-
-**Action:** Promote C1-E from ðŸŸ¡ â†’ âœ… by generalizing it OR substitute with a simpler scheduled-message pattern for portfolio demo. **Choice:** for Template #1 portfolio, use simpler scheduled-message pattern; flag C1-E generalization as a Tier 2 build priority.
-
-**Step 4 â€” Clone:**
-- Create new n8n workflow `Template-1_Lead-Capture-CRM-AI-Follow-up`
-- Clone in nodes for each âœ… component
-
-**Step 5 â€” Wire:**
-- Form webhook â†’ C4-L scoring â†’ C2-B routing â†’ (qualified path) C2-K+C4-D email gen â†’ C2-A CRM write â†’ C2-I Slack notify
-- (Unqualified path) â†’ C2-A CRM write with nurture tag â†’ scheduled-message sequence
-
-**Step 6 â€” Configure (portfolio demo):**
-- Sample form URL (Typeform or n8n-hosted)
-- Sandbox HubSpot CRM
-- Claude API key (own budget)
-- Demo Slack workspace
-
-**Step 7 â€” Test + Document + Deploy:**
-- Submit 5 test leads (qualified, unqualified, edge cases)
-- Verify all 6 buyer outcomes achieved
-- Loom walkthrough recorded
-- Workflow file saved to `templates/template-1/workflow.json`
-- 1-paragraph case study added to portfolio listing
-
----
-
-## When to Use This Pipeline vs. a Saved Template
-
-| Scenario | Action |
+| Need | Component |
 |---|---|
-| New buyer outcome that doesn't match any of the 5 saved templates | Run the full 7-step pipeline from scratch |
-| Buyer outcome matches a saved template exactly | Start from `templates/[template-id]/workflow.json`, apply Steps 6-7 only |
-| Mostly matches a template but with a unique twist | Start from saved template, apply Steps 2-3 to identify the gap, build the gap component, then Steps 5-7 |
-| Diagnostic engagement (Offering #6) | Use C6-A Diagnostic Checklist as the starting "template" â€” the engagement IS a structured walk through C6-A |
+| Form intake | C2-E |
+| Webhook trigger | C2-C |
+| Validation | C2-F |
+| Dedupe | C2-D |
+| Conditional routing | C2-B |
+| Suppression / opt-out | C2-P |
+| AI classification | C4-A |
+| AI extraction | C4-B |
+| AI email draft | C4-E |
+| Lead qualification | C4-L |
+| Human approval | C2-O |
+| Approval response capture | C2-O2 |
+| Manual review | C5-E |
+| Status tracking | C5-W |
+| Error logging / retry | C6-G |
+
+Output:
+
+- component dependency list
+- built/not-built status
+- missing component list
 
 ---
 
-## Discipline Reminders
+## Step 4 - Select Adapters
 
-1. **Components are atomic.** A component does one thing well. If it does two things, split it.
+Select adapters only after the core workflow logic is mapped.
 
-2. **Templates are assemblies.** A template never contains logic that should be a component. If you find yourself writing template-specific business logic, stop â€” extract it as a component first.
+Examples:
 
-3. **Test components independently.** Before assembling, every âœ… component should run on its own with sample data. If it can't, it's not âœ….
+| Need | Adapter |
+|---|---|
+| Google Sheets write | C2-A1 |
+| Airtable write | C2-A2 |
+| HubSpot contact write | C2-A3 |
+| LLM call | C2-K |
+| Email notification | C2-I |
+| Gmail send | ADP-GMAIL-SEND |
+| Gmail inbox | ADP-GMAIL-INBOX |
+| Slack send | ADP-SLACK-SEND |
+| Generic REST API | ADP-REST |
+| Generic webhook send | ADP-WEBHOOK-SEND |
+| Google Drive file access | ADP-GDRIVE |
+| PDF text extraction | ADP-PDF |
 
-4. **Document at the component level, not the template level.** Templates assemble; components implement. Documentation lives with the thing being implemented.
+If an adapter does not exist, do not fake it.
 
-5. **Every paid client engagement updates the library.** When you build something new for a client, the question is always: "is this reusable across other clients?" If yes, extract it as a component and add to `component-catalog.md`.
+Choose one:
 
-6. **The catalog is the source of truth, not the codebase.** If a component exists in code but not in the catalog, it doesn't exist. Catalog first, code second.
+- build adapter first
+- use manual handoff
+- use generic REST adapter
+- defer live execution
+- reject template fit
 
-7. **Build sequence for Phase 2:** Cat 2 (Make.com/n8n) first per locked architecture. Days 2-10 of Phase 2 build the 5 demand-backed templates, extracting Cat 2 components from what repeats. Other categories ramp on demand thereafter.
+Output:
+
+- built adapters
+- missing/deferred adapters
+- adapter gap report
+- manual handoff list
 
 ---
 
-## Common Anti-Patterns to Avoid
+## Step 5 - Check Credentials and Access
 
-| Anti-pattern | Why it's bad | Correct pattern |
-|---|---|---|
-| Writing client-specific logic inside a template | Locks you into bespoke rebuilds every engagement | Extract as a configurable component with parameters |
-| Skipping the catalog update after building something new | Library decays into a folder of files no one can find | Update catalog FIRST, then write code |
-| Cloning a template and modifying inline for a new client | Diverges your sources of truth | Clone components from the library, not from a previous template instance |
-| Building a component "good enough" for one use case | When the second use case arrives, you rebuild | Generalize at component creation time â€” name parameters, externalize config |
-| Letting "Partial" components stay partial forever | Phantom inventory â€” looks like you have it but you don't | Schedule ðŸŸ¡ â†’ âœ… work; status it on the catalog with target date |
+Before implementation, check credential readiness.
+
+Use:
+
+- CFG-003 Tool Stack Questionnaire
+- CFG-005 Credential Collection Checklist
+
+Check:
+
+- API key availability
+- OAuth connection availability
+- workspace invite status
+- admin permission needs
+- test/sandbox access
+- production restrictions
+- logging/privacy constraints
+
+Output:
+
+- credential blockers
+- demo readiness
+- production readiness
+- test-data readiness
+
+Readiness statuses:
+
+| Status | Meaning |
+|---|---|
+| Ready for production build | Components, adapters, and credentials ready |
+| Ready for demo build | Can build with mock/dummy/manual data |
+| Ready with handoffs | Live adapters unavailable but handoffs acceptable |
+| Blocked by credentials | Required access missing |
+| Blocked by adapter gap | Required adapter missing and no fallback |
+| Needs more information | Discovery incomplete |
 
 ---
 
-## Version History
+## Step 6 - Add Dashboard / Visibility Layer
 
-| Version | Date | Change |
-|---|---|---|
-| v1.0 | 2026-05-24 | Initial pipeline documentation. Codifies D86-A hybrid template-first architecture and 7-step process. |
+Every serious workflow should include basic visibility.
+
+Default visibility pack:
+
+- C5-W Automation Status Control Table
+- C5-E Manual Review Queue, if review is possible
+- C6-G Error Log / Retry Queue
+
+Category-specific dashboard add-ons:
+
+| Category | Dashboard Add-On |
+|---|---|
+| Cat 1 | Sequence Performance Tracker |
+| Cat 2 | Workflow Status Table |
+| Cat 3 | Onboarding / Delivery Tracker |
+| Cat 6 | Fix Report / Error Dashboard |
+| AI add-ons | Approval queue + run log |
+
+Output:
+
+- status fields
+- dashboard fields
+- manual review fields
+- error/retry fields
 
 ---
 
-**This document is the canonical process reference. Every template build and every paid client engagement follows this sequence â€” no exceptions.**
+## Step 7 - Apply AI Profile and Approval Rules
 
+If the workflow uses AI, apply CFG-004.
+
+AI outputs must be:
+
+- client-profile aware
+- constrained by output rules
+- constrained by risk boundaries
+- confidence-aware
+- manual-review friendly
+- approval-first where external action is involved
+
+Do not allow AI to:
+
+- invent missing contact details
+- override opt-outs
+- auto-send externally without approval
+- make legal/medical/financial claims unless specifically allowed and reviewed
+- change payment, CRM, publishing, or email actions without permission
+
+Output:
+
+- AI profile mapping
+- confidence thresholds
+- never-infer fields
+- approval triggers
+- manual review triggers
+
+---
+
+## Step 8 - Generate Test Plan
+
+Every assembly needs tests.
+
+Minimum tests:
+
+- valid input
+- missing required field
+- duplicate record
+- low-confidence AI result
+- manual review path
+- tool/API failure
+- notification/status logging
+- error/retry logging
+
+Template-specific tests:
+
+| Workflow Type | Additional Tests |
+|---|---|
+| Outreach sequence | opt-out, reply detected, follow-up stopped |
+| Payment onboarding | payment failed, payment confirmed, onboarding started |
+| Document extraction | unsupported file, unreadable PDF, low-confidence extraction |
+| Fixing/debugging | known auth error, mapping error, webhook failure |
+| AI draft approval | approved, rejected, revised, low-confidence |
+
+Output:
+
+- test payload list
+- expected output list
+- failure cases
+- acceptance criteria
+
+---
+
+## Step 9 - Produce Build Plan
+
+The build plan should be implementation-ready.
+
+Include:
+
+- selected workflow shape/template
+- components used
+- adapters used
+- config inputs required
+- manual handoffs
+- build steps
+- test steps
+- known blockers
+- client handoff notes
+
+Do not claim production readiness if credentials or adapters are missing.
+
+---
+
+## Step 10 - Handoff and Documentation
+
+For client delivery, provide:
+
+- what was built
+- tools connected
+- how to test it
+- how to operate it
+- where errors go
+- where manual review items go
+- how to retry or escalate
+- what is intentionally manual/deferred
+- what can be upgraded later
+
+For fixing jobs, provide:
+
+- what was broken
+- root cause
+- what was changed
+- what was tested
+- what to monitor
+- remaining risks
+
+---
+
+## Assembly Discipline
+
+The Assembly Engine / operator must not:
+
+- invent client facts
+- pretend a deferred adapter is built
+- bypass approval rules
+- hardcode provider logic into templates when an adapter should exist
+- skip status/error logging
+- skip manual review paths for low confidence
+- mark a workflow production-ready without credential readiness
+
+---
+
+## Relationship to Roadmap
+
+The roadmap controls build order.
+
+This document controls assembly discipline.
+
+Current roadmap priority:
+
+1. Finish Cat 2 universal core/adapters
+2. Build Cat 1
+3. Build Cat 3
+4. Finish Cat 6
+5. Use Cat 5 dashboards as add-ons
+6. Build controlled AI add-ons
+7. Build templates later
+8. Restructure repo later
+
+So assembly should not pull the repo back into template-first mode.
