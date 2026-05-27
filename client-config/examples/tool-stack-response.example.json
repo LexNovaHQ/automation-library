@@ -1,0 +1,229 @@
+﻿{
+  "tool_stack_overview": {
+    "current_tools": [
+      "Tally",
+      "HubSpot",
+      "Google Sheets",
+      "Gmail",
+      "Slack",
+      "Google Calendar",
+      "Google Drive"
+    ],
+    "essential_tools": [
+      "Tally",
+      "HubSpot",
+      "Gmail",
+      "Slack"
+    ],
+    "optional_tools": [
+      "Google Sheets",
+      "Google Calendar"
+    ],
+    "do_not_touch_tools": []
+  },
+  "source_systems": {
+    "workflow_sources": [
+      "form submission",
+      "new email"
+    ],
+    "source_tools": [
+      {
+        "source": "lead form",
+        "tool": "Tally",
+        "access_method": "webhook",
+        "sample_available": true,
+        "sample_type": "form submission JSON"
+      },
+      {
+        "source": "inbound email",
+        "tool": "Gmail",
+        "access_method": "OAuth/API",
+        "sample_available": true,
+        "sample_type": "email example"
+      }
+    ]
+  },
+  "destination_systems": {
+    "write_targets": [
+      {
+        "tool": "HubSpot",
+        "record_type": "contact",
+        "operation": "upsert",
+        "unique_key": "email",
+        "required_fields": [
+          "email",
+          "firstname",
+          "company"
+        ],
+        "live_write_required": true
+      },
+      {
+        "tool": "Google Sheets",
+        "record_type": "status row",
+        "operation": "append",
+        "unique_key": "",
+        "required_fields": [
+          "event_id",
+          "status",
+          "timestamp"
+        ],
+        "live_write_required": true
+      }
+    ]
+  },
+  "crm_database_stack": {
+    "main_crm": "HubSpot",
+    "crm_object_types": [
+      "contact",
+      "deal",
+      "note"
+    ],
+    "dedupe_key": "email",
+    "pipeline_fields": {
+      "pipeline": "Sales Pipeline",
+      "stage": "New Lead",
+      "owner_field": "hubspot_owner_id",
+      "status_field": "lead_status",
+      "source_field": "lead_source"
+    }
+  },
+  "communication_tools": {
+    "email_provider": "Gmail",
+    "email_use_cases": [
+      "send notifications",
+      "send approval requests",
+      "read inbound emails"
+    ],
+    "team_notification_tools": [
+      "Slack"
+    ],
+    "notification_rules": {
+      "new_lead": [
+        "Slack",
+        "Email"
+      ],
+      "approval_needed": [
+        "Email"
+      ],
+      "workflow_error": [
+        "Email"
+      ],
+      "daily_digest": [
+        "Email"
+      ]
+    },
+    "live_sending_required": {
+      "email": true,
+      "slack": true
+    }
+  },
+  "calendar_scheduling_tools": {
+    "calendar_provider": "Google Calendar",
+    "scheduling_use_cases": [
+      "send booking link",
+      "send reminder"
+    ],
+    "live_calendar_execution_required": false,
+    "meeting_defaults": {
+      "default_duration": "30 minutes",
+      "meeting_location": "Google Meet",
+      "video_meeting_provider": "Google Meet",
+      "attendees": [
+        "lead",
+        "owner"
+      ],
+      "reminder_timing": "24 hours before"
+    }
+  },
+  "payment_invoice_tools": {
+    "payment_provider": "Stripe",
+    "payment_use_cases": [],
+    "live_payment_execution_required": false,
+    "payment_event_source_available": false
+  },
+  "file_document_tools": {
+    "file_storage": "Google Drive",
+    "document_use_cases": [
+      "archive files"
+    ],
+    "ocr_document_parsing_requirement": "not needed"
+  },
+  "publishing_marketing_tools": {
+    "publishing_platforms": [
+      "LinkedIn"
+    ],
+    "publishing_use_cases": [
+      "draft content only",
+      "manual publishing handoff"
+    ],
+    "live_publishing_required": false
+  },
+  "access_credentials": {
+    "tool_access": [
+      {
+        "tool": "HubSpot",
+        "access_type": "private app token or OAuth",
+        "available_now": "later",
+        "notes": "Client will provide after scope approval."
+      },
+      {
+        "tool": "Gmail",
+        "access_type": "OAuth",
+        "available_now": "later",
+        "notes": "Needs client authorization."
+      },
+      {
+        "tool": "Slack",
+        "access_type": "OAuth/app invite",
+        "available_now": "later",
+        "notes": "Workspace admin approval required."
+      }
+    ],
+    "api_keys_available": "client needs guidance",
+    "oauth_possible": "yes",
+    "sandbox_available": "no",
+    "access_restrictions": [
+      "Production access only after approval"
+    ]
+  },
+  "adapter_mapping": {
+    "built_adapters_available": [
+      "C2-A3",
+      "C2-I",
+      "C2-K"
+    ],
+    "handoff_only_cores_involved": [
+      "C2-L"
+    ],
+    "deferred_adapters_required": [
+      "ADP-GMAIL-SEND",
+      "ADP-GMAIL-INBOX",
+      "ADP-SLACK-SEND"
+    ],
+    "adapter_gap_action": "build custom adapter"
+  },
+  "assembly_engine_output": {
+    "required_adapters": {
+      "built_adapters": [
+        "C2-A3",
+        "C2-I",
+        "C2-K"
+      ],
+      "deferred_adapters": [
+        "ADP-GMAIL-SEND",
+        "ADP-GMAIL-INBOX",
+        "ADP-SLACK-SEND"
+      ],
+      "custom_adapters": [],
+      "manual_handoffs": [
+        "C2-L scheduling handoff"
+      ]
+    },
+    "tool_risk_level": "medium",
+    "risk_factors": [
+      "OAuth access not yet granted",
+      "Slack workspace approval required"
+    ],
+    "final_recommendation": "ready but requires adapter build"
+  }
+}

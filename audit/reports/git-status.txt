@@ -1,8 +1,8 @@
 ﻿ M audit/config/component-classification.csv
  M audit/reports/classification-summary.md
  M client-config/questionnaires/README.md
-?? client-config/examples/workflow-discovery-response.example.json
-?? client-config/questionnaires/cfg-002-workflow-discovery-questionnaire/
-?? client-config/questionnaires/cfg-002a-client-facing-workflow-discovery-form/
-?? client-config/questionnaires/client-facing-workflow-discovery-form.md
-?? client-config/questionnaires/workflow-discovery-questionnaire.md
+?? client-config/examples/tool-stack-response.example.json
+?? client-config/questionnaires/cfg-003-tool-stack-questionnaire/
+?? client-config/questionnaires/cfg-003a-client-facing-tool-stack-form/
+?? client-config/questionnaires/client-facing-tool-stack-form.md
+?? client-config/questionnaires/tool-stack-questionnaire.md

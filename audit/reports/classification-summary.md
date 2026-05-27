@@ -1,12 +1,12 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-27 11:07:38
+Generated: 2026-05-27 11:14:45
 
 ## Layer Type Counts
 
 | Layer Type | Count |
 |---|---:|
-| CLIENT_CONFIG_ASSET | 7 |
+| CLIENT_CONFIG_ASSET | 8 |
 | COMPONENT_ADAPTER | 5 |
 | CORE_COMPONENT | 20 |
 | HANDOFF_ONLY_CORE | 5 |
@@ -18,15 +18,15 @@ Generated: 2026-05-27 11:07:38
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 33 |
+| BUILT | 35 |
 | DEFERRED_ADAPTER | 11 |
-| NOT_BUILT | 33 |
+| NOT_BUILT | 32 |
 
 ## Priority Counts
 
 | Priority | Count |
 |---|---:|
-| P0 | 47 |
+| P0 | 48 |
 | P1 | 13 |
 | P2 | 11 |
 | P3 | 6 |
@@ -38,7 +38,8 @@ Generated: 2026-05-27 11:07:38
 | CFG-001 | Client Profile Schema | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-002 | Workflow Discovery Questionnaire | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-002A | Client-Facing Workflow Discovery Form | CLIENT_CONFIG_ASSET | BUILT |
-| CFG-003 | Tool Stack Questionnaire | CLIENT_CONFIG_ASSET | NOT_BUILT |
+| CFG-003 | Tool Stack Questionnaire | CLIENT_CONFIG_ASSET | BUILT |
+| CFG-003A | Client-Facing Tool Stack Form | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-004 | AI Customization Questionnaire | CLIENT_CONFIG_ASSET | NOT_BUILT |
 | CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | NOT_BUILT |
 | CFG-006 | Template Config Generator | CLIENT_CONFIG_ASSET | NOT_BUILT |
@@ -90,6 +91,8 @@ Generated: 2026-05-27 11:07:38
 | CFG-001 | Client Profile Schema | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-002 | Workflow Discovery Questionnaire | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-002A | Client-Facing Workflow Discovery Form | CLIENT_CONFIG_ASSET | config_asset |
+| CFG-003 | Tool Stack Questionnaire | CLIENT_CONFIG_ASSET | config_asset |
+| CFG-003A | Client-Facing Tool Stack Form | CLIENT_CONFIG_ASSET | config_asset |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |
