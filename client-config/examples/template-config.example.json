@@ -1,0 +1,218 @@
+﻿{
+  "config_version": "v1",
+  "generated_for": {
+    "client_id": "growthops_studio",
+    "client_name": "GrowthOps Studio",
+    "workflow_name": "Lead Intake to HubSpot Follow-up"
+  },
+  "selected_template": {
+    "template_id": "TPL-P0-001",
+    "template_name": "Lead Intake to Qualification to Follow-up",
+    "priority": "P0"
+  },
+  "template_fit": {
+    "fit_status": "strong_fit",
+    "reason": "Workflow requires form intake, validation, dedupe, lead qualification, HubSpot write, email draft, approval, notification, status tracking, and error logging."
+  },
+  "build_readiness": {
+    "status": "ready_for_demo_build",
+    "production_test_allowed": false,
+    "reason": "Core components are available, but Gmail and Slack live adapters are deferred and credentials are not connected."
+  },
+  "required_components": [
+    {
+      "component_id": "C2-E",
+      "name": "Form Intake Pipeline",
+      "role": "Normalize incoming Tally form submission",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C2-F",
+      "name": "Payload Validation Layer",
+      "role": "Validate required fields",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C2-D",
+      "name": "Deduplication / Merge Engine",
+      "role": "Detect duplicate leads by email and company",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C4-L",
+      "name": "Lead Qualification Pipeline",
+      "role": "Score and qualify lead",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C4-E",
+      "name": "AI Email Draft Generator",
+      "role": "Create approval-ready follow-up email draft",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C4-M",
+      "name": "AI Draft Approval Pipeline",
+      "role": "Package email draft for approval",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C2-O",
+      "name": "Human Approval Gate",
+      "role": "Request owner approval",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C2-O2",
+      "name": "Approval Response Capture",
+      "role": "Capture approve/edit/reject response",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C5-W",
+      "name": "Automation Status Control Table",
+      "role": "Track status of each lead",
+      "readiness": "BUILT"
+    },
+    {
+      "component_id": "C6-G",
+      "name": "Error Log / Retry Queue",
+      "role": "Log failures and prepare retry/manual review",
+      "readiness": "BUILT"
+    }
+  ],
+  "required_adapters": {
+    "built_adapters": [
+      {
+        "component_id": "C2-A3",
+        "name": "HubSpot Contact Write Adapter",
+        "provider": "HubSpot",
+        "readiness": "BUILT"
+      },
+      {
+        "component_id": "C2-K",
+        "name": "LLM in Workflow Adapter",
+        "provider": "OpenAI-compatible/Groq",
+        "readiness": "BUILT"
+      },
+      {
+        "component_id": "C2-I",
+        "name": "Notification / Alert Engine",
+        "provider": "Email/SMTP",
+        "readiness": "BUILT"
+      }
+    ],
+    "deferred_adapters": [
+      {
+        "component_id": "ADP-GMAIL-SEND",
+        "name": "Gmail Send Adapter",
+        "provider": "Gmail",
+        "readiness": "DEFERRED_ADAPTER"
+      },
+      {
+        "component_id": "ADP-SLACK-SEND",
+        "name": "Slack Send Adapter",
+        "provider": "Slack",
+        "readiness": "DEFERRED_ADAPTER"
+      }
+    ]
+  },
+  "manual_handoffs": [
+    {
+      "handoff": "Slack notification can be replaced with email notification until Slack adapter is built and credentials are connected."
+    },
+    {
+      "handoff": "Scheduling can use C2-L booking-link handoff instead of live calendar event creation."
+    }
+  ],
+  "client_config": {
+    "timezone": "America/New_York",
+    "primary_contact_email": "riya@example.com",
+    "notification_channels": [
+      "email",
+      "slack"
+    ]
+  },
+  "workflow_config": {
+    "trigger": {
+      "type": "form_submission",
+      "source_tool": "Tally"
+    },
+    "dedupe_strategy": "email_and_company",
+    "required_fields": [
+      "name",
+      "email",
+      "company",
+      "message"
+    ],
+    "manual_review_triggers": [
+      "missing required field",
+      "duplicate conflict",
+      "low confidence",
+      "API failure"
+    ]
+  },
+  "ai_config": {
+    "confidence_threshold": 0.75,
+    "never_infer_fields": [
+      "email",
+      "phone",
+      "budget"
+    ],
+    "approval_required_before_external_send": true,
+    "preferred_cta": "Book a quick workflow review"
+  },
+  "approval_config": {
+    "email_drafts_require_approval": true,
+    "approver_role": "owner",
+    "approver_email": "riya@example.com",
+    "allowed_actions": [
+      "approve",
+      "edit",
+      "reject",
+      "request_more_info"
+    ]
+  },
+  "status_error_config": {
+    "status_tracking_required": true,
+    "status_target": "google_sheets",
+    "error_log_target": "google_sheets",
+    "default_failure_action": "manual_review",
+    "max_retries": 3
+  },
+  "test_plan": [
+    {
+      "case": "valid input",
+      "expected": "Lead is validated, qualified, written to HubSpot, status logged, and draft email created."
+    },
+    {
+      "case": "missing required field",
+      "expected": "Lead is routed to manual review."
+    },
+    {
+      "case": "duplicate record",
+      "expected": "Existing HubSpot contact is updated instead of creating duplicate."
+    },
+    {
+      "case": "low confidence AI result",
+      "expected": "Lead is routed to manual review."
+    },
+    {
+      "case": "tool/API failure",
+      "expected": "Failure is logged in C6-G and owner is notified."
+    },
+    {
+      "case": "approval required",
+      "expected": "Email draft is packaged for approval before external send."
+    }
+  ],
+  "missing_client_information": [
+    "Gmail OAuth not connected",
+    "Slack workspace approval pending",
+    "HubSpot private app token not created"
+  ],
+  "notes": [
+    "Ready for demo build using mock Gmail/Slack handoffs.",
+    "Production requires live Gmail and Slack adapter/credential readiness."
+  ]
+}

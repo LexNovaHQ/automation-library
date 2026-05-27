@@ -1,0 +1,81 @@
+﻿{
+  "config_version": "v1",
+  "selected_template": "TPL-P0-001",
+  "built_adapters_available": [
+    {
+      "component_id": "C2-A3",
+      "name": "HubSpot Contact Write Adapter",
+      "provider": "HubSpot",
+      "status": "built"
+    },
+    {
+      "component_id": "C2-I",
+      "name": "Notification / Alert Engine",
+      "provider": "Email/SMTP",
+      "status": "built"
+    },
+    {
+      "component_id": "C2-K",
+      "name": "LLM in Workflow Adapter",
+      "provider": "OpenAI-compatible/Groq",
+      "status": "built"
+    }
+  ],
+  "deferred_adapters_required": [
+    {
+      "component_id": "ADP-GMAIL-SEND",
+      "name": "Gmail Send Adapter",
+      "provider": "Gmail",
+      "needed_for": "approval email and follow-up sending",
+      "status": "deferred"
+    },
+    {
+      "component_id": "ADP-SLACK-SEND",
+      "name": "Slack Send Adapter",
+      "provider": "Slack",
+      "needed_for": "new qualified lead and error notifications",
+      "status": "deferred"
+    }
+  ],
+  "missing_adapters": [],
+  "credential_blockers": [
+    {
+      "tool": "Gmail",
+      "blocker": "OAuth not connected",
+      "impact": "Cannot live-send approval/follow-up emails"
+    },
+    {
+      "tool": "Slack",
+      "blocker": "Workspace admin approval pending",
+      "impact": "Cannot live-send Slack alerts"
+    },
+    {
+      "tool": "HubSpot",
+      "blocker": "Private app token not created",
+      "impact": "Cannot production-test HubSpot upsert"
+    }
+  ],
+  "manual_handoff_options": [
+    {
+      "handoff": "Use built C2-I email notification instead of Gmail-specific adapter for demo."
+    },
+    {
+      "handoff": "Use manual Slack message or email fallback until Slack adapter is built."
+    }
+  ],
+  "recommended_adapter_actions": [
+    {
+      "adapter": "ADP-GMAIL-SEND",
+      "action": "Build as P0 independent adapter before production email workflows."
+    },
+    {
+      "adapter": "ADP-SLACK-SEND",
+      "action": "Build as P0 independent adapter before Slack notification templates."
+    }
+  ],
+  "risk_level": "medium",
+  "notes": [
+    "Template can be assembled with existing components for demo.",
+    "Production readiness depends on credentials and deferred adapter builds."
+  ]
+}

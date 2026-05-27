@@ -1,0 +1,58 @@
+﻿{
+  "config_version": "v1",
+  "recommended_action": "build_demo_then_scope_adapters",
+  "build_readiness": "ready_for_demo_build",
+  "selected_template": {
+    "template_id": "TPL-P0-001",
+    "template_name": "Lead Intake to Qualification to Follow-up"
+  },
+  "why_this_template": [
+    "The workflow starts from a lead form submission.",
+    "The workflow requires validation, dedupe, lead qualification, CRM update, AI email draft, approval, and notification.",
+    "Most required core components are already built."
+  ],
+  "can_start_now": true,
+  "blocking_items": [
+    {
+      "item": "Gmail OAuth",
+      "severity": "production_blocker",
+      "reason": "Required for live Gmail sending."
+    },
+    {
+      "item": "Slack workspace approval",
+      "severity": "production_blocker",
+      "reason": "Required for live Slack alerts."
+    },
+    {
+      "item": "HubSpot private app token",
+      "severity": "production_blocker",
+      "reason": "Required for production HubSpot upsert testing."
+    }
+  ],
+  "next_steps": [
+    "Assemble demo version of TPL-P0-001 using existing core components.",
+    "Use mock/manual handoffs for Gmail and Slack.",
+    "Request HubSpot private app token or OAuth access.",
+    "Build ADP-GMAIL-SEND before production email sending.",
+    "Build ADP-SLACK-SEND before production Slack notifications.",
+    "Run acceptance tests using dummy lead data."
+  ],
+  "implementation_mode": "n8n_stepwise_build_instructions",
+  "test_strategy": {
+    "mode": "dummy_data_first",
+    "production_test_allowed": false,
+    "required_tests": [
+      "valid input",
+      "missing required field",
+      "duplicate record",
+      "low confidence AI result",
+      "tool/API failure",
+      "approval required"
+    ]
+  },
+  "handoff_notes": [
+    "Do not claim Gmail/Slack live adapters are already built.",
+    "Do not auto-send external emails unless approval rules allow it.",
+    "Use existing C2-I for email notification demos where possible."
+  ]
+}

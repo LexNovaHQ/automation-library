@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-27 11:43:22
+Generated: 2026-05-27 11:53:08
 
 ## Layer Type Counts
 
@@ -18,9 +18,9 @@ Generated: 2026-05-27 11:43:22
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 39 |
+| BUILT | 40 |
 | DEFERRED_ADAPTER | 11 |
-| NOT_BUILT | 30 |
+| NOT_BUILT | 29 |
 
 ## Priority Counts
 
@@ -44,7 +44,7 @@ Generated: 2026-05-27 11:43:22
 | CFG-004A | Client-Facing AI Customization Form | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | BUILT |
 | CFG-005A | Client-Facing Credential Checklist | CLIENT_CONFIG_ASSET | BUILT |
-| CFG-006 | Template Config Generator | CLIENT_CONFIG_ASSET | NOT_BUILT |
+| CFG-006 | Template Config Generator | CLIENT_CONFIG_ASSET | BUILT |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | BUILT |
@@ -99,6 +99,7 @@ Generated: 2026-05-27 11:43:22
 | CFG-004A | Client-Facing AI Customization Form | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-005 | Credential Collection Checklist | CLIENT_CONFIG_ASSET | config_asset |
 | CFG-005A | Client-Facing Credential Checklist | CLIENT_CONFIG_ASSET | config_asset |
+| CFG-006 | Template Config Generator | CLIENT_CONFIG_ASSET | config_asset |
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |
