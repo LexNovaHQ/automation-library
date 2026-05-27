@@ -1,1 +1,4 @@
-﻿ M docs/architecture/platform-architecture-classification.md
+﻿ M audit/reports/build-completeness.csv
+ M audit/reports/component-inventory.csv
+ M docs/catalog/component-catalog.md
+?? docs/archive/
