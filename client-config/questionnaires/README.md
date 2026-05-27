@@ -11,6 +11,7 @@ These questionnaires feed:
 - client onboarding
 - template selection
 - adapter gap scoping
+- AI profile compatibility mapping
 
 ## Current Questionnaires
 
@@ -62,7 +63,30 @@ Purpose:
 - identifies client tools, required integrations, and access constraints
 - can be converted into CFG-003 structured tool stack response
 
+### CFG-004 - AI Profile Compatibility Pack
+
+File:
+
+- `ai-profile-compatibility-map.md`
+
+Purpose:
+
+- maps `CFG-001.ai_profile` into existing C4 `client_ai_profile` runtime contracts
+- preserves upstream C4 payload compatibility
+- prevents schema drift between client config and C4 AI components
+
+### CFG-004A - Client-Facing AI Customization Form
+
+File:
+
+- `client-facing-ai-customization-form.md`
+
+Purpose:
+
+- simplified version clients can fill
+- captures voice, tone, output rules, forbidden claims, risk boundaries, and examples
+- populates `CFG-001.ai_profile`
+
 ## Future Questionnaires
 
-- CFG-004 AI Customization Questionnaire
 - CFG-005 Credential Collection Checklist
