@@ -1,4 +1,3 @@
-﻿ M audit/reports/build-completeness.csv
- M audit/reports/component-inventory.csv
- M docs/catalog/component-catalog.md
-?? docs/archive/
+﻿ M docs/catalog/component-catalog.md
+ M docs/catalog/component-readiness-matrix.md
+ M docs/roadmap/universal-automation-roadmap.md

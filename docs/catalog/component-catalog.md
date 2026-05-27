@@ -137,7 +137,7 @@ Built base:
 | C2-J | Digest Summary Notification Builder |
 | C2-K | LLM in Workflow Adapter |
 | C2-L | Calendar / Scheduling Automation / handoff core |
-| C2-M | WhatsApp Message Automation / handoff core |
+| C2-M | WhatsApp Message Automation / handoff core. Built handoff core; live execution requires WhatsApp adapters. |
 | C2-N | CSV / Excel Parser |
 | C2-O | Human Approval Gate |
 | C2-O2 | Approval Response Capture |
@@ -154,6 +154,9 @@ Immediate Cat 2 build targets:
 | ADP-OAUTH-TEST | OAuth Credential Test Adapter |
 | ADP-GMAIL-SEND | Gmail Send Adapter |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter |
+| ADP-WHATSAPP-CLOUD | WhatsApp Cloud API Adapter |
+| ADP-WHATSAPP-TEMPLATE | WhatsApp Template Message Adapter |
+| ADP-WHATSAPP-INBOUND | WhatsApp Inbound Message Trigger |
 | ADP-SLACK-SEND | Slack Send Adapter |
 | ADP-GDRIVE | Google Drive File Adapter |
 | ADP-PDF | PDF Text Extraction Adapter |
@@ -429,3 +432,4 @@ For exact readiness and classification details, use:
 Legacy v1 catalog is archived at:
 
 - `docs/archive/component-catalog-v1-legacy.md`
+

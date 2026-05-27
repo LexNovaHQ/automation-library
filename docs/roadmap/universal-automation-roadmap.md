@@ -87,10 +87,13 @@ Complete the reusable automation base layer that every other category depends on
 | 4 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents auth/credential failures before build. |
 | 5 | ADP-GMAIL-SEND Gmail Send Adapter | Independent adapter | Needed for Cat 1, Cat 2, Cat 3, and AI email workflows. |
 | 6 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Independent adapter | Needed for inbound email and reply workflows. |
-| 7 | ADP-SLACK-SEND Slack Send Adapter | Independent adapter | Needed for team alerts, status, and error notifications. |
-| 8 | ADP-GDRIVE Google Drive File Adapter | Independent adapter | Needed for file routing, onboarding, document delivery. |
-| 9 | ADP-PDF PDF Text Extraction Adapter | Independent adapter | Needed for document workflows and extraction jobs. |
-| 10 | ADP-NOTION-DB Notion Database Adapter | Independent adapter | Useful for SMB, creator, agency, and internal ops workflows. |
+| 7 | ADP-WHATSAPP-CLOUD WhatsApp Cloud API Adapter | Independent adapter | High-demand business messaging adapter for lead follow-up, reminders, onboarding, and support. |
+| 8 | ADP-WHATSAPP-TEMPLATE WhatsApp Template Message Adapter | Independent adapter | Required for compliant outbound WhatsApp template messages. |
+| 9 | ADP-WHATSAPP-INBOUND WhatsApp Inbound Message Trigger | Independent adapter | Required for reply capture, support triage, and inbound WhatsApp workflows. |
+| 10 | ADP-SLACK-SEND Slack Send Adapter | Independent adapter | Needed for team alerts, status, and error notifications. |
+| 11 | ADP-GDRIVE Google Drive File Adapter | Independent adapter | Needed for file routing, onboarding, document delivery. |
+| 12 | ADP-PDF PDF Text Extraction Adapter | Independent adapter | Needed for document workflows and extraction jobs. |
+| 13 | ADP-NOTION-DB Notion Database Adapter | Independent adapter | Useful for SMB, creator, agency, and internal ops workflows. |
 
 Optional later Category 2 adapters:
 
@@ -300,3 +303,4 @@ This completes the existing C2-A family:
 - C2-A3 HubSpot Contact Write Adapter
 
 Future templates should call C2-A instead of hardcoding C2-A1/C2-A2/C2-A3 directly.
+

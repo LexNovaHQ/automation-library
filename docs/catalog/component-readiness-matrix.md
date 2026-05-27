@@ -98,7 +98,7 @@ These are built cores that prepare structured handoff/action objects but do not 
 |---|---|---|
 | C2-H | Payment-on-Intake Flow | Stripe, Razorpay, PayPal, Wise/payment-status adapters. |
 | C2-L | Calendar / Scheduling Automation | Google Calendar, Outlook Calendar, Calendly, Cal.com adapters. |
-| C2-M | WhatsApp Message Automation | WhatsApp Cloud API, Twilio, WATI adapters. |
+| C2-M | WhatsApp Message Automation | WhatsApp Cloud API, WhatsApp template message, WhatsApp inbound trigger, Twilio, WATI adapters. |
 | C2-Q | Publishing Adapter Family | LinkedIn, WordPress, Webflow, X/Twitter adapters. |
 | C4-T | OCR / Document Processing Pipeline | OCR, PDF parser, DOCX parser adapters. |
 
@@ -130,7 +130,7 @@ These areas exist or are planned but are not yet implementation-ready.
 | Area | Examples | Current Meaning |
 |---|---|---|
 | Category 1 | C1-E and future C1-F/C1-G/C1-H | Outreach/sequence layer not built yet. |
-| Category 2 parent/adapters | C2-A, ADP-REST, ADP-GMAIL-SEND, ADP-SLACK-SEND, etc. | Cat 2 foundation still needs universal router and live adapters. |
+| Category 2 parent/adapters | C2-A, ADP-REST, ADP-GMAIL-SEND, ADP-WHATSAPP-CLOUD, ADP-WHATSAPP-TEMPLATE, ADP-WHATSAPP-INBOUND, ADP-SLACK-SEND, etc. | Cat 2 foundation still needs universal router and live adapters. |
 | Category 3 | C3-D to C3-I and future C3-M | Onboarding/payment/document delivery layer not built yet. |
 | Category 5 dashboards | C5-A/B/C/D/L/T/X and future add-ons | Only C5-E and C5-W are built. Dashboard layer is mostly future add-on work. |
 | Category 6 diagnostics | C6-A to C6-F and future C6-H/C6-I/C6-K/C6-L | Only C6-G is built. Fixing/debugging lane still needs diagnostic tools. |
@@ -180,3 +180,4 @@ When exact counts or classification details matter, use:
 - `audit/reports/classification-summary.md`
 - `audit/reports/classification-consistency.md`
 - `audit/reports/component-inventory.csv`
+
