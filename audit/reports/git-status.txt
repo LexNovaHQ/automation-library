@@ -1,6 +1,8 @@
 ﻿ M audit/config/component-classification.csv
  M audit/reports/classification-summary.md
- M client-config/schemas/README.md
-?? client-config/examples/client-profile.example.json
-?? client-config/schemas/cfg-001-client-profile-schema/
-?? client-config/schemas/client-profile-schema.json
+ M client-config/questionnaires/README.md
+?? client-config/examples/workflow-discovery-response.example.json
+?? client-config/questionnaires/cfg-002-workflow-discovery-questionnaire/
+?? client-config/questionnaires/cfg-002a-client-facing-workflow-discovery-form/
+?? client-config/questionnaires/client-facing-workflow-discovery-form.md
+?? client-config/questionnaires/workflow-discovery-questionnaire.md

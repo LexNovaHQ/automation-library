@@ -1,0 +1,255 @@
+﻿{
+  "workflow_identity": {
+    "workflow_name": "Lead Intake to HubSpot Follow-up",
+    "workflow_objective": "Capture new leads, validate required fields, qualify them, update HubSpot, notify the team, and draft a follow-up email.",
+    "current_manual_process": "Leads submit a Tally form. The owner checks email notifications, copies details into HubSpot, then writes a follow-up manually.",
+    "automation_reason": [
+      "missed leads",
+      "slow response time",
+      "manual CRM updates",
+      "poor follow-up visibility"
+    ]
+  },
+  "trigger_source": {
+    "trigger_type": "form_submission",
+    "source_tool": "tally",
+    "trigger_frequency": "many times per day",
+    "expected_volume": {
+      "per_day": 20,
+      "per_week": 100,
+      "per_month": 400,
+      "peak_volume": 50
+    },
+    "sample_input_available": true,
+    "sample_input_type": "form_sample"
+  },
+  "input_data": {
+    "expected_fields": [
+      "name",
+      "email",
+      "company",
+      "message",
+      "budget",
+      "timeline",
+      "service_interest"
+    ],
+    "required_fields": [
+      "name",
+      "email",
+      "company",
+      "message"
+    ],
+    "optional_fields": [
+      "budget",
+      "timeline",
+      "service_interest"
+    ],
+    "sensitive_fields": [
+      "phone",
+      "deal_value"
+    ],
+    "never_infer_fields": [
+      "email",
+      "phone",
+      "budget"
+    ],
+    "data_quality_issues": [
+      "missing budget",
+      "unclear message",
+      "duplicate leads"
+    ]
+  },
+  "processing_logic": {
+    "workflow_steps_needed": [
+      "validate required fields",
+      "normalize fields",
+      "score/qualify lead",
+      "detect duplicates",
+      "create/update CRM record",
+      "draft email",
+      "request approval",
+      "send notification",
+      "log status",
+      "log errors"
+    ],
+    "classification_needed": true,
+    "classification_targets": [
+      "lead intent",
+      "priority"
+    ],
+    "extraction_needed": true,
+    "extraction_fields": [
+      "pain_point",
+      "budget",
+      "timeline",
+      "requested_service"
+    ],
+    "scoring_needed": true,
+    "qualification_outcomes": [
+      "qualified",
+      "unqualified",
+      "manual_review"
+    ],
+    "decision_rules": [
+      "If email missing -> manual review",
+      "If duplicate exists -> update existing contact",
+      "If budget >= 500 and timeline <= 30 days -> qualified",
+      "If AI confidence below 0.75 -> manual review"
+    ],
+    "dedupe_rules": {
+      "strategy": "email_and_company",
+      "lookup_target": "hubspot"
+    },
+    "suppression_check_required": true,
+    "suppression_source": "google_sheets"
+  },
+  "outputs_actions": {
+    "write_targets": [
+      "hubspot",
+      "google_sheets"
+    ],
+    "record_types": [
+      "contact",
+      "deal",
+      "status_record"
+    ],
+    "notifications": {
+      "required": true,
+      "recipients": [
+        "owner",
+        "sales team"
+      ],
+      "channels": [
+        "email",
+        "slack"
+      ]
+    },
+    "email_followup": {
+      "needed": true,
+      "mode": "draft_plus_approval"
+    },
+    "scheduling": {
+      "needed": true,
+      "mode": "send_booking_email"
+    },
+    "payment": {
+      "needed": false,
+      "mode": "none"
+    },
+    "publishing": {
+      "needed": false,
+      "mode": "none"
+    },
+    "documents": {
+      "needed": false,
+      "mode": "none"
+    }
+  },
+  "approval_review": {
+    "approval_required_for": [
+      "AI email drafts",
+      "low-confidence AI outputs"
+    ],
+    "approver_role": "owner",
+    "approver_email": "riya@example.com",
+    "backup_approver": "",
+    "allowed_actions": [
+      "approve",
+      "edit",
+      "reject",
+      "request_more_info"
+    ],
+    "approval_sla": "24 hours"
+  },
+  "error_handling": {
+    "missing_required_data_action": "manual_review",
+    "tool_failure_action": [
+      "retry",
+      "log error",
+      "notify owner"
+    ],
+    "retry_rules": {
+      "max_retries": 3,
+      "delay_between_retries": "5 minutes",
+      "do_not_retry_errors": [
+        "invalid credentials",
+        "permission denied"
+      ]
+    },
+    "manual_review_triggers": [
+      "missing required field",
+      "duplicate conflict",
+      "low confidence",
+      "API failure"
+    ],
+    "status_tracking": {
+      "required": true,
+      "target": "google_sheets"
+    }
+  },
+  "ai_requirements": {
+    "ai_required": true,
+    "ai_task_types": [
+      "classify",
+      "extract",
+      "qualify",
+      "draft email"
+    ],
+    "confidence_threshold": 0.75,
+    "ai_restrictions": [
+      "never invent email or phone",
+      "never auto-send without approval",
+      "never promise results",
+      "never override opt-out"
+    ]
+  },
+  "success_metrics": {
+    "success_definition": [
+      "Lead response time under 15 minutes",
+      "All leads logged in HubSpot",
+      "Qualified lead notification sent",
+      "Follow-up email draft created for approval"
+    ],
+    "acceptance_tests": [
+      "Submit valid form -> HubSpot contact created",
+      "Missing email -> manual review",
+      "Duplicate email -> existing contact updated",
+      "Qualified lead -> notification sent",
+      "Low AI confidence -> manual review",
+      "HubSpot failure -> error logged"
+    ],
+    "must_pass_test_cases": [
+      "valid input",
+      "missing required field",
+      "duplicate record",
+      "low confidence",
+      "tool/API failure",
+      "manual review"
+    ]
+  },
+  "assembly_engine_notes": {
+    "preferred_template": "TPL-P0-001",
+    "known_required_components": [
+      "C2-E",
+      "C2-F",
+      "C2-D",
+      "C4-L",
+      "C4-E",
+      "C4-M",
+      "C2-O",
+      "C2-I",
+      "C5-W",
+      "C6-G"
+    ],
+    "known_required_adapters": [
+      "C2-A3",
+      "ADP-GMAIL-SEND",
+      "ADP-SLACK-SEND"
+    ],
+    "adapter_gaps": [
+      "Gmail Send Adapter",
+      "Slack Send Adapter"
+    ],
+    "final_assembly_output_wanted": "stepwise_build_instructions"
+  }
+}
