@@ -381,3 +381,23 @@ Current next adapter build:
 ADP-REST - Generic REST API Adapter
 
 
+
+---
+
+## Build Validity Guardrail
+
+No component may be counted as BUILT unless it passes the primary-category 80-20 production assembly-ready rule in docs/architecture/platform-architecture-classification.md.
+
+Every component must have:
+
+- a primary category
+- a layer type
+- a defined production job
+- borrowed-by categories where applicable
+- validation, success, and error outputs
+- only 10-20 percent client customization remaining
+
+Diagnostic components belong primarily to Category 6 unless their main job is delivery execution.
+
+Universal adapters must still be production-usable as universal adapters. They must not be treated as substitutes for high-demand provider adapters.
+

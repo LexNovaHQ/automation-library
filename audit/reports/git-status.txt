@@ -1,3 +1,5 @@
-﻿ M audit/config/component-classification.csv
- M audit/reports/json-validation.csv
-?? components/adapters/adp-webhook-send-generic-webhook-sender/
+﻿ M audit/reports/json-validation.csv
+ M docs/architecture/platform-architecture-classification.md
+ M docs/roadmap/universal-automation-roadmap.md
+?? audit/reports/primary-category-80-20-rule.tmp.md
+?? components/adapters/adp-oauth-test-credential-api-access-test/
