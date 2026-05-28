@@ -1,15 +1,4 @@
-﻿ M audit/config/component-classification.csv
- M audit/reports/build-completeness.csv
- M audit/reports/component-inventory.csv
- M audit/reports/json-validation.csv
- M components/cat-2/c2-a-data-sync-pipeline/README.md
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-destination.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-record.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/error-unsupported-provider.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/error-upstream-validation-failed.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/success-airtable-routed.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/success-google-sheets-routed.json
- D components/cat-2/c2-a-data-sync-pipeline/output-samples/success-hubspot-routed.json
- M components/cat-2/c2-a-data-sync-pipeline/workflows/c2-a-core-data-sync-router-v1.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/.gitkeep
-?? components/cat-2/c2-a-data-sync-pipeline/workflows/.gitkeep
+﻿ M docs/architecture/platform-architecture-classification.md
+ M docs/catalog/component-catalog.md
+ M docs/roadmap/universal-automation-roadmap.md
+?? audit/reports/adapter-strategy-snippet.tmp.md
