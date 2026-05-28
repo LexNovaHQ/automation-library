@@ -1,0 +1,24 @@
+﻿{
+  "request_id": "c2a-test-google-sheets-001",
+  "source_component": "C2-E",
+  "upstream_status": "success",
+  "destination": {
+    "provider": "google_sheets",
+    "operation": "upsert",
+    "config": {
+      "spreadsheet_id": "sheet_123",
+      "worksheet_name": "Leads",
+      "match_key": "email"
+    }
+  },
+  "record": {
+    "name": "Aarav Mehta",
+    "email": "aarav@example.com",
+    "company": "BrightCart",
+    "status": "qualified"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

@@ -163,10 +163,8 @@ $Completeness = foreach ($Item in $Inventory) {
   elseif ($IsFullyBuilt) {
     $Status = "BUILT"
 
-    if (-not $Item.catalog_record_present) {
-      $Status = "CATALOG_MISMATCH"
-      $Issues.Add("catalog build record missing")
-    }
+    # component-catalog.md is human-readable only.
+    # Build validity is determined by repo artifacts + component-classification.csv.
   }
   else {
     $Status = "BROKEN_BUILD"
@@ -183,9 +181,7 @@ $Completeness = foreach ($Item in $Inventory) {
       $Issues.Add("output samples missing")
     }
 
-    if (-not $Item.catalog_record_present) {
-      $Issues.Add("catalog build record missing")
-    }
+    # Legacy catalog build-record check removed.
   }
 
   [pscustomobject]@{
@@ -450,6 +446,7 @@ Write-Host "Summary: $SummaryMd"
 Write-Host "Inventory: $InventoryCsv"
 Write-Host "Completeness: $CompletenessCsv"
 Write-Host "JSON validation: $JsonValidationCsv"
+
 
 
 

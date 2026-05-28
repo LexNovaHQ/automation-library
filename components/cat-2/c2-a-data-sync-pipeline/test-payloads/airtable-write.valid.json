@@ -1,0 +1,24 @@
+﻿{
+  "request_id": "c2a-test-airtable-001",
+  "source_component": "C2-E",
+  "upstream_status": "success",
+  "destination": {
+    "provider": "airtable",
+    "operation": "create",
+    "config": {
+      "base_id": "app123",
+      "table_name": "Leads",
+      "match_key": "email"
+    }
+  },
+  "record": {
+    "name": "Maya Kapoor",
+    "email": "maya@example.com",
+    "company": "FlowOps",
+    "status": "new"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

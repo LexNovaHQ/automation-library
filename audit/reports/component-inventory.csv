@@ -3,7 +3,7 @@
 "C2-A1","c2-a1-google-sheets-write-adapter","cat-2",".\components\cat-2\c2-a1-google-sheets-write-adapter","True","1","3","3","False","2026-05-25 14:41:36"
 "C2-A2","c2-a2-airtable-write-adapter","cat-2",".\components\cat-2\c2-a2-airtable-write-adapter","True","1","3","3","False","2026-05-25 14:41:36"
 "C2-A3","c2-a3-hubspot-contact-write-adapter","cat-2",".\components\cat-2\c2-a3-hubspot-contact-write-adapter","True","1","3","3","False","2026-05-25 14:41:36"
-"C2-A","c2-a-data-sync-pipeline","cat-2",".\components\cat-2\c2-a-data-sync-pipeline","True","0","0","0","False","2026-05-25 14:46:24"
+"C2-A","c2-a-data-sync-pipeline","cat-2",".\components\cat-2\c2-a-data-sync-pipeline","True","1","7","7","False","2026-05-25 14:46:24"
 "C2-B","c2-b-conditional-routing-engine","cat-2",".\components\cat-2\c2-b-conditional-routing-engine","True","1","5","4","False","2026-05-25 15:54:13"
 "C2-C","c2-c-webhook-trigger-system","cat-2",".\components\cat-2\c2-c-webhook-trigger-system","True","2","6","4","False","2026-05-25 14:41:36"
 "C2-D","c2-d-deduplication-merge-engine","cat-2",".\components\cat-2\c2-d-deduplication-merge-engine","True","1","5","5","False","2026-05-25 14:46:24"

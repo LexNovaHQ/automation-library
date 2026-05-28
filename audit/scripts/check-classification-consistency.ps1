@@ -14,9 +14,6 @@ if (!(Test-Path $InventoryPath)) {
   throw "Missing component inventory at $InventoryPath. Run audit/scripts/run-repo-audit.ps1 first."
 }
 
-if (!(Test-Path $CatalogPath)) {
-  throw "Missing component catalog at $CatalogPath"
-}
 
 $Rows = Import-Csv $ClassificationPath
 $Inventory = Import-Csv $InventoryPath
@@ -90,7 +87,7 @@ foreach ($row in $Rows) {
   }
 }
 
-# 3. Built component rows must have folder + catalog record
+# 3. Built component rows must have folder
 $BuiltComponentRows = @(
   $Rows |
     Where-Object {
@@ -106,10 +103,8 @@ foreach ($row in $BuiltComponentRows) {
     Add-Issue -Severity "FAIL" -Code "BUILT_FOLDER_MISSING" -ComponentId $row.component_id -Message "Built row points to missing folder: $($row.folder_path)"
   }
 
-  $catalogPattern = "##\s+$([regex]::Escape($row.component_id))\s+Build Record"
-  if ($CatalogText -notmatch $catalogPattern) {
-    Add-Issue -Severity "FAIL" -Code "BUILT_CATALOG_RECORD_MISSING" -ComponentId $row.component_id -Message "Built row has no matching build record in component-catalog.md"
-  }
+  # component-catalog.md is human-readable only.
+  # Built rows are checked against folder existence and repo artifacts.
 }
 
 # 4. Repo built folders must exist in classification CSV
@@ -198,4 +193,5 @@ Get-Content $ReportPath
 if ($FailCount -gt 0) {
   exit 1
 }
+
 

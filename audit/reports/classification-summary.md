@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-27 20:16:39
+Generated: 2026-05-28 06:45:10
 
 ## Layer Type Counts
 
@@ -8,19 +8,19 @@ Generated: 2026-05-27 20:16:39
 |---|---:|
 | CLIENT_CONFIG_ASSET | 10 |
 | COMPONENT_ADAPTER | 5 |
-| CORE_COMPONENT | 20 |
+| CORE_COMPONENT | 21 |
 | HANDOFF_ONLY_CORE | 5 |
 | INDEPENDENT_ADAPTER | 11 |
-| SCAFFOLD_ONLY | 23 |
+| SCAFFOLD_ONLY | 22 |
 | TEMPLATE_GLUE | 6 |
 
 ## Readiness Counts
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 40 |
+| BUILT | 41 |
 | DEFERRED_ADAPTER | 11 |
-| NOT_BUILT | 29 |
+| NOT_BUILT | 28 |
 
 ## Priority Counts
 
@@ -50,6 +50,7 @@ Generated: 2026-05-27 20:16:39
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-I | Notification / Alert Engine | COMPONENT_ADAPTER | BUILT |
 | C2-K | LLM in Workflow Adapter | COMPONENT_ADAPTER | BUILT |
+| C2-A | Parent Data Sync Router | CORE_COMPONENT | BUILT |
 | C2-B | Conditional Routing Engine | CORE_COMPONENT | BUILT |
 | C2-C | Webhook Trigger System | CORE_COMPONENT | BUILT |
 | C2-D | Deduplication / Merge Engine | CORE_COMPONENT | BUILT |
@@ -78,7 +79,6 @@ Generated: 2026-05-27 20:16:39
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| C2-A | Data Sync Pipeline Parent | SCAFFOLD_ONLY | NOT_BUILT |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-002 | Form Submission to CRM Update to Team Alert | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-003 | CSV/Excel Cleanup to CRM Import | TEMPLATE_GLUE | NOT_BUILT |
@@ -105,6 +105,7 @@ Generated: 2026-05-27 20:16:39
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-I | Notification / Alert Engine | COMPONENT_ADAPTER | provider_execution |
 | C2-K | LLM in Workflow Adapter | COMPONENT_ADAPTER | provider_execution |
+| C2-A | Parent Data Sync Router | CORE_COMPONENT | core_logic |
 | C2-B | Conditional Routing Engine | CORE_COMPONENT | core_logic |
 | C2-C | Webhook Trigger System | CORE_COMPONENT | core_logic |
 | C2-D | Deduplication / Merge Engine | CORE_COMPONENT | core_logic |

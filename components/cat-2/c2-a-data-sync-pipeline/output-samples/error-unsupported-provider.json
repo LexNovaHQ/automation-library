@@ -1,0 +1,18 @@
+﻿{
+  "request_id": "c2a-test-unsupported-provider-001",
+  "router_status": "error",
+  "selected_adapter": null,
+  "provider": "notion",
+  "operation": "upsert",
+  "manual_review_required": true,
+  "error_code": "UNSUPPORTED_PROVIDER",
+  "error_message": "Provider notion is not supported by C2-A v1.",
+  "next_action": "route_to_manual_review_and_scope_adapter_gap",
+  "status_log_event": "router_error",
+  "downstream_components": ["C5-E", "C6-G", "C5-W"],
+  "adapter_gap": {
+    "provider": "notion",
+    "suggested_adapter": "ADP-NOTION-DB",
+    "gap_type": "deferred_or_missing_adapter"
+  }
+}

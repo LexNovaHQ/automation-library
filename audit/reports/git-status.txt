@@ -1,3 +1,18 @@
-﻿ M docs/catalog/component-catalog.md
- M docs/catalog/component-readiness-matrix.md
- M docs/roadmap/universal-automation-roadmap.md
+﻿ M audit/config/component-classification.csv
+ M audit/reports/audit-summary.md
+ M audit/reports/build-completeness.csv
+ M audit/reports/build-completeness.md
+ M audit/reports/catalog-consistency.md
+ M audit/reports/classification-consistency.md
+ M audit/reports/classification-summary.md
+ M audit/reports/component-inventory.csv
+ M audit/reports/component-inventory.md
+ M audit/reports/duplicate-component-ids.md
+ M audit/reports/git-status.txt
+ M audit/reports/json-validation.csv
+ M audit/scripts/check-classification-consistency.ps1
+ M audit/scripts/run-repo-audit.ps1
+ M components/cat-2/c2-a-data-sync-pipeline/README.md
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/
+?? components/cat-2/c2-a-data-sync-pipeline/test-payloads/
+?? components/cat-2/c2-a-data-sync-pipeline/workflows/

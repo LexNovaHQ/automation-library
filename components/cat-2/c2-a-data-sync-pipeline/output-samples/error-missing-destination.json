@@ -1,0 +1,13 @@
+﻿{
+  "request_id": "c2a-test-missing-destination-001",
+  "router_status": "error",
+  "selected_adapter": null,
+  "provider": null,
+  "operation": null,
+  "manual_review_required": true,
+  "error_code": "MISSING_DESTINATION",
+  "error_message": "Destination object is required before C2-A can select a write adapter.",
+  "next_action": "route_to_error_log",
+  "status_log_event": "router_error",
+  "downstream_components": ["C6-G", "C5-W"]
+}

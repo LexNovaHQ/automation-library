@@ -1,6 +1,6 @@
 ﻿# Component Inventory
 
-Generated: 2026-05-27 20:16:37
+Generated: 2026-05-28 06:45:07
 
 | Component | Category | README | Workflows | Payloads | Samples | Catalog | Path |
 |---|---:|---:|---:|---:|---:|---:|---|
@@ -8,7 +8,7 @@ Generated: 2026-05-27 20:16:37
 | C2-A1 | cat-2 | True | 1 | 3 | 3 | False | .\components\cat-2\c2-a1-google-sheets-write-adapter |
 | C2-A2 | cat-2 | True | 1 | 3 | 3 | False | .\components\cat-2\c2-a2-airtable-write-adapter |
 | C2-A3 | cat-2 | True | 1 | 3 | 3 | False | .\components\cat-2\c2-a3-hubspot-contact-write-adapter |
-| C2-A | cat-2 | True | 0 | 0 | 0 | False | .\components\cat-2\c2-a-data-sync-pipeline |
+| C2-A | cat-2 | True | 1 | 7 | 7 | False | .\components\cat-2\c2-a-data-sync-pipeline |
 | C2-B | cat-2 | True | 1 | 5 | 4 | False | .\components\cat-2\c2-b-conditional-routing-engine |
 | C2-C | cat-2 | True | 2 | 6 | 4 | False | .\components\cat-2\c2-c-webhook-trigger-system |
 | C2-D | cat-2 | True | 1 | 5 | 5 | False | .\components\cat-2\c2-d-deduplication-merge-engine |

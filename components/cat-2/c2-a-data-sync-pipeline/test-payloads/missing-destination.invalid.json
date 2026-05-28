@@ -1,0 +1,14 @@
+﻿{
+  "request_id": "c2a-test-missing-destination-001",
+  "source_component": "C2-E",
+  "upstream_status": "success",
+  "record": {
+    "name": "No Destination Lead",
+    "email": "missing.destination@example.com",
+    "company": "NoRoute Co"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

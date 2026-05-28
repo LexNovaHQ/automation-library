@@ -1,0 +1,164 @@
+﻿{
+  "component_id": "C2-A",
+  "component_name": "Parent Data Sync Router",
+  "version": "1.0.0",
+  "layer_type": "CORE_COMPONENT",
+  "category": "cat-2",
+  "status": "built",
+  "workflow_name": "C2-A_CORE_Parent_Data_Sync_Router_v1",
+  "purpose": "Route normalized write requests to the correct provider-specific write adapter and return a unified routing result.",
+  "router_contract": {
+    "supported_providers": [
+      {
+        "provider": "google_sheets",
+        "adapter_component_id": "C2-A1",
+        "adapter_name": "Google Sheets Write Adapter",
+        "supported_operations": ["create", "update", "upsert"]
+      },
+      {
+        "provider": "airtable",
+        "adapter_component_id": "C2-A2",
+        "adapter_name": "Airtable Write Adapter",
+        "supported_operations": ["create", "update", "upsert"]
+      },
+      {
+        "provider": "hubspot",
+        "adapter_component_id": "C2-A3",
+        "adapter_name": "HubSpot Contact Write Adapter",
+        "supported_operations": ["create", "update", "upsert"]
+      }
+    ],
+    "default_unsupported_provider_action": "manual_review",
+    "default_failure_action": "route_to_error_log",
+    "error_log_component": "C6-G",
+    "manual_review_component": "C5-E"
+  },
+  "input_schema": {
+    "required_fields": [
+      "request_id",
+      "source_component",
+      "upstream_status",
+      "destination",
+      "record"
+    ],
+    "destination_required_fields": [
+      "provider",
+      "operation",
+      "config"
+    ],
+    "record_required": true
+  },
+  "output_schema": {
+    "router_status_values": ["routed", "blocked", "error"],
+    "required_fields": [
+      "request_id",
+      "router_status",
+      "selected_adapter",
+      "provider",
+      "operation",
+      "manual_review_required",
+      "next_action"
+    ],
+    "optional_fields": [
+      "adapter_input",
+      "error_code",
+      "error_message",
+      "status_log_event",
+      "retry_policy"
+    ]
+  },
+  "validation_rules": [
+    {
+      "rule_id": "C2A_VAL_001",
+      "name": "upstream_status_must_be_success",
+      "condition": "input.upstream_status != 'success'",
+      "result": {
+        "router_status": "blocked",
+        "error_code": "UPSTREAM_VALIDATION_FAILED",
+        "manual_review_required": true,
+        "next_action": "route_to_manual_review_and_error_log"
+      }
+    },
+    {
+      "rule_id": "C2A_VAL_002",
+      "name": "destination_required",
+      "condition": "missing(input.destination)",
+      "result": {
+        "router_status": "error",
+        "error_code": "MISSING_DESTINATION",
+        "manual_review_required": true,
+        "next_action": "route_to_error_log"
+      }
+    },
+    {
+      "rule_id": "C2A_VAL_003",
+      "name": "record_required",
+      "condition": "missing(input.record)",
+      "result": {
+        "router_status": "error",
+        "error_code": "MISSING_RECORD",
+        "manual_review_required": true,
+        "next_action": "route_to_error_log"
+      }
+    }
+  ],
+  "routing_rules": [
+    {
+      "provider": "google_sheets",
+      "selected_adapter": "C2-A1",
+      "next_action": "call_google_sheets_write_adapter"
+    },
+    {
+      "provider": "airtable",
+      "selected_adapter": "C2-A2",
+      "next_action": "call_airtable_write_adapter"
+    },
+    {
+      "provider": "hubspot",
+      "selected_adapter": "C2-A3",
+      "next_action": "call_hubspot_contact_write_adapter"
+    }
+  ],
+  "adapter_input_mapping": {
+    "common_fields": [
+      "request_id",
+      "source_component",
+      "destination.operation",
+      "destination.config",
+      "record",
+      "routing_options"
+    ],
+    "google_sheets": {
+      "adapter_component_id": "C2-A1",
+      "maps_to": "google_sheets_write_request"
+    },
+    "airtable": {
+      "adapter_component_id": "C2-A2",
+      "maps_to": "airtable_write_request"
+    },
+    "hubspot": {
+      "adapter_component_id": "C2-A3",
+      "maps_to": "hubspot_contact_write_request"
+    }
+  },
+  "unsupported_provider_result": {
+    "router_status": "error",
+    "error_code": "UNSUPPORTED_PROVIDER",
+    "manual_review_required": true,
+    "selected_adapter": null,
+    "next_action": "route_to_manual_review_and_scope_adapter_gap"
+  },
+  "status_events": [
+    "router_received",
+    "router_validated",
+    "adapter_selected",
+    "router_blocked",
+    "router_error"
+  ],
+  "downstream_components": {
+    "success": ["selected_adapter"],
+    "manual_review": ["C5-E"],
+    "error_log": ["C6-G"],
+    "status_tracking": ["C5-W"]
+  }
+}
