@@ -1,6 +1,6 @@
 ﻿# Build Completeness
 
-Generated: 2026-05-28 21:55:25
+Generated: 2026-05-29 00:12:18
 
 | Component | Status | Issues | Workflows | Payloads | Samples | Catalog |
 |---|---:|---|---:|---:|---:|---:|
@@ -8,7 +8,7 @@ Generated: 2026-05-28 21:55:25
 | C2-A1 | BUILT |  | 1 | 3 | 3 | False |
 | C2-A2 | BUILT |  | 1 | 3 | 3 | False |
 | C2-A3 | BUILT |  | 1 | 3 | 3 | False |
-| C2-A | BROKEN_BUILD | output samples missing | 1 | 7 | 0 | False |
+| C2-A | BUILT |  | 1 | 7 | 7 | False |
 | C2-B | BUILT |  | 1 | 5 | 4 | False |
 | C2-C | BUILT |  | 2 | 6 | 4 | False |
 | C2-D | BUILT |  | 1 | 5 | 5 | False |

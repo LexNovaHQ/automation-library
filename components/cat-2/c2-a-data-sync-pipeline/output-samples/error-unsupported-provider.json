@@ -1,0 +1,46 @@
+﻿{
+    "request_id":  "c2a-test-unsupported-provider-001",
+    "router_status":  "error",
+    "selected_adapter":  null,
+    "selected_adapter_name":  null,
+    "adapter_family":  "data_write",
+    "provider":  "notion",
+    "operation":  "upsert",
+    "manual_review_required":  true,
+    "error_code":  "UNSUPPORTED_PROVIDER",
+    "error_message":  "Provider notion is not supported by C2-A v1.",
+    "next_action":  "route_to_manual_review_and_scope_adapter_gap",
+    "status_log_event":  "router_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "adapter_gap":  {
+                        "provider":  "notion",
+                        "suggested_action":  "build_or_configure_adapter",
+                        "gap_type":  "deferred_or_missing_adapter"
+                    },
+    "original_input":  {
+                           "request_id":  "c2a-test-unsupported-provider-001",
+                           "source_component":  "C2-E",
+                           "upstream_status":  "success",
+                           "destination":  {
+                                               "provider":  "notion",
+                                               "operation":  "upsert",
+                                               "config":  {
+                                                              "database_id":  "notion_db_123",
+                                                              "match_key":  "email"
+                                                          }
+                                           },
+                           "record":  {
+                                          "name":  "Unsupported Provider Lead",
+                                          "email":  "unsupported@example.com",
+                                          "company":  "NotionFuture"
+                                      },
+                           "routing_options":  {
+                                                   "manual_review_on_error":  true,
+                                                   "status_tracking_required":  true
+                                               }
+                       }
+}

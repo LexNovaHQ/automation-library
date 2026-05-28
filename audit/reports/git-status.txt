@@ -1,5 +1,11 @@
-﻿ M audit/reports/json-validation.csv
- M docs/architecture/platform-architecture-classification.md
- M docs/roadmap/universal-automation-roadmap.md
-?? audit/reports/primary-category-80-20-rule.tmp.md
+﻿ M audit/reports/build-completeness.csv
+ M audit/reports/component-inventory.csv
+ M audit/reports/json-validation.csv
 ?? components/adapters/adp-oauth-test-credential-api-access-test/
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-destination.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-record.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-unsupported-provider.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-upstream-validation-failed.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-airtable-routed.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-google-sheets-routed.json
+?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-hubspot-routed.json

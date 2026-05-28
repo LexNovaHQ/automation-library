@@ -1,6 +1,6 @@
 ﻿# Classification Consistency
 
-Generated: 2026-05-28 21:55:27
+Generated: 2026-05-29 00:12:38
 
 ## Summary
 
@@ -8,7 +8,7 @@ Generated: 2026-05-28 21:55:27
 |---|---:|
 | Classification rows | 80 |
 | Built component rows | 31 |
-| Built repo folders | 30 |
+| Built repo folders | 31 |
 | Scaffold-only repo folders | 22 |
 | FAIL issues | 0 |
 | WARN issues | 0 |

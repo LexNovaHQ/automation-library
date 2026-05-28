@@ -1,0 +1,68 @@
+﻿{
+    "request_id":  "c2a-test-hubspot-001",
+    "router_status":  "routed",
+    "selected_adapter":  "C2-A3",
+    "selected_adapter_name":  "HubSpot Contact Write Adapter",
+    "adapter_family":  "data_write",
+    "provider":  "hubspot",
+    "operation":  "upsert",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "execute_selected_adapter",
+    "status_log_event":  "adapter_selected",
+    "adapter_input":  {
+                          "adapter_component_id":  "C2-A3",
+                          "adapter_name":  "HubSpot Contact Write Adapter",
+                          "adapter_family":  "data_write",
+                          "write_request_type":  "hubspot_contact_write_request",
+                          "request_id":  "c2a-test-hubspot-001",
+                          "source_component":  "C4-L",
+                          "operation":  "upsert",
+                          "destination_config":  {
+                                                     "object_type":  "contact",
+                                                     "match_key":  "email",
+                                                     "pipeline":  "sales"
+                                                 },
+                          "record":  {
+                                         "firstname":  "Rohan",
+                                         "lastname":  "Sen",
+                                         "email":  "rohan@example.com",
+                                         "company":  "AgentDesk",
+                                         "lead_score":  82
+                                     },
+                          "routing_options":  {
+                                                  "manual_review_on_error":  true,
+                                                  "status_tracking_required":  true
+                                              }
+                      },
+    "downstream_components":  [
+                                  "C2-A3",
+                                  "C5-W"
+                              ],
+    "original_input":  {
+                           "request_id":  "c2a-test-hubspot-001",
+                           "source_component":  "C4-L",
+                           "upstream_status":  "success",
+                           "destination":  {
+                                               "provider":  "hubspot",
+                                               "operation":  "upsert",
+                                               "config":  {
+                                                              "object_type":  "contact",
+                                                              "match_key":  "email",
+                                                              "pipeline":  "sales"
+                                                          }
+                                           },
+                           "record":  {
+                                          "firstname":  "Rohan",
+                                          "lastname":  "Sen",
+                                          "email":  "rohan@example.com",
+                                          "company":  "AgentDesk",
+                                          "lead_score":  82
+                                      },
+                           "routing_options":  {
+                                                   "manual_review_on_error":  true,
+                                                   "status_tracking_required":  true
+                                               }
+                       }
+}

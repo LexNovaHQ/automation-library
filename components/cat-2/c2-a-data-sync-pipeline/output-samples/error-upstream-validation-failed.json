@@ -1,0 +1,46 @@
+﻿{
+    "request_id":  "c2a-test-upstream-validation-failed-001",
+    "router_status":  "blocked",
+    "selected_adapter":  null,
+    "selected_adapter_name":  null,
+    "adapter_family":  "data_write",
+    "provider":  "hubspot",
+    "operation":  "upsert",
+    "manual_review_required":  true,
+    "error_code":  "UPSTREAM_VALIDATION_FAILED",
+    "error_message":  "Upstream component failed validation. C2-A did not route to a write adapter.",
+    "next_action":  "route_to_manual_review_and_error_log",
+    "status_log_event":  "router_blocked",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "original_input":  {
+                           "request_id":  "c2a-test-upstream-validation-failed-001",
+                           "source_component":  "C2-F",
+                           "upstream_status":  "failed",
+                           "upstream_error":  {
+                                                  "component_id":  "C2-F",
+                                                  "error_code":  "MISSING_REQUIRED_FIELD",
+                                                  "field":  "email"
+                                              },
+                           "destination":  {
+                                               "provider":  "hubspot",
+                                               "operation":  "upsert",
+                                               "config":  {
+                                                              "object_type":  "contact",
+                                                              "match_key":  "email"
+                                                          }
+                                           },
+                           "record":  {
+                                          "firstname":  "Invalid",
+                                          "lastname":  "Lead",
+                                          "company":  "ValidationFail Co"
+                                      },
+                           "routing_options":  {
+                                                   "manual_review_on_error":  true,
+                                                   "status_tracking_required":  true
+                                               }
+                       }
+}

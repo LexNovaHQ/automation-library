@@ -1,0 +1,66 @@
+﻿{
+    "request_id":  "c2a-test-airtable-001",
+    "router_status":  "routed",
+    "selected_adapter":  "C2-A2",
+    "selected_adapter_name":  "Airtable Write Adapter",
+    "adapter_family":  "data_write",
+    "provider":  "airtable",
+    "operation":  "create",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "execute_selected_adapter",
+    "status_log_event":  "adapter_selected",
+    "adapter_input":  {
+                          "adapter_component_id":  "C2-A2",
+                          "adapter_name":  "Airtable Write Adapter",
+                          "adapter_family":  "data_write",
+                          "write_request_type":  "airtable_write_request",
+                          "request_id":  "c2a-test-airtable-001",
+                          "source_component":  "C2-E",
+                          "operation":  "create",
+                          "destination_config":  {
+                                                     "base_id":  "app123",
+                                                     "table_name":  "Leads",
+                                                     "match_key":  "email"
+                                                 },
+                          "record":  {
+                                         "name":  "Maya Kapoor",
+                                         "email":  "maya@example.com",
+                                         "company":  "FlowOps",
+                                         "status":  "new"
+                                     },
+                          "routing_options":  {
+                                                  "manual_review_on_error":  true,
+                                                  "status_tracking_required":  true
+                                              }
+                      },
+    "downstream_components":  [
+                                  "C2-A2",
+                                  "C5-W"
+                              ],
+    "original_input":  {
+                           "request_id":  "c2a-test-airtable-001",
+                           "source_component":  "C2-E",
+                           "upstream_status":  "success",
+                           "destination":  {
+                                               "provider":  "airtable",
+                                               "operation":  "create",
+                                               "config":  {
+                                                              "base_id":  "app123",
+                                                              "table_name":  "Leads",
+                                                              "match_key":  "email"
+                                                          }
+                                           },
+                           "record":  {
+                                          "name":  "Maya Kapoor",
+                                          "email":  "maya@example.com",
+                                          "company":  "FlowOps",
+                                          "status":  "new"
+                                      },
+                           "routing_options":  {
+                                                   "manual_review_on_error":  true,
+                                                   "status_tracking_required":  true
+                                               }
+                       }
+}

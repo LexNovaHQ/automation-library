@@ -1,0 +1,66 @@
+﻿{
+    "request_id":  "c2a-test-google-sheets-001",
+    "router_status":  "routed",
+    "selected_adapter":  "C2-A1",
+    "selected_adapter_name":  "Google Sheets Write Adapter",
+    "adapter_family":  "data_write",
+    "provider":  "google_sheets",
+    "operation":  "upsert",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "execute_selected_adapter",
+    "status_log_event":  "adapter_selected",
+    "adapter_input":  {
+                          "adapter_component_id":  "C2-A1",
+                          "adapter_name":  "Google Sheets Write Adapter",
+                          "adapter_family":  "data_write",
+                          "write_request_type":  "google_sheets_write_request",
+                          "request_id":  "c2a-test-google-sheets-001",
+                          "source_component":  "C2-E",
+                          "operation":  "upsert",
+                          "destination_config":  {
+                                                     "spreadsheet_id":  "sheet_123",
+                                                     "worksheet_name":  "Leads",
+                                                     "match_key":  "email"
+                                                 },
+                          "record":  {
+                                         "name":  "Aarav Mehta",
+                                         "email":  "aarav@example.com",
+                                         "company":  "BrightCart",
+                                         "status":  "qualified"
+                                     },
+                          "routing_options":  {
+                                                  "manual_review_on_error":  true,
+                                                  "status_tracking_required":  true
+                                              }
+                      },
+    "downstream_components":  [
+                                  "C2-A1",
+                                  "C5-W"
+                              ],
+    "original_input":  {
+                           "request_id":  "c2a-test-google-sheets-001",
+                           "source_component":  "C2-E",
+                           "upstream_status":  "success",
+                           "destination":  {
+                                               "provider":  "google_sheets",
+                                               "operation":  "upsert",
+                                               "config":  {
+                                                              "spreadsheet_id":  "sheet_123",
+                                                              "worksheet_name":  "Leads",
+                                                              "match_key":  "email"
+                                                          }
+                                           },
+                           "record":  {
+                                          "name":  "Aarav Mehta",
+                                          "email":  "aarav@example.com",
+                                          "company":  "BrightCart",
+                                          "status":  "qualified"
+                                      },
+                           "routing_options":  {
+                                                   "manual_review_on_error":  true,
+                                                   "status_tracking_required":  true
+                                               }
+                       }
+}

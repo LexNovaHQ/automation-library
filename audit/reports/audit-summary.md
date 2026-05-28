@@ -1,19 +1,19 @@
 ﻿# Repo Audit Summary
 
-Generated: 2026-05-28 21:55:25
+Generated: 2026-05-29 00:12:18
 
 ## Counts
 
 | Metric | Count |
 |---|---:|
 | Components found | 53 |
-| BUILT | 30 |
+| BUILT | 31 |
 | SCAFFOLD_ONLY | 22 |
-| BROKEN_BUILD | 1 |
+| BROKEN_BUILD | 0 |
 | CATALOG_MISMATCH | 0 |
 | Workflow JSON files | 32 |
 | Test payload JSON files | 195 |
-| Output sample JSON files | 184 |
+| Output sample JSON files | 191 |
 | Invalid JSON files | 0 |
 | Folder components missing catalog record | 53 |
 | Catalog records missing folder | 0 |
@@ -22,9 +22,7 @@ Generated: 2026-05-28 21:55:25
 
 ## Problem Components
 
-| Component | Status | Issues |
-|---|---:|---|
-| C2-A | BROKEN_BUILD | output samples missing |
+None.
 
 ## Invalid JSON Files
 
