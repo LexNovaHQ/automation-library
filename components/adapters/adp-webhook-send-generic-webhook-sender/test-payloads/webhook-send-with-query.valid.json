@@ -1,0 +1,25 @@
+﻿{
+  "request_id": "adp-webhook-send-test-query-001",
+  "source_component": "C2-J",
+  "webhook_url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "Content-Type": "application/json",
+    "X-Webhook-Test": "ADP-WEBHOOK-SEND-QUERY"
+  },
+  "query": {
+    "source": "automation-library",
+    "test_case": "webhook_send_with_query"
+  },
+  "payload": {
+    "event_type": "digest.ready",
+    "summary": "Daily automation digest ready",
+    "count": 7
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

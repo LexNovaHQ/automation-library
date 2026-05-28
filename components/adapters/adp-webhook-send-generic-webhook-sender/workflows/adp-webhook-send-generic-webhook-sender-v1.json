@@ -1,0 +1,283 @@
+{
+  "name": "ADP-WEBHOOK-SEND - Generic Webhook Sender v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-webhook-send-generic-webhook-sender",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -160
+      ],
+      "id": "8d178764-5eb7-4f42-8e92-723e8eed9e63",
+      "name": "Receive Webhook Send Request",
+      "webhookId": "46286cce-2f4e-4047-a357-e7b1076d122e"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input =\n  $json.request_id\n    ? $json\n    : ($json.body && $json.body.request_id)\n      ? $json.body\n      : $json;\n\nconst supportedAuthModesV1 = ['none'];\n\nfunction errorResult(code, message) {\n  return [{\n    json: {\n      adapter_status: 'error',\n      validation_status: 'invalid',\n      request_id: input.request_id || null,\n      source_component: input.source_component || null,\n      webhook_url: input.webhook_url || null,\n      auth_mode: input.auth?.mode || 'none',\n      headers: input.headers || {},\n      query: input.query || {},\n      payload: input.payload === undefined ? null : input.payload,\n      status_code: null,\n      response_body: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: 'route_to_manual_review_or_error_log',\n      status_log_event: 'webhook_send_validation_error',\n      downstream_components: ['C5-E', 'C6-G', 'C5-W'],\n      original_input: input\n    }\n  }];\n}\n\nif (!input.request_id) {\n  return errorResult('MISSING_REQUEST_ID', 'request_id is required.');\n}\n\nif (!input.webhook_url) {\n  return errorResult('MISSING_WEBHOOK_URL', 'webhook_url is required before ADP-WEBHOOK-SEND can send the request.');\n}\n\nconst authMode = input.auth?.mode || 'none';\n\nif (!supportedAuthModesV1.includes(authMode)) {\n  return errorResult('AUTH_MODE_NOT_SUPPORTED_V1', `Auth mode ${authMode} is not supported in ADP-WEBHOOK-SEND v1.`);\n}\n\nif (input.payload === undefined || input.payload === null) {\n  return errorResult('MISSING_PAYLOAD', 'payload is required before ADP-WEBHOOK-SEND can send the webhook.');\n}\n\nreturn [{\n  json: {\n    adapter_status: 'ready',\n    validation_status: 'valid',\n    request_id: input.request_id,\n    source_component: input.source_component || null,\n    method: 'POST',\n    webhook_url: input.webhook_url,\n    auth_mode: authMode,\n    headers: input.headers || {},\n    query: input.query || {},\n    payload: input.payload,\n    routing_options: input.routing_options || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: 'send_outbound_webhook',\n    status_log_event: 'webhook_send_request_validated',\n    original_input: input\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -160
+      ],
+      "id": "b87ff664-c2a0-43fe-a34d-7cc5d5f9f987",
+      "name": "Normalize And Validate Webhook Send"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.validation_status }}",
+                    "rightValue": "valid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "328ee618-d24b-4dee-81a7-7a31986c9931"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "valid"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        144
+      ],
+      "id": "24ff3c27-6add-4520-8f62-ae05e4b51662",
+      "name": "Validation Status Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.webhook_url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.query.source || \"\" }}"
+            },
+            {
+              "name": "test_case",
+              "value": "={{ $json.query.test_case || \"\" }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Webhook-Test",
+              "value": "={{ $json.headers[\"X-Webhook-Test\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "={{ $json.payload }}",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -80,
+        48
+      ],
+      "id": "b68496b1-93b0-4458-85e2-05cac9c877ab",
+      "name": "Send Outbound Webhook",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $json;\n\nreturn [{\n  json: {\n    adapter_status: 'success',\n    validation_status: 'valid',\n    request_id: response.request_id || response.json?.request_id || null,\n    method: 'POST',\n    webhook_url: response.url || null,\n    status_code: 200,\n    response_body: response,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: 'return_webhook_send_success',\n    status_log_event: 'webhook_send_success',\n    downstream_components: ['C5-W']\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        48
+      ],
+      "id": "d971bf68-6a38-4132-9851-81831913c145",
+      "name": "Normalize Webhook Send Success"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    adapter_status: $json.adapter_status || 'error',\n    validation_status: $json.validation_status || 'invalid',\n    request_id: $json.request_id || null,\n    source_component: $json.source_component || null,\n    method: 'POST',\n    webhook_url: $json.webhook_url || null,\n    auth_mode: $json.auth_mode || 'none',\n    status_code: null,\n    response_body: null,\n    manual_review_required: true,\n    error_code: $json.error_code || 'ADP_WEBHOOK_SEND_ERROR',\n    error_message: $json.error_message || 'ADP-WEBHOOK-SEND failed before execution.',\n    next_action: $json.next_action || 'route_to_manual_review_or_error_log',\n    status_log_event: $json.status_log_event || 'webhook_send_error',\n    downstream_components: $json.downstream_components || ['C5-E', 'C6-G', 'C5-W'],\n    original_input: $json.original_input || $json\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        288
+      ],
+      "id": "9f443378-9b9a-453e-91ea-a96c39f6195b",
+      "name": "Prepare Webhook Send Error"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        320,
+        320
+      ],
+      "id": "b21f0bf0-5702-42db-adff-a8f2d7585277",
+      "name": "Return Webhook Send Result"
+    }
+  ],
+  "pinData": {
+    "Receive Webhook Send Request": [
+      {
+        "json": {
+          "request_id": "adp-webhook-send-test-minimal-001",
+          "source_component": "C2-B",
+          "webhook_url": "https://httpbingo.org/anything",
+          "auth": {
+            "mode": "none"
+          },
+          "headers": {},
+          "query": {},
+          "payload": {
+            "message": "Minimal webhook test"
+          },
+          "routing_options": {
+            "manual_review_on_error": true,
+            "status_tracking_required": true
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive Webhook Send Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate Webhook Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate Webhook Send": {
+      "main": [
+        [
+          {
+            "node": "Validation Status Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Status Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Outbound Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Webhook Send Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Outbound Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Webhook Send Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Webhook Send Error": {
+      "main": [
+        [
+          {
+            "node": "Return Webhook Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Webhook Send Success": {
+      "main": [
+        [
+          {
+            "node": "Return Webhook Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "97da229f-c9eb-45b6-91aa-2ae1854a6af2",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "lF6DK7Mkz5IH2FyN",
+  "tags": []
+}

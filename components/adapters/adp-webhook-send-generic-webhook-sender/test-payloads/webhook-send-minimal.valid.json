@@ -1,0 +1,17 @@
+﻿{
+  "request_id": "adp-webhook-send-test-minimal-001",
+  "source_component": "C2-B",
+  "webhook_url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {},
+  "query": {},
+  "payload": {
+    "message": "Minimal webhook test"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

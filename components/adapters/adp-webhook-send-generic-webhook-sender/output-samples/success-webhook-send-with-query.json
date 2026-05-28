@@ -1,0 +1,17 @@
+﻿{
+  "adapter_status": "success",
+  "validation_status": "valid",
+  "request_id": "adp-webhook-send-test-query-001",
+  "method": "POST",
+  "webhook_url": "https://httpbingo.org/anything",
+  "status_code": 200,
+  "manual_review_required": false,
+  "error_code": null,
+  "error_message": null,
+  "next_action": "return_webhook_send_success",
+  "status_log_event": "webhook_send_success",
+  "expected_response_checks": {
+    "json.event_type": "digest.ready",
+    "json.count": 7
+  }
+}

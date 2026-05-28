@@ -1,0 +1,16 @@
+﻿{
+  "request_id": "adp-webhook-send-test-missing-payload-001",
+  "source_component": "C2-I",
+  "webhook_url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "query": {},
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

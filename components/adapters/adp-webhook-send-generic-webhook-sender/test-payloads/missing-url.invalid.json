@@ -1,0 +1,18 @@
+﻿{
+  "request_id": "adp-webhook-send-test-missing-url-001",
+  "source_component": "C2-I",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "query": {},
+  "payload": {
+    "event_type": "lead.created"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

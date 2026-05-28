@@ -1,3 +1,3 @@
 ﻿ M audit/config/component-classification.csv
  M audit/reports/json-validation.csv
-?? components/adapters/
+?? components/adapters/adp-webhook-send-generic-webhook-sender/

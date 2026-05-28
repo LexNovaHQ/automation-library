@@ -1,0 +1,15 @@
+﻿{
+  "adapter_status": "error",
+  "validation_status": "invalid",
+  "request_id": "adp-webhook-send-test-missing-payload-001",
+  "method": "POST",
+  "webhook_url": "https://httpbingo.org/anything",
+  "status_code": null,
+  "response_body": null,
+  "manual_review_required": true,
+  "error_code": "MISSING_PAYLOAD",
+  "error_message": "payload is required before ADP-WEBHOOK-SEND can send the webhook.",
+  "next_action": "route_to_manual_review_or_error_log",
+  "status_log_event": "webhook_send_validation_error",
+  "downstream_components": ["C5-E", "C6-G", "C5-W"]
+}

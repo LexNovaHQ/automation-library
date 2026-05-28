@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-28 19:02:34
+Generated: 2026-05-28 19:49:50
 
 ## Layer Type Counts
 
@@ -18,8 +18,8 @@ Generated: 2026-05-28 19:02:34
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 42 |
-| DEFERRED_ADAPTER | 10 |
+| BUILT | 43 |
+| DEFERRED_ADAPTER | 9 |
 | NOT_BUILT | 28 |
 
 ## Priority Counts
@@ -78,7 +78,7 @@ Generated: 2026-05-28 19:02:34
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | BUILT |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-002 | Form Submission to CRM Update to Team Alert | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-003 | CSV/Excel Cleanup to CRM Import | TEMPLATE_GLUE | NOT_BUILT |
@@ -132,3 +132,4 @@ Generated: 2026-05-28 19:02:34
 | C2-Q | Publishing Adapter Family | HANDOFF_ONLY_CORE | handoff_only |
 | C4-T | OCR / Document Processing Pipeline | HANDOFF_ONLY_CORE | handoff_only |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |
+| ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | provider_execution |
