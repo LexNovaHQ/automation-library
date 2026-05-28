@@ -1,11 +1,15 @@
-﻿ M audit/reports/build-completeness.csv
- M audit/reports/component-inventory.csv
- M audit/reports/json-validation.csv
+﻿ M audit/config/component-classification.csv
+ M audit/reports/audit-summary.md
+ M audit/reports/build-completeness.md
+ M audit/reports/catalog-consistency.md
+ M audit/reports/classification-consistency.md
+ M audit/reports/classification-summary.md
+ M audit/reports/component-inventory.md
+ M audit/reports/duplicate-component-ids.md
+ M audit/reports/git-status.txt
+?? audit/reports/classification-80-20-update.md
+?? audit/reports/primary-category-80-20-audit.csv
+?? audit/reports/primary-category-80-20-audit.md
+?? audit/scripts/audit-primary-category-80-20.ps1
+?? audit/scripts/update-classification-80-20-fields.ps1
 ?? components/adapters/adp-oauth-test-credential-api-access-test/
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-destination.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-missing-record.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-unsupported-provider.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/error-upstream-validation-failed.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-airtable-routed.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-google-sheets-routed.json
-?? components/cat-2/c2-a-data-sync-pipeline/output-samples/success-hubspot-routed.json
