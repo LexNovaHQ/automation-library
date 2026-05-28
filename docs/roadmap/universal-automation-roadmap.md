@@ -402,3 +402,4 @@ Diagnostic components belong primarily to Category 6 unless their main job is de
 Universal adapters must still be production-usable as universal adapters. They must not be treated as substitutes for high-demand provider adapters.
 
 
+

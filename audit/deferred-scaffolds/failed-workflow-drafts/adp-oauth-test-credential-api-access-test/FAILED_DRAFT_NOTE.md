@@ -4,7 +4,7 @@
 Parked failed draft. Not production built. Not active.
 
 ## Reason
-This workflow was originally attempted as ADP-OAUTH-TEST under an adapter path, but it does not fit the Category 2 universal automation adapter model.
+This workflow was originally attempted as ADP-OAUTH-TEST, but it does not fit the Category 2 universal automation adapter model.
 
 It functionally belongs under Category 6 debugging/reliability as a credential/API access diagnostic adapter attached to C6-C API Auth Debugger.
 
@@ -19,13 +19,11 @@ It functionally belongs under Category 6 debugging/reliability as a credential/A
 
 ## Superseding Component
 
-Future rebuild should be:
-
 - Component ID: C6-C1
 - Name: Credential API Access Test Adapter
 - Primary category: Category 6 - Debugging / Reliability
 - Parent core: C6-C API Auth Debugger
-- Layer type: COMPONENT_ADAPTER or future DIAGNOSTIC_ADAPTER
+- Layer type: COMPONENT_ADAPTER for now; possible future DIAGNOSTIC_ADAPTER
 - Readiness: NOT_BUILT until rebuilt cleanly
 
 ## Rule

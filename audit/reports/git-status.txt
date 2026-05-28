@@ -1,5 +1,5 @@
-﻿ M audit/config/component-classification.csv
- M audit/reports/json-validation.csv
+﻿ M audit/deferred-scaffolds/failed-workflow-drafts/adp-oauth-test-credential-api-access-test/FAILED_DRAFT_NOTE.md
+ M audit/reports/classification-summary.md
  M docs/README.md
  M docs/architecture/platform-architecture-classification.md
  M docs/archive/component-catalog-v1-legacy.md
@@ -7,4 +7,3 @@
  M docs/catalog/component-readiness-matrix.md
  M docs/process/assembly-pipeline.md
  M docs/roadmap/universal-automation-roadmap.md
-?? audit/deferred-scaffolds/failed-workflow-drafts/
