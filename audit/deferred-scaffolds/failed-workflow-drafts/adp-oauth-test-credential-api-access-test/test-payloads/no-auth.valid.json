@@ -1,0 +1,16 @@
+﻿{
+  "request_id": "adp-oauth-test-no-auth-001",
+  "source_component": "C6-C",
+  "auth_mode": "none",
+  "test_url": "https://httpbingo.org/headers",
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-NONE"
+  },
+  "expected_result": {
+    "status_code": 200
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

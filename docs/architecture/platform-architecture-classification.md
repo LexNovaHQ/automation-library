@@ -273,7 +273,7 @@ Do not build low-demand provider adapters until real client/job demand proves th
 |---:|---|---|---|
 | 1 | ADP-REST Generic REST API Adapter | Generic independent adapter | Universal long-tail API adapter. |
 | 2 | ADP-WEBHOOK-SEND Generic Webhook Sender | Generic independent adapter | Universal outbound webhook adapter. |
-| 3 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
+| 3 | C6-C1 Credential API Access Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
 | 4 | ADP-GMAIL-SEND Gmail Send Adapter | Specialised adapter | Email send is universal. |
 | 5 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Specialised adapter | Inbound/reply workflows. |
 | 6 | ADP-WHATSAPP-CLOUD WhatsApp Cloud API Adapter | Specialised adapter | Very high-demand business messaging. |
@@ -407,5 +407,6 @@ Do not let a diagnostic utility pretend to be a delivery workflow.
 Do not build category-less components.
 
 Do not continue a build if the component cannot meet the 80-20 production assembly-ready rule for its own primary category.
+
 
 

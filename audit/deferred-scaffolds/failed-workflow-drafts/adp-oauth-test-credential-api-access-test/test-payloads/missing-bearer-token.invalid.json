@@ -1,0 +1,14 @@
+﻿{
+  "request_id": "adp-oauth-test-missing-bearer-token-001",
+  "source_component": "C6-C",
+  "auth_mode": "bearer_token",
+  "test_url": "https://httpbingo.org/bearer",
+  "credential": {},
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-MISSING-BEARER"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

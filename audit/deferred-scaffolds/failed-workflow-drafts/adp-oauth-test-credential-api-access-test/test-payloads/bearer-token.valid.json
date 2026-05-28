@@ -1,0 +1,19 @@
+﻿{
+  "request_id": "adp-oauth-test-bearer-001",
+  "source_component": "C6-C",
+  "auth_mode": "bearer_token",
+  "test_url": "https://httpbingo.org/bearer",
+  "credential": {
+    "bearer_token": "test-bearer-token-123"
+  },
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-BEARER"
+  },
+  "expected_result": {
+    "authenticated": true
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

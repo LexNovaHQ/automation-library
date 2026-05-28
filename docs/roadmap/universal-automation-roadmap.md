@@ -84,7 +84,7 @@ Complete the reusable automation base layer that every other category depends on
 | 1 | C2-A Parent Data Sync Router | Core router | Gives templates one write abstraction instead of hardcoding Sheets/Airtable/HubSpot. |
 | 2 | ADP-REST Generic REST API Adapter | Independent adapter | Universal fallback for unsupported tools. |
 | 3 | ADP-WEBHOOK-SEND Generic Webhook Sender | Independent adapter | Needed for webhook/API sync jobs. |
-| 4 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents auth/credential failures before build. |
+| 4 | C6-C1 Credential API Access Test Adapter | Diagnostic adapter | Prevents auth/credential failures before build. |
 | 5 | ADP-GMAIL-SEND Gmail Send Adapter | Independent adapter | Needed for Cat 1, Cat 2, Cat 3, and AI email workflows. |
 | 6 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Independent adapter | Needed for inbound email and reply workflows. |
 | 7 | ADP-WHATSAPP-CLOUD WhatsApp Cloud API Adapter | Independent adapter | High-demand business messaging adapter for lead follow-up, reminders, onboarding, and support. |
@@ -335,7 +335,7 @@ Do not build low-demand provider adapters until real client/job demand proves th
 |---:|---|---|---|
 | 1 | ADP-REST Generic REST API Adapter | Generic independent adapter | Universal long-tail API adapter. |
 | 2 | ADP-WEBHOOK-SEND Generic Webhook Sender | Generic independent adapter | Universal outbound webhook adapter. |
-| 3 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
+| 3 | C6-C1 Credential API Access Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
 | 4 | ADP-GMAIL-SEND Gmail Send Adapter | Specialised adapter | Email send is universal. |
 | 5 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Specialised adapter | Inbound/reply workflows. |
 | 6 | ADP-WHATSAPP-CLOUD WhatsApp Cloud API Adapter | Specialised adapter | Very high-demand business messaging. |
@@ -400,4 +400,5 @@ Every component must have:
 Diagnostic components belong primarily to Category 6 unless their main job is delivery execution.
 
 Universal adapters must still be production-usable as universal adapters. They must not be treated as substitutes for high-demand provider adapters.
+
 

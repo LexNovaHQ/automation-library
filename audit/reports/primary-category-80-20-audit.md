@@ -1,13 +1,13 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 00:22:25
+Generated: 2026-05-29 00:34:51
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
-| DEFERRED | 9 |
-| NOT_BUILT | 6 |
+| DEFERRED | 8 |
+| NOT_BUILT | 7 |
 | PASS_80_20 | 26 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
@@ -30,10 +30,10 @@ Generated: 2026-05-29 00:22:25
 | Category 3 - Client Onboarding / Delivery | 6 |
 | Category 4 - AI Workflow Systems | 9 |
 | Category 5 - Dashboards / Status / Review | 9 |
-| Category 6 - Debugging / Reliability | 7 |
+| Category 6 - Debugging / Reliability | 8 |
 | Client Config Layer | 10 |
 | Template Glue Layer | 6 |
-| Universal Adapter Layer | 11 |
+| Universal Adapter Layer | 10 |
 
 ## Built Artifact Snapshot
 

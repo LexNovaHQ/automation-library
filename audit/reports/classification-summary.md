@@ -1,16 +1,16 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 00:22:24
+Generated: 2026-05-29 00:34:51
 
 ## Layer Type Counts
 
 | Layer Type | Count |
 |---|---:|
 | CLIENT_CONFIG_ASSET | 10 |
-| COMPONENT_ADAPTER | 5 |
+| COMPONENT_ADAPTER | 6 |
 | CORE_COMPONENT | 21 |
 | HANDOFF_ONLY_CORE | 5 |
-| INDEPENDENT_ADAPTER | 11 |
+| INDEPENDENT_ADAPTER | 10 |
 | SCAFFOLD_ONLY | 22 |
 | TEMPLATE_GLUE | 6 |
 
@@ -19,8 +19,8 @@ Generated: 2026-05-29 00:22:24
 | Readiness | Count |
 |---|---:|
 | BUILT | 43 |
-| DEFERRED_ADAPTER | 9 |
-| NOT_BUILT | 28 |
+| DEFERRED_ADAPTER | 8 |
+| NOT_BUILT | 29 |
 
 ## Priority Counts
 
@@ -50,6 +50,7 @@ Generated: 2026-05-29 00:22:24
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-I | Notification / Alert Engine | COMPONENT_ADAPTER | BUILT |
 | C2-K | LLM in Workflow Adapter | COMPONENT_ADAPTER | BUILT |
+| C6-C1 | Credential API Access Test Adapter | COMPONENT_ADAPTER | NOT_BUILT |
 | C2-A | Parent Data Sync Router | CORE_COMPONENT | BUILT |
 | C2-B | Conditional Routing Engine | CORE_COMPONENT | BUILT |
 | C2-C | Webhook Trigger System | CORE_COMPONENT | BUILT |
@@ -73,7 +74,6 @@ Generated: 2026-05-29 00:22:24
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-NOTION-DB | Notion Database Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| ADP-OAUTH-TEST | OAuth Credential Test Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PDF | PDF Text Extraction Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |

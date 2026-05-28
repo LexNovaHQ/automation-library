@@ -1,0 +1,12 @@
+﻿{
+  "request_id": "adp-oauth-test-missing-url-001",
+  "source_component": "C6-C",
+  "auth_mode": "none",
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-MISSING-URL"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

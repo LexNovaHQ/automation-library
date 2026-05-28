@@ -117,3 +117,4 @@ Initial AI add-ons must be:
 - manual-review friendly
 
 Do not build fully autonomous agents until action permissions, run logs, approval gates, and rollback/retry logic are mature.
+

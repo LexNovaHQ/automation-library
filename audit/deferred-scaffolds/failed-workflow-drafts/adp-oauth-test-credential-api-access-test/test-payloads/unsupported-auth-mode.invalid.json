@@ -1,0 +1,16 @@
+﻿{
+  "request_id": "adp-oauth-test-unsupported-auth-mode-001",
+  "source_component": "C6-C",
+  "auth_mode": "oauth2_authorization_code",
+  "test_url": "https://httpbingo.org/headers",
+  "credential": {
+    "client_id": "dummy-client-id"
+  },
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-UNSUPPORTED-AUTH-MODE"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

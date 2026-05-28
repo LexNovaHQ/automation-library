@@ -151,7 +151,7 @@ Immediate Cat 2 build targets:
 | C2-A | Parent Data Sync Router |
 | ADP-REST | Generic REST API Adapter |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender |
-| ADP-OAUTH-TEST | OAuth Credential Test Adapter |
+| C6-C1 | Credential API Access Test Adapter |
 | ADP-GMAIL-SEND | Gmail Send Adapter |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter |
 | ADP-WHATSAPP-CLOUD | WhatsApp Cloud API Adapter |
@@ -464,7 +464,7 @@ Do not build low-demand provider adapters until real client/job demand proves th
 |---:|---|---|---|
 | 1 | ADP-REST Generic REST API Adapter | Generic independent adapter | Universal long-tail API adapter. |
 | 2 | ADP-WEBHOOK-SEND Generic Webhook Sender | Generic independent adapter | Universal outbound webhook adapter. |
-| 3 | ADP-OAUTH-TEST OAuth Credential Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
+| 3 | C6-C1 Credential API Access Test Adapter | Diagnostic adapter | Prevents credential/access failures before build. |
 | 4 | ADP-GMAIL-SEND Gmail Send Adapter | Specialised adapter | Email send is universal. |
 | 5 | ADP-GMAIL-INBOX Gmail Inbox Trigger Adapter | Specialised adapter | Inbound/reply workflows. |
 | 6 | ADP-WHATSAPP-CLOUD WhatsApp Cloud API Adapter | Specialised adapter | Very high-demand business messaging. |
@@ -508,5 +508,6 @@ Only build a new specialised adapter when it is:
 Current next adapter build:
 
 ADP-REST - Generic REST API Adapter
+
 
 

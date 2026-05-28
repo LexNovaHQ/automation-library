@@ -1,0 +1,16 @@
+﻿{
+  "request_id": "adp-oauth-test-missing-api-key-001",
+  "source_component": "C6-C",
+  "auth_mode": "header_api_key",
+  "test_url": "https://httpbingo.org/headers",
+  "credential": {
+    "header_name": "X-API-Key"
+  },
+  "headers": {
+    "X-Credential-Test": "ADP-OAUTH-TEST-MISSING-API-KEY"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}

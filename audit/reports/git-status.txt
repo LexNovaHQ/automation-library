@@ -1,15 +1,10 @@
 ﻿ M audit/config/component-classification.csv
- M audit/reports/audit-summary.md
- M audit/reports/build-completeness.md
- M audit/reports/catalog-consistency.md
- M audit/reports/classification-consistency.md
- M audit/reports/classification-summary.md
- M audit/reports/component-inventory.md
- M audit/reports/duplicate-component-ids.md
- M audit/reports/git-status.txt
-?? audit/reports/classification-80-20-update.md
-?? audit/reports/primary-category-80-20-audit.csv
-?? audit/reports/primary-category-80-20-audit.md
-?? audit/scripts/audit-primary-category-80-20.ps1
-?? audit/scripts/update-classification-80-20-fields.ps1
-?? components/adapters/adp-oauth-test-credential-api-access-test/
+ M audit/reports/json-validation.csv
+ M docs/README.md
+ M docs/architecture/platform-architecture-classification.md
+ M docs/archive/component-catalog-v1-legacy.md
+ M docs/catalog/component-catalog.md
+ M docs/catalog/component-readiness-matrix.md
+ M docs/process/assembly-pipeline.md
+ M docs/roadmap/universal-automation-roadmap.md
+?? audit/deferred-scaffolds/failed-workflow-drafts/
