@@ -1,0 +1,27 @@
+﻿{
+  "request_id": "adp-rest-test-post-001",
+  "source_component": "C2-A",
+  "method": "POST",
+  "url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "Content-Type": "application/json",
+    "X-Adapter-Test": "ADP-REST-POST"
+  },
+  "query": {
+    "source": "automation-library",
+    "test_case": "post_valid"
+  },
+  "body": {
+    "name": "Test Lead",
+    "email": "test@example.com",
+    "company": "REST Test Co"
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+

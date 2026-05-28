@@ -1,0 +1,22 @@
+﻿{
+  "request_id": "adp-rest-test-get-001",
+  "source_component": "C2-A",
+  "method": "GET",
+  "url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "X-Adapter-Test": "ADP-REST-GET"
+  },
+  "query": {
+    "source": "automation-library",
+    "test_case": "get_valid"
+  },
+  "body": null,
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+

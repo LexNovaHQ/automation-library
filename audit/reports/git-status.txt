@@ -1,4 +1,3 @@
-﻿ M docs/architecture/platform-architecture-classification.md
- M docs/catalog/component-catalog.md
- M docs/roadmap/universal-automation-roadmap.md
-?? audit/reports/adapter-strategy-snippet.tmp.md
+﻿ M audit/config/component-classification.csv
+ M audit/reports/json-validation.csv
+?? components/adapters/

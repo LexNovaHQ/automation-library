@@ -1,0 +1,15 @@
+﻿{
+  "adapter_status": "error",
+  "validation_status": "invalid",
+  "request_id": "adp-rest-test-missing-url-001",
+  "method": "GET",
+  "url": null,
+  "status_code": null,
+  "response_body": null,
+  "manual_review_required": true,
+  "error_code": "MISSING_URL",
+  "error_message": "URL is required before ADP-REST can execute the request.",
+  "next_action": "route_to_manual_review_or_error_log",
+  "status_log_event": "adapter_validation_error",
+  "downstream_components": ["C5-E", "C6-G", "C5-W"]
+}

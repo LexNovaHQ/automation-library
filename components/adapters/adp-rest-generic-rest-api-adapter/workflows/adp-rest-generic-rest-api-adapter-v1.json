@@ -1,0 +1,586 @@
+﻿{
+  "name": "ADP-REST - Generic REST API Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-rest-generic-rest-api-adapter",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1040,
+        -656
+      ],
+      "id": "bc28ba51-c49d-4b8f-84d7-d6ee2c6604ea",
+      "name": "Receive REST Adapter Request",
+      "webhookId": "054ca389-2ce1-494e-b30e-4914801e586d",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const input =\n  $json.request_id\n    ? $json\n    : ($json.body && $json.body.request_id)\n      ? $json.body\n      : $json;\n\nconst supportedMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];\nconst supportedAuthModesV1 = ['none'];\n\nfunction errorResult(code, message) {\n  const rawMethod = input.method ? String(input.method).trim().toUpperCase() : null;\n\n  return [{\n    json: {\n      adapter_status: 'error',\n      validation_status: 'invalid',\n      method_route: 'ERROR',\n      request_id: input.request_id || null,\n      source_component: input.source_component || null,\n      method: rawMethod,\n      url: input.url || null,\n      auth_mode: input.auth?.mode || 'none',\n      headers: input.headers || {},\n      query: input.query || {},\n      body: input.body === undefined ? null : input.body,\n      status_code: null,\n      response_body: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: 'route_to_manual_review_or_error_log',\n      status_log_event: 'adapter_validation_error',\n      downstream_components: ['C5-E', 'C6-G', 'C5-W'],\n      original_input: input\n    }\n  }];\n}\n\nif (!input.request_id) {\n  return errorResult('MISSING_REQUEST_ID', 'request_id is required.');\n}\n\nif (!input.method) {\n  return errorResult('MISSING_METHOD', 'HTTP method is required.');\n}\n\nconst method = String(input.method).trim().toUpperCase();\n\nif (!supportedMethods.includes(method)) {\n  return errorResult('UNSUPPORTED_METHOD', `Method ${method} is not supported by ADP-REST v1.`);\n}\n\nif (!input.url) {\n  return errorResult('MISSING_URL', 'URL is required before ADP-REST can execute the request.');\n}\n\nconst authMode = input.auth?.mode || 'none';\n\nif (!supportedAuthModesV1.includes(authMode)) {\n  return errorResult('AUTH_MODE_NOT_SUPPORTED_V1', `Auth mode ${authMode} is not supported in ADP-REST v1.`);\n}\n\nreturn [{\n  json: {\n    adapter_status: 'ready',\n    validation_status: 'valid',\n    method_route: method,\n    request_id: input.request_id,\n    source_component: input.source_component || null,\n    method: method,\n    url: input.url,\n    auth_mode: authMode,\n    headers: input.headers || {},\n    query: input.query || {},\n    body: input.body === undefined ? null : input.body,\n    routing_options: input.routing_options || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: 'execute_http_request',\n    status_log_event: 'adapter_request_validated',\n    original_input: input\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        -656
+      ],
+      "id": "7652a720-9bb5-4e58-a8a3-0b1a84e21761",
+      "name": "Normalize And Validate REST Request"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.validation_status }}",
+                    "rightValue": "valid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6ae805b8-1259-45e3-9129-1997fb043a14"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "valid"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1024,
+        176
+      ],
+      "id": "5e20eb4a-e8f3-49a8-9761-62f579737d4f",
+      "name": "Validation Status Switch"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.method_route }}",
+                    "rightValue": "GET",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cb656339-485f-42e9-8a34-a05b82d10916"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ce84916d-2692-4eab-bc00-94f9742ab6bd",
+                    "leftValue": "={{ $json.method_route }}",
+                    "rightValue": "POST",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "post"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bfe5b5ca-cdb7-4df1-8f33-e5bb646c8bcb",
+                    "leftValue": "={{ $json.method_route }}",
+                    "rightValue": "PATCH",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "patch"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4e90c604-09e0-4c6f-ae19-d676a53e4e58",
+                    "leftValue": "={{ $json.method_route }}",
+                    "rightValue": "DELETE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "delete"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -880,
+        -112
+      ],
+      "id": "47183f03-b6b6-47d8-9c15-1b7f5d630523",
+      "name": "Method Switch"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.query.source }}"
+            },
+            {
+              "name": "test_case",
+              "value": "={{ $json.query.test_case }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Adapter-Test",
+              "value": "={{ $json.headers[\"X-Adapter-Test\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -640,
+        -256
+      ],
+      "id": "3bd9edd0-dd1a-4266-8113-783fb0de7d58",
+      "name": "Execute GET REST Request",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.query.source }}"
+            },
+            {
+              "name": "test_case",
+              "value": "={{ $json.query.test_case }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Adapter-Test",
+              "value": "={{ $json.headers[\"X-Adapter-Test\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -496,
+        -160
+      ],
+      "id": "8644538a-4f4b-434e-8f35-c6f4690a49e2",
+      "name": "Execute POST REST Request"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $json.url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.query.source }}"
+            },
+            {
+              "name": "test_case",
+              "value": "={{ $json.query.test_case }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Adapter-Test",
+              "value": "={{ $json.headers[\"X-Adapter-Test\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -640,
+        -64
+      ],
+      "id": "4dafe270-518c-4ee5-969a-e05d994c072e",
+      "name": "Execute PATCH REST Request"
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "={{ $json.url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.query.source }}"
+            },
+            {
+              "name": "test_case",
+              "value": "={{ $json.query.test_case }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Adapter-Test",
+              "value": "={{ $json.headers[\"X-Adapter-Test\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -464,
+        16
+      ],
+      "id": "df599d0d-ddba-498f-8374-7d3254408ddf",
+      "name": "Execute PATCH REST Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $json;\n\nreturn [{\n  json: {\n    adapter_status: 'success',\n    validation_status: 'valid',\n    request_id: response.json?.request_id || response.request_id || null,\n    method: response.method || null,\n    url: response.url || null,\n    status_code: 200,\n    response_body: response,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: 'return_adapter_success',\n    status_log_event: 'adapter_request_success',\n    downstream_components: ['C5-W']\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        96
+      ],
+      "id": "d024c2e3-176e-4f57-9b7b-e17a66c8f1e0",
+      "name": "Normalize REST Success Response"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    adapter_status: $json.adapter_status || 'error',\n    validation_status: $json.validation_status || 'invalid',\n    request_id: $json.request_id || null,\n    source_component: $json.source_component || null,\n    method: $json.method || null,\n    url: $json.url || null,\n    status_code: null,\n    response_body: null,\n    manual_review_required: true,\n    error_code: $json.error_code || 'ADP_REST_ERROR',\n    error_message: $json.error_message || 'ADP-REST failed before execution.',\n    next_action: $json.next_action || 'route_to_manual_review_or_error_log',\n    status_log_event: $json.status_log_event || 'adapter_error',\n    downstream_components: $json.downstream_components || ['C5-E', 'C6-G', 'C5-W'],\n    original_input: $json.original_input || $json\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        240
+      ],
+      "id": "0ac429ce-f4aa-4e08-ad11-4e6bc5f26641",
+      "name": "Prepare REST Adapter Error"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        352
+      ],
+      "id": "03024ffd-72a8-4a2d-8e51-d75cddc90692",
+      "name": "Return REST Adapter Result"
+    }
+  ],
+  "pinData": {
+    "Receive REST Adapter Request": [
+      {
+        "json": {
+          "request_id": "adp-rest-test-auth-mode-not-supported-001",
+          "source_component": "C2-A",
+          "method": "GET",
+          "url": "https://httpbingo.org/anything",
+          "auth": {
+            "mode": "oauth2"
+          },
+          "headers": {
+            "X-Adapter-Test": "ADP-REST-AUTH-MODE-NOT-SUPPORTED"
+          },
+          "query": {
+            "source": "automation-library"
+          },
+          "body": null,
+          "routing_options": {
+            "manual_review_on_error": true,
+            "status_tracking_required": true
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive REST Adapter Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate REST Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate REST Request": {
+      "main": [
+        [
+          {
+            "node": "Validation Status Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Status Switch": {
+      "main": [
+        [
+          {
+            "node": "Method Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare REST Adapter Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Method Switch": {
+      "main": [
+        [
+          {
+            "node": "Execute GET REST Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute POST REST Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute PATCH REST Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute PATCH REST Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare REST Adapter Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute GET REST Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize REST Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute POST REST Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize REST Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute PATCH REST Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize REST Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute PATCH REST Request1": {
+      "main": [
+        [
+          {
+            "node": "Normalize REST Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare REST Adapter Error": {
+      "main": [
+        [
+          {
+            "node": "Return REST Adapter Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize REST Success Response": {
+      "main": [
+        [
+          {
+            "node": "Return REST Adapter Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cf597a40-725c-4bd3-b7b9-13235467d4db",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "orNo0VSzbi20MGrF",
+  "tags": []
+}

@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-28 16:32:55
+Generated: 2026-05-28 19:02:34
 
 ## Layer Type Counts
 
@@ -18,8 +18,8 @@ Generated: 2026-05-28 16:32:55
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 41 |
-| DEFERRED_ADAPTER | 11 |
+| BUILT | 42 |
+| DEFERRED_ADAPTER | 10 |
 | NOT_BUILT | 28 |
 
 ## Priority Counts
@@ -76,7 +76,7 @@ Generated: 2026-05-28 16:32:55
 | ADP-OAUTH-TEST | OAuth Credential Test Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PDF | PDF Text Extraction Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
@@ -131,3 +131,4 @@ Generated: 2026-05-28 16:32:55
 | C2-M | WhatsApp Message Automation | HANDOFF_ONLY_CORE | handoff_only |
 | C2-Q | Publishing Adapter Family | HANDOFF_ONLY_CORE | handoff_only |
 | C4-T | OCR / Document Processing Pipeline | HANDOFF_ONLY_CORE | handoff_only |
+| ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |

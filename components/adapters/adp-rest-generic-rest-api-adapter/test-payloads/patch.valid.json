@@ -1,0 +1,26 @@
+﻿{
+  "request_id": "adp-rest-test-patch-001",
+  "source_component": "C2-A",
+  "method": "PATCH",
+  "url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "Content-Type": "application/json",
+    "X-Adapter-Test": "ADP-REST-PATCH"
+  },
+  "query": {
+    "source": "automation-library",
+    "test_case": "patch_valid"
+  },
+  "body": {
+    "status": "updated",
+    "score": 91
+  },
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+

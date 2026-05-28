@@ -1,0 +1,22 @@
+﻿{
+  "request_id": "adp-rest-test-delete-001",
+  "source_component": "C2-A",
+  "method": "DELETE",
+  "url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "X-Adapter-Test": "ADP-REST-DELETE"
+  },
+  "query": {
+    "source": "automation-library",
+    "test_case": "delete_valid"
+  },
+  "body": null,
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+

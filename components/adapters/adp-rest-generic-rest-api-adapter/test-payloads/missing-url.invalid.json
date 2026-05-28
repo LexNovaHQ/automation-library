@@ -1,0 +1,20 @@
+﻿{
+  "request_id": "adp-rest-test-missing-url-001",
+  "source_component": "C2-A",
+  "method": "GET",
+  "auth": {
+    "mode": "none"
+  },
+  "headers": {
+    "X-Adapter-Test": "ADP-REST-MISSING-URL"
+  },
+  "query": {
+    "source": "automation-library"
+  },
+  "body": null,
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+

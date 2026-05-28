@@ -1,0 +1,21 @@
+﻿{
+  "request_id": "adp-rest-test-auth-mode-not-supported-001",
+  "source_component": "C2-A",
+  "method": "GET",
+  "url": "https://httpbingo.org/anything",
+  "auth": {
+    "mode": "oauth2"
+  },
+  "headers": {
+    "X-Adapter-Test": "ADP-REST-AUTH-MODE-NOT-SUPPORTED"
+  },
+  "query": {
+    "source": "automation-library"
+  },
+  "body": null,
+  "routing_options": {
+    "manual_review_on_error": true,
+    "status_tracking_required": true
+  }
+}
+
