@@ -1,164 +1,231 @@
-﻿{
-  "component_id": "C2-A",
-  "component_name": "Parent Data Sync Router",
-  "version": "1.0.0",
-  "layer_type": "CORE_COMPONENT",
-  "category": "cat-2",
-  "status": "built",
-  "workflow_name": "C2-A_CORE_Parent_Data_Sync_Router_v1",
-  "purpose": "Route normalized write requests to the correct provider-specific write adapter and return a unified routing result.",
-  "router_contract": {
-    "supported_providers": [
-      {
-        "provider": "google_sheets",
-        "adapter_component_id": "C2-A1",
-        "adapter_name": "Google Sheets Write Adapter",
-        "supported_operations": ["create", "update", "upsert"]
+{
+  "name": "C2-A CORE - Parent Data Sync Router v1.json",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c2-a-data-sync-router",
+        "responseMode": "responseNode",
+        "options": {}
       },
-      {
-        "provider": "airtable",
-        "adapter_component_id": "C2-A2",
-        "adapter_name": "Airtable Write Adapter",
-        "supported_operations": ["create", "update", "upsert"]
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        -192
+      ],
+      "id": "faed2013-afd8-4abc-ba41-52842b113b01",
+      "name": "Receive Write Request",
+      "webhookId": "dc646a02-ef06-4d40-9c77-cc2db1241725"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $json.body || $json;\n\nconst supportedProviders = {\n  google_sheets: {\n    adapter_component_id: 'C2-A1',\n    adapter_name: 'Google Sheets Write Adapter',\n    adapter_family: 'data_write',\n    next_action: 'execute_selected_adapter',\n    write_request_type: 'google_sheets_write_request'\n  },\n  airtable: {\n    adapter_component_id: 'C2-A2',\n    adapter_name: 'Airtable Write Adapter',\n    adapter_family: 'data_write',\n    next_action: 'execute_selected_adapter',\n    write_request_type: 'airtable_write_request'\n  },\n  hubspot: {\n    adapter_component_id: 'C2-A3',\n    adapter_name: 'HubSpot Contact Write Adapter',\n    adapter_family: 'data_write',\n    next_action: 'execute_selected_adapter',\n    write_request_type: 'hubspot_contact_write_request'\n  }\n};\n\nfunction baseResult(status, code, message) {\n  return {\n    request_id: input.request_id || null,\n    router_status: status,\n    selected_adapter: null,\n    selected_adapter_name: null,\n    adapter_family: 'data_write',\n    provider: input.destination?.provider || null,\n    operation: input.destination?.operation || null,\n    manual_review_required: true,\n    error_code: code,\n    error_message: message,\n    next_action: status === 'blocked'\n      ? 'route_to_manual_review_and_error_log'\n      : 'route_to_error_log',\n    status_log_event: status === 'blocked'\n      ? 'router_blocked'\n      : 'router_error',\n    downstream_components: status === 'blocked'\n      ? ['C5-E', 'C6-G', 'C5-W']\n      : ['C6-G', 'C5-W'],\n    original_input: input\n  };\n}\n\nif (input.upstream_status !== 'success') {\n  return [{\n    json: baseResult(\n      'blocked',\n      'UPSTREAM_VALIDATION_FAILED',\n      'Upstream component failed validation. C2-A did not route to a write adapter.'\n    )\n  }];\n}\n\nif (!input.destination) {\n  return [{\n    json: baseResult(\n      'error',\n      'MISSING_DESTINATION',\n      'Destination object is required before C2-A can select a write adapter.'\n    )\n  }];\n}\n\nif (!input.destination.provider) {\n  return [{\n    json: baseResult(\n      'error',\n      'MISSING_PROVIDER',\n      'Destination provider is required before C2-A can select a write adapter.'\n    )\n  }];\n}\n\nif (!input.destination.config) {\n  return [{\n    json: baseResult(\n      'error',\n      'MISSING_DESTINATION_CONFIG',\n      'Destination config is required before C2-A can prepare adapter input.'\n    )\n  }];\n}\n\nif (!input.record) {\n  return [{\n    json: baseResult(\n      'error',\n      'MISSING_RECORD',\n      'Record payload is required before C2-A can prepare adapter input.'\n    )\n  }];\n}\n\nconst provider = input.destination.provider;\nconst adapter = supportedProviders[provider];\n\nif (!adapter) {\n  return [{\n    json: {\n      request_id: input.request_id || null,\n      router_status: 'error',\n      selected_adapter: null,\n      selected_adapter_name: null,\n      adapter_family: 'data_write',\n      provider,\n      operation: input.destination.operation || null,\n      manual_review_required: true,\n      error_code: 'UNSUPPORTED_PROVIDER',\n      error_message: `Provider ${provider} is not supported by C2-A v1.`,\n      next_action: 'route_to_manual_review_and_scope_adapter_gap',\n      status_log_event: 'router_error',\n      downstream_components: ['C5-E', 'C6-G', 'C5-W'],\n      adapter_gap: {\n        provider,\n        suggested_action: 'build_or_configure_adapter',\n        gap_type: 'deferred_or_missing_adapter'\n      },\n      original_input: input\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    request_id: input.request_id,\n    router_status: 'routed',\n    selected_adapter: adapter.adapter_component_id,\n    selected_adapter_name: adapter.adapter_name,\n    adapter_family: adapter.adapter_family,\n    provider,\n    operation: input.destination.operation,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: adapter.next_action,\n    status_log_event: 'adapter_selected',\n    adapter_input: {\n      adapter_component_id: adapter.adapter_component_id,\n      adapter_name: adapter.adapter_name,\n      adapter_family: adapter.adapter_family,\n      write_request_type: adapter.write_request_type,\n      request_id: input.request_id,\n      source_component: input.source_component,\n      operation: input.destination.operation,\n      destination_config: input.destination.config,\n      record: input.record,\n      routing_options: input.routing_options || {}\n    },\n    downstream_components: [adapter.adapter_component_id, 'C5-W'],\n    original_input: input\n  }\n}];"
       },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -192
+      ],
+      "id": "ab0137f8-a03c-4a12-8b70-1f163e776ae9",
+      "name": "Validate And Route Write Request"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.selected_adapter }}",
+                    "rightValue": "C2-A1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "317f4801-154e-459c-b981-129816ce6163"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "google_sheets"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8b0a03dd-b28e-4152-b41c-e8cba8570a2e",
+                    "leftValue": "={{ $json.selected_adapter }}",
+                    "rightValue": "C2-A2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "airtable"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "65bc1421-8491-4e11-95e4-3ebe9c5bd3dd",
+                    "leftValue": "={{ $json.selected_adapter }}",
+                    "rightValue": "C2-A3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hubspot"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        32
+      ],
+      "id": "977a7e2d-cc44-4596-914e-271b0922d525",
+      "name": "Provider Adapter Switch"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        96,
+        144
+      ],
+      "id": "301c6078-6586-4836-b19f-b8f0a27f4468",
+      "name": "Return Router Result"
+    }
+  ],
+  "pinData": {
+    "Receive Write Request": [
       {
-        "provider": "hubspot",
-        "adapter_component_id": "C2-A3",
-        "adapter_name": "HubSpot Contact Write Adapter",
-        "supported_operations": ["create", "update", "upsert"]
+        "json": {
+          "request_id": "c2a-test-missing-destination-001",
+          "source_component": "C2-E",
+          "upstream_status": "success",
+          "record": {
+            "name": "No Destination Lead",
+            "email": "missing.destination@example.com",
+            "company": "NoRoute Co"
+          },
+          "routing_options": {
+            "manual_review_on_error": true,
+            "status_tracking_required": true
+          }
+        }
       }
-    ],
-    "default_unsupported_provider_action": "manual_review",
-    "default_failure_action": "route_to_error_log",
-    "error_log_component": "C6-G",
-    "manual_review_component": "C5-E"
-  },
-  "input_schema": {
-    "required_fields": [
-      "request_id",
-      "source_component",
-      "upstream_status",
-      "destination",
-      "record"
-    ],
-    "destination_required_fields": [
-      "provider",
-      "operation",
-      "config"
-    ],
-    "record_required": true
-  },
-  "output_schema": {
-    "router_status_values": ["routed", "blocked", "error"],
-    "required_fields": [
-      "request_id",
-      "router_status",
-      "selected_adapter",
-      "provider",
-      "operation",
-      "manual_review_required",
-      "next_action"
-    ],
-    "optional_fields": [
-      "adapter_input",
-      "error_code",
-      "error_message",
-      "status_log_event",
-      "retry_policy"
     ]
   },
-  "validation_rules": [
-    {
-      "rule_id": "C2A_VAL_001",
-      "name": "upstream_status_must_be_success",
-      "condition": "input.upstream_status != 'success'",
-      "result": {
-        "router_status": "blocked",
-        "error_code": "UPSTREAM_VALIDATION_FAILED",
-        "manual_review_required": true,
-        "next_action": "route_to_manual_review_and_error_log"
-      }
+  "connections": {
+    "Receive Write Request": {
+      "main": [
+        [
+          {
+            "node": "Validate And Route Write Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "rule_id": "C2A_VAL_002",
-      "name": "destination_required",
-      "condition": "missing(input.destination)",
-      "result": {
-        "router_status": "error",
-        "error_code": "MISSING_DESTINATION",
-        "manual_review_required": true,
-        "next_action": "route_to_error_log"
-      }
+    "Validate And Route Write Request": {
+      "main": [
+        [
+          {
+            "node": "Provider Adapter Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "rule_id": "C2A_VAL_003",
-      "name": "record_required",
-      "condition": "missing(input.record)",
-      "result": {
-        "router_status": "error",
-        "error_code": "MISSING_RECORD",
-        "manual_review_required": true,
-        "next_action": "route_to_error_log"
-      }
-    }
-  ],
-  "routing_rules": [
-    {
-      "provider": "google_sheets",
-      "selected_adapter": "C2-A1",
-      "next_action": "call_google_sheets_write_adapter"
-    },
-    {
-      "provider": "airtable",
-      "selected_adapter": "C2-A2",
-      "next_action": "call_airtable_write_adapter"
-    },
-    {
-      "provider": "hubspot",
-      "selected_adapter": "C2-A3",
-      "next_action": "call_hubspot_contact_write_adapter"
-    }
-  ],
-  "adapter_input_mapping": {
-    "common_fields": [
-      "request_id",
-      "source_component",
-      "destination.operation",
-      "destination.config",
-      "record",
-      "routing_options"
-    ],
-    "google_sheets": {
-      "adapter_component_id": "C2-A1",
-      "maps_to": "google_sheets_write_request"
-    },
-    "airtable": {
-      "adapter_component_id": "C2-A2",
-      "maps_to": "airtable_write_request"
-    },
-    "hubspot": {
-      "adapter_component_id": "C2-A3",
-      "maps_to": "hubspot_contact_write_request"
+    "Provider Adapter Switch": {
+      "main": [
+        [
+          {
+            "node": "Return Router Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Router Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Router Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Router Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "unsupported_provider_result": {
-    "router_status": "error",
-    "error_code": "UNSUPPORTED_PROVIDER",
-    "manual_review_required": true,
-    "selected_adapter": null,
-    "next_action": "route_to_manual_review_and_scope_adapter_gap"
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
-  "status_events": [
-    "router_received",
-    "router_validated",
-    "adapter_selected",
-    "router_blocked",
-    "router_error"
-  ],
-  "downstream_components": {
-    "success": ["selected_adapter"],
-    "manual_review": ["C5-E"],
-    "error_log": ["C6-G"],
-    "status_tracking": ["C5-W"]
-  }
+  "versionId": "513ab100-7702-4e2e-8a59-a2f59a6aab5f",
+  "meta": {
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "2YggRZ1crYZ71B5u",
+  "tags": []
 }
