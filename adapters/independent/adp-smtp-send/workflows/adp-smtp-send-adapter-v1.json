@@ -1,0 +1,247 @@
+{
+  "name": "ADP-SMTP-SEND - Generic SMTP Send Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-smtp-send",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "61565bc2-2e92-40b9-958d-cb5098a0b33f",
+      "name": "Receive SMTP Send Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        144
+      ],
+      "webhookId": "adp-smtp-send"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.request_id ? $json : (($json.body && $json.body.request_id) ? $json.body : $json);\n\nfunction asArray(value) {\n  if (Array.isArray(value)) return value.map(v => String(v).trim()).filter(Boolean);\n  if (value === undefined || value === null || value === \"\") return [];\n  return String(value).split(\",\").map(v => v.trim()).filter(Boolean);\n}\n\nfunction errorResult(code, message) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-SMTP-SEND\",\n      component_version: \"v1\",\n      request_id: raw.request_id || null,\n      source_component: raw.source_component || null,\n      provider: \"smtp\",\n      operation: \"send_email\",\n      validation_status: \"invalid\",\n      message_id: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"smtp_send_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: null,\n      original_input: raw\n    }\n  }];\n}\n\nif (!raw.request_id) return errorResult(\"MISSING_REQUEST_ID\", \"request_id is required.\");\nif (!raw.email || typeof raw.email !== \"object\") return errorResult(\"MISSING_EMAIL_OBJECT\", \"email object is required.\");\n\nconst email = raw.email;\nconst from = String(email.from || \"\").trim();\nconst fromName = String(email.from_name || email.fromName || \"\").trim();\nconst to = asArray(email.to);\nconst cc = asArray(email.cc);\nconst bcc = asArray(email.bcc);\nconst replyTo = String(email.reply_to || email.replyTo || \"\").trim();\nconst subject = String(email.subject || \"\").trim();\nconst bodyText = String(email.body_text || \"\");\nconst bodyHtml = String(email.body_html || \"\");\nconst sendFormat = String(email.send_format || \"text\").trim().toLowerCase();\n\nif (!from) return errorResult(\"MISSING_FROM\", \"email.from is required.\");\nif (to.length < 1) return errorResult(\"MISSING_TO\", \"email.to must contain at least one recipient.\");\nif (!subject) return errorResult(\"MISSING_SUBJECT\", \"email.subject is required.\");\nif (![\"text\", \"html\"].includes(sendFormat)) return errorResult(\"INVALID_SEND_FORMAT\", \"email.send_format must be text or html.\");\nif (sendFormat === \"html\" && !bodyHtml && !bodyText) return errorResult(\"MISSING_BODY\", \"body_html or body_text is required for html email.\");\nif (sendFormat === \"text\" && !bodyText && !bodyHtml) return errorResult(\"MISSING_BODY\", \"body_text or body_html is required for text email.\");\n\nconst message = sendFormat === \"html\" ? (bodyHtml || bodyText) : (bodyText || bodyHtml.replace(/<[^>]*>/g, \"\"));\n\nreturn [{\n  json: {\n    adapter_status: \"ready\",\n    component_id: \"ADP-SMTP-SEND\",\n    component_version: \"v1\",\n    request_id: raw.request_id,\n    source_component: raw.source_component || null,\n    provider: \"smtp\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    smtp: {\n      from,\n      fromName,\n      to: to.join(\",\"),\n      cc: cc.join(\",\"),\n      bcc: bcc.join(\",\"),\n      replyTo,\n      subject,\n      emailType: sendFormat,\n      message\n    },\n    routing_options: raw.routing_options || {},\n    metadata: raw.metadata || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"execute_smtp_send\",\n    status_log_event: \"smtp_send_request_validated\",\n    original_input: raw\n  }\n}];"
+      },
+      "id": "c91d52a8-273a-48d4-ba08-2b981eef9558",
+      "name": "Normalize And Validate SMTP Email Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.adapter_status }}",
+                    "rightValue": "ready",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "00a81448-5121-43a6-9a13-d28222a81beb"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ready"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "f8f2202a-775f-458b-ab94-776edbec8331",
+      "name": "Validation Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        144
+      ],
+      "notesInFlow": true,
+      "notes": "After import, manually confirm fallback/extra output is enabled and connected to Return SMTP Send Result."
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.smtp.from }}",
+        "toEmail": "={{ $json.smtp.to }}",
+        "subject": "={{ $json.smtp.subject }}",
+        "emailFormat": "={{ $json.smtp.emailType }}",
+        "options": {
+          "ccEmail": "={{ $json.smtp.cc }}",
+          "bccEmail": "={{ $json.smtp.bcc }}",
+          "replyTo": "={{ $json.smtp.replyTo }}"
+        }
+      },
+      "id": "8b91f5bd-44e8-454f-91ce-cd4cc45fd586",
+      "name": "Send Email Through SMTP",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "notesInFlow": true,
+      "webhookId": "e0e29e80-2e06-4d26-b28a-f8f53565aa8e",
+      "credentials": {
+        "smtp": {
+          "id": "sI8NSbA9eU3yGIC3",
+          "name": "SMTP account"
+        }
+      },
+      "continueOnFail": true,
+      "notes": "Select SMTP credential manually in n8n. Do not embed credential IDs or secrets."
+    },
+    {
+      "parameters": {
+        "jsCode": "const validation = $node[\"Normalize And Validate SMTP Email Request\"].json;\nconst providerResult = $json;\n\nconst hasError = Boolean(providerResult.error || providerResult.message?.includes?.(\"ERROR\"));\n\nif (hasError) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-SMTP-SEND\",\n      component_version: \"v1\",\n      request_id: validation.request_id || null,\n      source_component: validation.source_component || null,\n      provider: \"smtp\",\n      operation: \"send_email\",\n      validation_status: validation.validation_status || \"valid\",\n      message_id: null,\n      manual_review_required: true,\n      error_code: \"SMTP_SEND_FAILED\",\n      error_message: providerResult.error?.message || providerResult.message || \"SMTP send failed.\",\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"smtp_send_failed\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: providerResult,\n      original_input: validation.original_input || null\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-SMTP-SEND\",\n    component_version: \"v1\",\n    request_id: validation.request_id || null,\n    source_component: validation.source_component || null,\n    provider: \"smtp\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    message_id: providerResult.messageId || providerResult.id || null,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: validation.routing_options?.on_success || \"log_status\",\n    status_log_event: \"smtp_send_success\",\n    downstream_components: [\"C5-W\"],\n    source_result: providerResult,\n    original_input: validation.original_input || null\n  }\n}];"
+      },
+      "id": "679dfb1c-4200-4040-9977-294c2913dd87",
+      "name": "Normalize SMTP Send Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "05720385-68b1-4528-814a-b3f7c2c11c93",
+      "name": "Return SMTP Send Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        144
+      ]
+    }
+  ],
+  "pinData": {
+    "Receive SMTP Send Request": [
+      {
+        "json": {
+          "request_id": "req_smtp_send_text_001",
+          "source_component": "C2-I",
+          "email": {
+            "from": "shwetabh.singh@lexnovahq.com",
+            "from_name": "Automation Bot",
+            "to": [
+              "shwetabh@lexnova-hq.com"
+            ],
+            "cc": [],
+            "bcc": [],
+            "reply_to": "sender@example.com",
+            "subject": "ADP-SMTP-SEND test - text",
+            "body_text": "This is a plain text test from ADP-SMTP-SEND.",
+            "body_html": "",
+            "send_format": "text"
+          },
+          "routing_options": {
+            "on_success": "log_status",
+            "on_failure": "manual_review"
+          },
+          "metadata": {
+            "template_id": "smtp-send-test",
+            "environment": "n8n-test"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive SMTP Send Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate SMTP Email Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate SMTP Email Request": {
+      "main": [
+        [
+          {
+            "node": "Validation Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Email Through SMTP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return SMTP Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Through SMTP": {
+      "main": [
+        [
+          {
+            "node": "Normalize SMTP Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize SMTP Send Result": {
+      "main": [
+        [
+          {
+            "node": "Return SMTP Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0e605a25-f21a-49a0-afb8-d6d7e1e09513",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "RLyilByStTvGdavJ",
+  "tags": []
+}

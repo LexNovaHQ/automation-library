@@ -1,0 +1,35 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-SMTP-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_smtp_send_html_001",
+    "source_component":  "C4-E",
+    "provider":  "smtp",
+    "operation":  "send_email",
+    "validation_status":  "valid",
+    "message_id":  "smtp_message_id_or_null",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "log_status",
+    "status_log_event":  "smtp_send_success",
+    "downstream_components":  [
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "messageId":  "smtp_message_id_or_null"
+                      },
+    "original_input":  {
+                           "request_id":  "req_smtp_send_html_001",
+                           "email":  {
+                                         "subject":  "ADP-SMTP-SEND test - HTML",
+                                         "from":  "sender@example.com",
+                                         "from_name":  "Automation Bot",
+                                         "to":  [
+                                                    "shwetabh@lexnovahq.com"
+                                                ],
+                                         "send_format":  "html"
+                                     },
+                           "source_component":  "C4-E"
+                       }
+}

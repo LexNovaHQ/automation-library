@@ -1,0 +1,26 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-SMTP-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_smtp_missing_from_001",
+    "source_component":  "C2-I",
+    "provider":  "smtp",
+    "operation":  "send_email",
+    "validation_status":  "invalid",
+    "message_id":  null,
+    "manual_review_required":  true,
+    "error_code":  "MISSING_FROM",
+    "error_message":  "email.from is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "smtp_send_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  null,
+    "original_input":  {
+                           "source_component":  "C2-I",
+                           "request_id":  "req_smtp_missing_from_001"
+                       }
+}

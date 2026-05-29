@@ -1,13 +1,14 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 17:29:12
+Generated: 2026-05-29 17:49:28
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
+| BROKEN_ARTIFACTS | 1 |
 | DEFERRED | 6 |
-| NOT_BUILT | 8 |
+| NOT_BUILT | 7 |
 | PASS_80_20 | 28 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
@@ -18,6 +19,7 @@ Generated: 2026-05-29 17:29:12
 
 | ID | Name | Layer | Status | Reason |
 |---|---|---|---|---|
+| ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=1; payloads=0; samples=8; nodes=6; credentials=1 |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=7; samples=7; nodes=11; credentials=0 |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=6; samples=6; nodes=7; credentials=0 |
 
@@ -42,6 +44,7 @@ Generated: 2026-05-29 17:29:12
 | ADP-GMAIL-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 6 | 6 |
 | ADP-GMAIL-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 7 |
 | ADP-REST | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 11 | 7 | 7 |
+| ADP-SMTP-SEND | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | 1 | 6 | 0 | 8 |
 | ADP-WEBHOOK-SEND | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 7 | 6 | 6 |
 | C2-A | CORE_COMPONENT | PASS_80_20 | 1 | 4 | 7 | 7 |
 | C2-A1 | COMPONENT_ADAPTER | PASS_80_20 | 1 | 6 | 3 | 3 |

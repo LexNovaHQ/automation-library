@@ -1,3 +1,12 @@
-﻿ M audit/config/component-classification.csv
- M components/cat-2/c2-i-notification-alert-engine/README.md
- M docs/roadmap/category-2-adapter-family-roadmap.md
+﻿ M adapters/independent/adp-smtp-send/README.md
+ M audit/config/category-2-adapter-family-roadmap.csv
+ M audit/config/component-classification.csv
+?? adapters/independent/adp-smtp-send/output-samples/error-invalid-send-format.json
+?? adapters/independent/adp-smtp-send/output-samples/error-missing-body.json
+?? adapters/independent/adp-smtp-send/output-samples/error-missing-from.json
+?? adapters/independent/adp-smtp-send/output-samples/error-missing-subject.json
+?? adapters/independent/adp-smtp-send/output-samples/error-missing-to.json
+?? adapters/independent/adp-smtp-send/output-samples/success-send-cc-bcc.json
+?? adapters/independent/adp-smtp-send/output-samples/success-send-html.json
+?? adapters/independent/adp-smtp-send/output-samples/success-send-text.json
+?? adapters/independent/adp-smtp-send/workflows/adp-smtp-send-adapter-v1.json

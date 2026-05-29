@@ -1,7 +1,7 @@
 ﻿# ADP-SMTP-SEND - Generic SMTP Send Adapter
 
 ## Status
-Phase 1 scaffold and test payloads.
+Built v1.0.
 
 ## Primary Category
 Category 2 - Automation Workflows
@@ -18,21 +18,24 @@ Sends outbound email through a manually configured SMTP credential from a standa
 ## Why This Exists
 ADP-SMTP-SEND is the universal email-send fallback for clients who do not use Gmail or Outlook/M365, but can provide SMTP credentials.
 
+## Relationship to C2-I
+C2-I is the notification orchestration component. ADP-SMTP-SEND is the lower-level universal SMTP provider execution adapter. C2-I may call ADP-SMTP-SEND when the selected notification channel is SMTP email.
+
 ## 80/20 Build Standard
-This adapter counts as built only if it can validate a standardized email-send request, send through SMTP using manually configured n8n SMTP/email credentials, normalize the provider result, return a stable output contract, and fail safely into manual review/error handling.
+This adapter passes the 80/20 build standard for generic SMTP outbound sending. It validates a standardized email-send request, sends through SMTP using manually configured n8n Send Email credentials, normalizes the provider result, returns a stable output contract, and fails safely into manual review/error handling.
 
 ## Credential Rule
 Credentials are added manually by the user inside n8n. No real credential IDs, SMTP usernames, passwords, hostnames, or secrets are embedded in the workflow JSON.
 
 ## n8n Import Note
-SMTP/email credentials must be configured manually in n8n after import. If a Switch node is used, fallback/extra output must be confirmed manually in n8n.
+SMTP/email credentials must be configured manually in n8n after import. Confirm that Validation Switch fallback/extra output is connected to Return SMTP Send Result.
 
 ## Supported v1 Operations
 - Send plain text email
 - Send HTML email
 - CC and BCC
-- Reply-to field where supported by n8n email node
-- Sender name/from field where supported by n8n email node
+- Reply-to field where supported by n8n Email Send node
+- Sender name/from field where supported by n8n Email Send node
 - Subject/body validation
 - Safe failure output
 
@@ -45,53 +48,10 @@ SMTP/email credentials must be configured manually in n8n after import. If a Swi
 - SMTP credential creation or testing
 - Deliverability checks
 
-## Input Contract
+## Workflow Artifact
+- workflows/adp-smtp-send-adapter-v1.json
 
-`json
-{
-  "request_id": "req_smtp_send_001",
-  "source_component": "C2-I",
-  "email": {
-    "from": "sender@example.com",
-    "from_name": "Sender Name",
-    "to": ["recipient@example.com"],
-    "cc": [],
-    "bcc": [],
-    "reply_to": "reply@example.com",
-    "subject": "Subject line",
-    "body_text": "Plain text body",
-    "body_html": "<p>HTML body</p>",
-    "send_format": "html"
-  },
-  "routing_options": {
-    "on_success": "log_status",
-    "on_failure": "manual_review"
-  }
-}
-`",
-",
-
-
-`json
-{
-  "adapter_status": "success",
-  "component_id": "ADP-SMTP-SEND",
-  "component_version": "v1",
-  "request_id": "req_smtp_send_001",
-  "provider": "smtp",
-  "operation": "send_email",
-  "validation_status": "valid",
-  "message_id": "provider_message_id_or_null",
-  "manual_review_required": false,
-  "error_code": null,
-  "error_message": null,
-  "next_action": "log_status",
-  "downstream_components": ["C5-W"],
-  "source_result": {}
-}
-`",
-",
-
+## Test Payloads
 - send-text.valid.json
 - send-html.valid.json
 - send-with-cc-bcc.valid.json
@@ -101,5 +61,22 @@ SMTP/email credentials must be configured manually in n8n after import. If a Swi
 - missing-body.invalid.json
 - invalid-send-format.invalid.json
 
+## Output Samples
+- success-send-text.json
+- success-send-html.json
+- success-send-cc-bcc.json
+- error-missing-from.json
+- error-missing-to.json
+- error-missing-subject.json
+- error-missing-body.json
+- error-invalid-send-format.json
+
+## Tested
+- Invalid validation tests passed.
+- Text send test passed.
+- HTML send test passed.
+- CC/BCC send test passed.
+- SMTP credential configured manually in n8n.
+
 ## Version
-v1.0 draft
+v1.0

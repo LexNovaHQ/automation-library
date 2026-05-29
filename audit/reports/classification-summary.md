@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 17:29:11
+Generated: 2026-05-29 17:49:28
 
 ## Layer Type Counts
 
@@ -18,9 +18,9 @@ Generated: 2026-05-29 17:29:11
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 45 |
+| BUILT | 46 |
 | DEFERRED_ADAPTER | 6 |
-| NOT_BUILT | 30 |
+| NOT_BUILT | 29 |
 
 ## Priority Counts
 
@@ -78,7 +78,7 @@ Generated: 2026-05-29 17:29:11
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | NOT_BUILT |
+| ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | BUILT |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-002 | Form Submission to CRM Update to Team Alert | TEMPLATE_GLUE | NOT_BUILT |
@@ -135,4 +135,5 @@ Generated: 2026-05-29 17:29:11
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |
+| ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | provider_execution |
