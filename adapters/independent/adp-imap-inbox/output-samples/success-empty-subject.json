@@ -1,0 +1,46 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-IMAP-INBOX",
+    "component_version":  "v1",
+    "provider":  "imap",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "valid",
+    "message_id":  "\u003cimap_msg_004@example.com\u003e",
+    "thread_id":  null,
+    "from":  {
+                 "name":  "No Subject",
+                 "email":  "nosubject@example.com"
+             },
+    "to":  [
+               "shwetabh@lexnovahq.com"
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  "",
+    "snippet":  "No subject but still processable.",
+    "body_text":  "No subject but still processable.",
+    "body_html":  "",
+    "received_at":  "Fri, 29 May 2026 10:15:00 +0530",
+    "mailbox":  "INBOX",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "route_to_email_processing",
+    "status_log_event":  "imap_inbox_message_normalized",
+    "downstream_components":  [
+                                  "C4-B",
+                                  "C4-A",
+                                  "C2-D",
+                                  "C2-B",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "mailbox":  "INBOX",
+                          "messageId":  "\u003cimap_msg_004@example.com\u003e",
+                          "uid":  "imap_uid_004"
+                      }
+}

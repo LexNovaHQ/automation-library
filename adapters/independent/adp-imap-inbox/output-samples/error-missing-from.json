@@ -1,0 +1,43 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-IMAP-INBOX",
+    "component_version":  "v1",
+    "provider":  "imap",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "invalid",
+    "message_id":  "\u003cimap_msg_006@example.com\u003e",
+    "thread_id":  null,
+    "from":  {
+                 "name":  "",
+                 "email":  ""
+             },
+    "to":  [
+
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  null,
+    "snippet":  "",
+    "body_text":  "",
+    "body_html":  "",
+    "received_at":  null,
+    "mailbox":  "INBOX",
+    "manual_review_required":  true,
+    "error_code":  "MISSING_FROM",
+    "error_message":  "IMAP from/sender field is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "imap_inbox_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "mailbox":  "INBOX",
+                          "messageId":  "\u003cimap_msg_006@example.com\u003e"
+                      }
+}

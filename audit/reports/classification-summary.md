@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 17:49:28
+Generated: 2026-05-29 18:55:10
 
 ## Layer Type Counts
 
@@ -10,7 +10,7 @@ Generated: 2026-05-29 17:49:28
 | COMPONENT_ADAPTER | 5 |
 | CORE_COMPONENT | 22 |
 | HANDOFF_ONLY_CORE | 5 |
-| INDEPENDENT_ADAPTER | 11 |
+| INDEPENDENT_ADAPTER | 12 |
 | SCAFFOLD_ONLY | 22 |
 | TEMPLATE_GLUE | 6 |
 
@@ -18,7 +18,7 @@ Generated: 2026-05-29 17:49:28
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 46 |
+| BUILT | 47 |
 | DEFERRED_ADAPTER | 6 |
 | NOT_BUILT | 29 |
 
@@ -26,7 +26,7 @@ Generated: 2026-05-29 17:49:28
 
 | Priority | Count |
 |---|---:|
-| P0 | 51 |
+| P0 | 52 |
 | P1 | 13 |
 | P2 | 11 |
 | P3 | 6 |
@@ -73,6 +73,7 @@ Generated: 2026-05-29 17:49:28
 | ADP-GHL | GoHighLevel Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | BUILT |
+| ADP-IMAP-INBOX | Generic IMAP Inbox Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-NOTION-DB | Notion Database Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PDF | PDF Text Extraction Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
@@ -134,6 +135,7 @@ Generated: 2026-05-29 17:49:28
 | C4-T | OCR / Document Processing Pipeline | HANDOFF_ONLY_CORE | handoff_only |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
+| ADP-IMAP-INBOX | Generic IMAP Inbox Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | provider_execution |

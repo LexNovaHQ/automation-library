@@ -1,0 +1,151 @@
+{
+  "name": "ADP-IMAP-INBOX - Generic IMAP Inbox Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "postProcessAction": "nothing",
+        "options": {}
+      },
+      "id": "e8c66a93-dd2b-45df-b449-a8ad30fba271",
+      "name": "Email Trigger IMAP - Message Received",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "notesInFlow": true,
+      "credentials": {
+        "imap": {
+          "id": "AO8UZ9sxXmwQqQ5n",
+          "name": "IMAP account"
+        }
+      },
+      "notes": "Configure IMAP credential manually. Confirm mailbox, mark-read behavior, attachment setting, and output format after import."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-imap-inbox-test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2784c377-c127-4a8f-a11a-90b2414270e4",
+      "name": "Receive Test IMAP Payload",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        352
+      ],
+      "webhookId": "adp-imap-inbox-test"
+    },
+    {
+      "parameters": {
+        "jsCode": "function parseAddress(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return { email: \"\", name: \"\" };\n\n  if (typeof value === \"object\" && value !== null) {\n    const email = String(value.address || value.email || \"\").trim();\n    const name = String(value.name || value.text || \"\").trim();\n    return { email, name };\n  }\n\n  const match = raw.match(/^(.*)<([^>]+)>$/);\n  if (match) {\n    return {\n      name: String(match[1] || \"\").trim().replace(/^\"|\"$/g, \"\"),\n      email: String(match[2] || \"\").trim()\n    };\n  }\n\n  return { name: \"\", email: raw };\n}\n\nfunction splitAddresses(value) {\n  if (Array.isArray(value)) {\n    return value.map(v => parseAddress(v).email).filter(Boolean);\n  }\n\n  if (value && typeof value === \"object\") {\n    if (Array.isArray(value.value)) return value.value.map(v => parseAddress(v).email).filter(Boolean);\n    if (value.text) return splitAddresses(value.text);\n  }\n\n  const raw = String(value || \"\").trim();\n  if (!raw) return [];\n  return raw.split(\",\").map(v => parseAddress(v).email).filter(Boolean);\n}\n\nfunction getFirst(...values) {\n  for (const value of values) {\n    if (value !== undefined && value !== null && String(value).trim() !== \"\") return value;\n  }\n  return \"\";\n}\n\nfunction stripHtml(html) {\n  return String(html || \"\").replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n}\n\nfunction errorResult(code, message, source) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-IMAP-INBOX\",\n      component_version: \"v1\",\n      provider: \"imap\",\n      operation: \"inbound_email_trigger\",\n      validation_status: \"invalid\",\n      message_id: source.messageId || source.messageID || source.id || source.uid || null,\n      thread_id: null,\n      from: { email: \"\", name: \"\" },\n      to: [],\n      cc: [],\n      bcc: [],\n      subject: null,\n      snippet: source.snippet || \"\",\n      body_text: source.textPlain || source.text || source.body_text || \"\",\n      body_html: source.textHtml || source.html || source.body_html || \"\",\n      received_at: source.date || source.receivedDate || null,\n      mailbox: source.mailbox || \"INBOX\",\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"imap_inbox_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: source\n    }\n  }];\n}\n\nconst source = $json.body && ($json.body.uid || $json.body.messageId || $json.body.from)\n  ? $json.body\n  : $json;\n\nconst messageId = getFirst(source.messageId, source.messageID, source.id, source.uid);\nif (!messageId) return errorResult(\"MISSING_MESSAGE_ID\", \"IMAP message id, uid, or equivalent identifier is required.\", source);\n\nconst fromRaw = getFirst(source.from, source.fromEmail, source.sender);\nconst from = parseAddress(fromRaw);\nif (!from.email) return errorResult(\"MISSING_FROM\", \"IMAP from/sender field is required.\", source);\n\nconst bodyHtml = String(getFirst(source.textHtml, source.html, source.body_html));\nconst bodyTextRaw = String(getFirst(source.textPlain, source.text, source.body_text, source.snippet));\nconst bodyText = bodyTextRaw || stripHtml(bodyHtml);\nconst snippet = String(source.snippet || bodyText.slice(0, 180));\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-IMAP-INBOX\",\n    component_version: \"v1\",\n    provider: \"imap\",\n    operation: \"inbound_email_trigger\",\n    validation_status: \"valid\",\n    message_id: String(messageId),\n    thread_id: null,\n    from,\n    to: splitAddresses(source.to),\n    cc: splitAddresses(source.cc),\n    bcc: splitAddresses(source.bcc),\n    subject: String(source.subject || \"\"),\n    snippet,\n    body_text: bodyText,\n    body_html: bodyHtml,\n    received_at: source.date || source.receivedDate || null,\n    mailbox: source.mailbox || \"INBOX\",\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"route_to_email_processing\",\n    status_log_event: \"imap_inbox_message_normalized\",\n    downstream_components: [\"C4-B\", \"C4-A\", \"C2-D\", \"C2-B\", \"C5-W\"],\n    source_result: source\n  }\n}];"
+      },
+      "id": "b9be72b2-d88b-4ebd-b2de-068ecb72de32",
+      "name": "Normalize Live IMAP Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function parseAddress(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return { email: \"\", name: \"\" };\n\n  if (typeof value === \"object\" && value !== null) {\n    const email = String(value.address || value.email || \"\").trim();\n    const name = String(value.name || value.text || \"\").trim();\n    return { email, name };\n  }\n\n  const match = raw.match(/^(.*)<([^>]+)>$/);\n  if (match) {\n    return {\n      name: String(match[1] || \"\").trim().replace(/^\"|\"$/g, \"\"),\n      email: String(match[2] || \"\").trim()\n    };\n  }\n\n  return { name: \"\", email: raw };\n}\n\nfunction splitAddresses(value) {\n  if (Array.isArray(value)) {\n    return value.map(v => parseAddress(v).email).filter(Boolean);\n  }\n\n  if (value && typeof value === \"object\") {\n    if (Array.isArray(value.value)) return value.value.map(v => parseAddress(v).email).filter(Boolean);\n    if (value.text) return splitAddresses(value.text);\n  }\n\n  const raw = String(value || \"\").trim();\n  if (!raw) return [];\n  return raw.split(\",\").map(v => parseAddress(v).email).filter(Boolean);\n}\n\nfunction getFirst(...values) {\n  for (const value of values) {\n    if (value !== undefined && value !== null && String(value).trim() !== \"\") return value;\n  }\n  return \"\";\n}\n\nfunction stripHtml(html) {\n  return String(html || \"\").replace(/<[^>]*>/g, \" \").replace(/\\s+/g, \" \").trim();\n}\n\nfunction errorResult(code, message, source) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-IMAP-INBOX\",\n      component_version: \"v1\",\n      provider: \"imap\",\n      operation: \"inbound_email_trigger\",\n      validation_status: \"invalid\",\n      message_id: source.messageId || source.messageID || source.id || source.uid || null,\n      thread_id: null,\n      from: { email: \"\", name: \"\" },\n      to: [],\n      cc: [],\n      bcc: [],\n      subject: null,\n      snippet: source.snippet || \"\",\n      body_text: source.textPlain || source.text || source.body_text || \"\",\n      body_html: source.textHtml || source.html || source.body_html || \"\",\n      received_at: source.date || source.receivedDate || null,\n      mailbox: source.mailbox || \"INBOX\",\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"imap_inbox_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: source\n    }\n  }];\n}\n\nconst source = $json.body && ($json.body.uid || $json.body.messageId || $json.body.from)\n  ? $json.body\n  : $json;\n\nconst messageId = getFirst(source.messageId, source.messageID, source.id, source.uid);\nif (!messageId) return errorResult(\"MISSING_MESSAGE_ID\", \"IMAP message id, uid, or equivalent identifier is required.\", source);\n\nconst fromRaw = getFirst(source.from, source.fromEmail, source.sender);\nconst from = parseAddress(fromRaw);\nif (!from.email) return errorResult(\"MISSING_FROM\", \"IMAP from/sender field is required.\", source);\n\nconst bodyHtml = String(getFirst(source.textHtml, source.html, source.body_html));\nconst bodyTextRaw = String(getFirst(source.textPlain, source.text, source.body_text, source.snippet));\nconst bodyText = bodyTextRaw || stripHtml(bodyHtml);\nconst snippet = String(source.snippet || bodyText.slice(0, 180));\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-IMAP-INBOX\",\n    component_version: \"v1\",\n    provider: \"imap\",\n    operation: \"inbound_email_trigger\",\n    validation_status: \"valid\",\n    message_id: String(messageId),\n    thread_id: null,\n    from,\n    to: splitAddresses(source.to),\n    cc: splitAddresses(source.cc),\n    bcc: splitAddresses(source.bcc),\n    subject: String(source.subject || \"\"),\n    snippet,\n    body_text: bodyText,\n    body_html: bodyHtml,\n    received_at: source.date || source.receivedDate || null,\n    mailbox: source.mailbox || \"INBOX\",\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"route_to_email_processing\",\n    status_log_event: \"imap_inbox_message_normalized\",\n    downstream_components: [\"C4-B\", \"C4-A\", \"C2-D\", \"C2-B\", \"C5-W\"],\n    source_result: source\n  }\n}];"
+      },
+      "id": "b0680463-c3ce-49b4-ab05-a22c02c918d8",
+      "name": "Normalize Test IMAP Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "14bba476-d25c-4ad9-8f61-ef3ca5938ad6",
+      "name": "Return Test Normalized Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        704,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "Email Trigger IMAP - Message Received": [
+      {
+        "json": {
+          "uid": "imap_uid_001",
+          "messageId": "<imap_msg_001@example.com>",
+          "mailbox": "INBOX",
+          "from": "Lead One <lead.one@example.com>",
+          "to": "shwetabh@lexnovahq.com",
+          "cc": "",
+          "bcc": "",
+          "subject": "Automation inquiry via IMAP",
+          "textPlain": "Hi, I am interested in your automation service.",
+          "textHtml": "",
+          "date": "Fri, 29 May 2026 10:00:00 +0530"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Email Trigger IMAP - Message Received": {
+      "main": [
+        [
+          {
+            "node": "Normalize Live IMAP Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Test IMAP Payload": {
+      "main": [
+        [
+          {
+            "node": "Normalize Test IMAP Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Test IMAP Payload": {
+      "main": [
+        [
+          {
+            "node": "Return Test Normalized Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b4f54c69-38a9-49a6-9de9-3ed062dd91e1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "rBJ6W6ZT1cLvgIuO",
+  "tags": []
+}
