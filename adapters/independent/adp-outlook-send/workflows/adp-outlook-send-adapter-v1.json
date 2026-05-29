@@ -1,0 +1,241 @@
+{
+  "name": "ADP-OUTLOOK-SEND - Outlook M365 Send Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-outlook-send",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2f769aa1-0928-4e06-9de5-80185fcf32b1",
+      "name": "Receive Outlook Send Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        144
+      ],
+      "webhookId": "adp-outlook-send"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.request_id ? $json : (($json.body && $json.body.request_id) ? $json.body : $json);\n\nfunction asArray(value) {\n  if (Array.isArray(value)) return value.map(v => String(v).trim()).filter(Boolean);\n  if (value === undefined || value === null || value === \"\") return [];\n  return String(value).split(\",\").map(v => v.trim()).filter(Boolean);\n}\n\nfunction errorResult(code, message) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-OUTLOOK-SEND\",\n      component_version: \"v1\",\n      request_id: raw.request_id || null,\n      source_component: raw.source_component || null,\n      provider: \"outlook_m365\",\n      operation: \"send_email\",\n      validation_status: \"invalid\",\n      message_id: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"outlook_send_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: null,\n      original_input: raw\n    }\n  }];\n}\n\nif (!raw.request_id) {\n  return errorResult(\"MISSING_REQUEST_ID\", \"request_id is required.\");\n}\n\nif (!raw.email || typeof raw.email !== \"object\") {\n  return errorResult(\"MISSING_EMAIL_OBJECT\", \"email object is required.\");\n}\n\nconst email = raw.email;\n\nconst to = asArray(email.to);\nconst cc = asArray(email.cc);\nconst bcc = asArray(email.bcc);\n\nconst subject = String(email.subject || \"\").trim();\nconst bodyText = String(email.body_text || \"\");\nconst bodyHtml = String(email.body_html || \"\");\nconst sendFormat = String(email.send_format || \"text\").trim().toLowerCase();\n\nif (to.length < 1) {\n  return errorResult(\"MISSING_TO\", \"email.to must contain at least one recipient.\");\n}\n\nif (!subject) {\n  return errorResult(\"MISSING_SUBJECT\", \"email.subject is required.\");\n}\n\nif (![\"text\", \"html\"].includes(sendFormat)) {\n  return errorResult(\"INVALID_SEND_FORMAT\", \"email.send_format must be text or html.\");\n}\n\nif (sendFormat === \"html\" && !bodyHtml && !bodyText) {\n  return errorResult(\"MISSING_BODY\", \"body_html or body_text is required for html email.\");\n}\n\nif (sendFormat === \"text\" && !bodyText && !bodyHtml) {\n  return errorResult(\"MISSING_BODY\", \"body_text or body_html is required for text email.\");\n}\n\nconst message = sendFormat === \"html\"\n  ? (bodyHtml || bodyText)\n  : (bodyText || bodyHtml.replace(/<[^>]*>/g, \"\"));\n\nconst outlook = {\n  to: to.join(\",\"),\n  subject,\n  bodyContentType: sendFormat === \"html\" ? \"html\" : \"text\",\n  message\n};\n\nif (cc.length > 0) {\n  outlook.cc = cc.join(\",\");\n}\n\nif (bcc.length > 0) {\n  outlook.bcc = bcc.join(\",\");\n}\n\nreturn [{\n  json: {\n    adapter_status: \"ready\",\n    component_id: \"ADP-OUTLOOK-SEND\",\n    component_version: \"v1\",\n    request_id: raw.request_id,\n    source_component: raw.source_component || null,\n    provider: \"outlook_m365\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    outlook,\n    routing_options: raw.routing_options || {},\n    metadata: raw.metadata || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"execute_outlook_send\",\n    status_log_event: \"outlook_send_request_validated\",\n    original_input: raw\n  }\n}];"
+      },
+      "id": "d8a665cb-dc30-4445-8a98-181c2a38dd8b",
+      "name": "Normalize And Validate Outlook Email Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.adapter_status }}",
+                    "rightValue": "ready",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "80d99994-7f43-4d75-b6e9-338bb948eb5e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ready"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "4e089315-9fed-4629-8cdc-159d9622e092",
+      "name": "Validation Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        144
+      ],
+      "notesInFlow": true,
+      "notes": "After import, manually confirm fallback/extra output is enabled and connected to Return Outlook Send Result."
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.outlook.to }}",
+        "subject": "={{ $json.outlook.subject }}",
+        "bodyContent": "={{ $json.outlook.message }}",
+        "additionalFields": {
+          "bodyContentType": "={{ $json.outlook.bodyContentType }}"
+        }
+      },
+      "id": "ea658ce4-180d-4a8c-b873-dabea508c2b1",
+      "name": "Send Email Through Outlook",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "notesInFlow": true,
+      "webhookId": "db244b1e-1151-4130-bd32-ca381606903d",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "OLP1DIXxOiBex24j",
+          "name": "Microsoft Outlook account"
+        }
+      },
+      "continueOnFail": true,
+      "notes": "Select Microsoft Outlook OAuth2 credential manually in n8n. Field labels may vary; map To/Subject/Body/CC/BCC manually if needed."
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst validation = $node[\"Normalize And Validate Outlook Email Request\"].json;\nconst providerResult = $json;\nconst hasError = Boolean(providerResult.error || providerResult.message?.includes?.(\"ERROR\"));\n\nif (hasError) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-OUTLOOK-SEND\",\n      component_version: \"v1\",\n      request_id: validation.request_id || null,\n      source_component: validation.source_component || null,\n      provider: \"outlook_m365\",\n      operation: \"send_email\",\n      validation_status: validation.validation_status || \"valid\",\n      message_id: null,\n      manual_review_required: true,\n      error_code: \"OUTLOOK_SEND_FAILED\",\n      error_message: providerResult.error?.message || providerResult.message || \"Outlook/M365 send failed.\",\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"outlook_send_failed\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: providerResult,\n      original_input: validation.original_input || null\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-OUTLOOK-SEND\",\n    component_version: \"v1\",\n    request_id: validation.request_id || null,\n    source_component: validation.source_component || null,\n    provider: \"outlook_m365\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    message_id: providerResult.id || providerResult.messageId || null,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: validation.routing_options?.on_success || \"log_status\",\n    status_log_event: \"outlook_send_success\",\n    downstream_components: [\"C5-W\"],\n    source_result: providerResult,\n    original_input: validation.original_input || null\n  }\n}];\n"
+      },
+      "id": "d6df4874-fd2d-419e-8986-9a2438063882",
+      "name": "Normalize Outlook Send Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "75cb4542-82b1-45ed-a0df-97dd8392ef5b",
+      "name": "Return Outlook Send Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        144
+      ]
+    }
+  ],
+  "pinData": {
+    "Receive Outlook Send Request": [
+      {
+        "json": {
+          "request_id": "req_outlook_send_text_001",
+          "source_component": "C2-I",
+          "email": {
+            "to": [
+              "shwetabh@lexnovahq.com"
+            ],
+            "cc": [],
+            "bcc": [],
+            "subject": "ADP-OUTLOOK-SEND test - text",
+            "body_text": "This is a plain text test from ADP-OUTLOOK-SEND.",
+            "body_html": "",
+            "send_format": "text"
+          },
+          "routing_options": {
+            "on_success": "log_status",
+            "on_failure": "manual_review"
+          },
+          "metadata": {
+            "template_id": "outlook-send-test",
+            "environment": "n8n-test"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive Outlook Send Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate Outlook Email Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate Outlook Email Request": {
+      "main": [
+        [
+          {
+            "node": "Validation Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Email Through Outlook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Outlook Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Through Outlook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Outlook Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Outlook Send Result": {
+      "main": [
+        [
+          {
+            "node": "Return Outlook Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d2830fac-a2ed-46de-8a58-77d80db68875",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "jJBno08LPhUdHPeW",
+  "tags": []
+}

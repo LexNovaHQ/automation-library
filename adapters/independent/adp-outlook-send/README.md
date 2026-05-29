@@ -1,7 +1,7 @@
 ﻿# ADP-OUTLOOK-SEND - Outlook/M365 Send Adapter
 
 ## Status
-Phase 1 scaffold and test payloads.
+Built v1.0.
 
 ## Primary Category
 Category 2 - Automation Workflows
@@ -24,13 +24,18 @@ Use n8n Microsoft Outlook node with Microsoft Outlook OAuth2 credentials. Do not
 ## Credential Rule
 Credentials are added manually by the user inside n8n. No real credential IDs, tenant IDs, client IDs, client secrets, or Microsoft account details are embedded in the workflow JSON.
 
+## Platform Setup Required
+Create a Microsoft Entra app registration, add Microsoft Graph delegated Mail.Send permission, configure the n8n OAuth callback URL as a Web redirect URI, create a client secret, then connect the Microsoft Outlook OAuth2 credential inside n8n.
+
 ## n8n Import Note
-Microsoft Outlook OAuth2 credentials must be configured manually in n8n after import. If a Switch node is used, fallback/extra output must be confirmed manually in n8n.
+Microsoft Outlook OAuth2 credentials must be configured manually in n8n after import. Confirm that Validation Switch fallback/extra output is connected to Return Outlook Send Result.
+
+## Outlook Recipient Handling Note
+Do not pass empty optional recipient fields into the Microsoft Outlook node. In v1, CC/BCC are not mapped unless explicitly configured because Outlook may try to resolve blank recipients and fail with Recipient '' is not resolved.
 
 ## Supported v1 Operations
-- Send plain text email where supported by Outlook node
-- Send HTML email where supported by Outlook node
-- CC and BCC where supported by Outlook node
+- Send plain text email
+- Send HTML email
 - Subject/body validation
 - Safe failure output
 
@@ -42,51 +47,12 @@ Microsoft Outlook OAuth2 credentials must be configured manually in n8n after im
 - Bulk email campaign sending
 - OAuth app registration automation
 - Shared mailbox support beyond credential-level configuration
+- CC/BCC execution unless manually configured with non-empty recipient handling
 
-## Input Contract
+## Workflow Artifact
+- workflows/adp-outlook-send-adapter-v1.json
 
-`json
-{
-  "request_id": "req_outlook_send_001",
-  "source_component": "C2-I",
-  "email": {
-    "to": ["recipient@example.com"],
-    "cc": [],
-    "bcc": [],
-    "subject": "Subject line",
-    "body_text": "Plain text body",
-    "body_html": "<p>HTML body</p>",
-    "send_format": "html"
-  },
-  "routing_options": {
-    "on_success": "log_status",
-    "on_failure": "manual_review"
-  }
-}
-`",
-",
-
-
-`json
-{
-  "adapter_status": "success",
-  "component_id": "ADP-OUTLOOK-SEND",
-  "component_version": "v1",
-  "request_id": "req_outlook_send_001",
-  "provider": "outlook_m365",
-  "operation": "send_email",
-  "validation_status": "valid",
-  "message_id": "provider_message_id_or_null",
-  "manual_review_required": false,
-  "error_code": null,
-  "error_message": null,
-  "next_action": "log_status",
-  "downstream_components": ["C5-W"],
-  "source_result": {}
-}
-`",
-",
-
+## Test Payloads
 - send-text.valid.json
 - send-html.valid.json
 - send-with-cc-bcc.valid.json
@@ -95,5 +61,20 @@ Microsoft Outlook OAuth2 credentials must be configured manually in n8n after im
 - missing-body.invalid.json
 - invalid-send-format.invalid.json
 
+## Output Samples
+- success-send-text.json
+- success-send-html.json
+- error-missing-to.json
+- error-missing-subject.json
+- error-missing-body.json
+- error-invalid-send-format.json
+
+## Tested
+- Invalid validation tests passed.
+- Text send test passed.
+- HTML send test passed.
+- Microsoft Outlook OAuth2 credential configured manually in n8n.
+- Empty CC/BCC recipient issue identified and avoided in v1.
+
 ## Version
-v1.0 draft
+v1.0

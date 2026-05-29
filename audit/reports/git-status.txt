@@ -1,11 +1,10 @@
-﻿ M adapters/independent/adp-imap-inbox/README.md
+﻿ M adapters/independent/adp-outlook-send/README.md
  M audit/config/category-2-adapter-family-roadmap.csv
  M audit/config/component-classification.csv
-?? adapters/independent/adp-imap-inbox/output-samples/error-missing-from.json
-?? adapters/independent/adp-imap-inbox/output-samples/error-missing-message-id.json
-?? adapters/independent/adp-imap-inbox/output-samples/success-basic-message.json
-?? adapters/independent/adp-imap-inbox/output-samples/success-empty-subject.json
-?? adapters/independent/adp-imap-inbox/output-samples/success-html-message.json
-?? adapters/independent/adp-imap-inbox/output-samples/success-no-body.json
-?? adapters/independent/adp-imap-inbox/output-samples/success-with-cc.json
-?? adapters/independent/adp-imap-inbox/workflows/adp-imap-inbox-adapter-v1.json
+?? adapters/independent/adp-outlook-send/output-samples/error-invalid-send-format.json
+?? adapters/independent/adp-outlook-send/output-samples/error-missing-body.json
+?? adapters/independent/adp-outlook-send/output-samples/error-missing-subject.json
+?? adapters/independent/adp-outlook-send/output-samples/error-missing-to.json
+?? adapters/independent/adp-outlook-send/output-samples/success-send-html.json
+?? adapters/independent/adp-outlook-send/output-samples/success-send-text.json
+?? adapters/independent/adp-outlook-send/workflows/adp-outlook-send-adapter-v1.json

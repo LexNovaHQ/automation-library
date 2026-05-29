@@ -1,0 +1,41 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-OUTLOOK-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_outlook_send_html_001",
+    "source_component":  "C4-E",
+    "provider":  "outlook_m365",
+    "operation":  "send_email",
+    "validation_status":  "valid",
+    "message_id":  "outlook_message_id_or_null",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "log_status",
+    "status_log_event":  "outlook_send_success",
+    "downstream_components":  [
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "id":  "outlook_message_id_or_null"
+                      },
+    "original_input":  {
+                           "request_id":  "req_outlook_send_html_001",
+                           "email":  {
+                                         "bcc":  [
+
+                                                 ],
+                                         "send_format":  "html",
+                                         "subject":  "ADP-OUTLOOK-SEND test - HTML",
+                                         "to":  [
+                                                    "shwetabh@lexnovahq.com"
+                                                ],
+                                         "body_html":  "\u003cp\u003e\u003cstrong\u003eADP-OUTLOOK-SEND test\u003c/strong\u003e\u003c/p\u003e\u003cp\u003eYour Outlook adapter test is ready.\u003c/p\u003e",
+                                         "body_text":  "Your Outlook adapter test is ready.",
+                                         "cc":  [
+
+                                                ]
+                                     },
+                           "source_component":  "C4-E"
+                       }
+}

@@ -1,6 +1,6 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 18:55:11
+Generated: 2026-05-29 20:04:56
 
 ## Status Counts
 
@@ -9,7 +9,7 @@ Generated: 2026-05-29 18:55:11
 | BROKEN_ARTIFACTS | 1 |
 | DEFERRED | 6 |
 | NOT_BUILT | 7 |
-| PASS_80_20 | 29 |
+| PASS_80_20 | 30 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
 | PASS_HANDOFF_ONLY | 5 |
@@ -35,7 +35,7 @@ Generated: 2026-05-29 18:55:11
 | Category 6 - Debugging / Reliability | 8 |
 | Client Config Layer | 10 |
 | Template Glue Layer | 6 |
-| Universal Adapter Layer | 12 |
+| Universal Adapter Layer | 13 |
 
 ## Built Artifact Snapshot
 
@@ -44,6 +44,7 @@ Generated: 2026-05-29 18:55:11
 | ADP-GMAIL-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 6 | 6 |
 | ADP-GMAIL-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 7 |
 | ADP-IMAP-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 7 | 7 |
+| ADP-OUTLOOK-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 6 |
 | ADP-REST | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 11 | 7 | 7 |
 | ADP-SMTP-SEND | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | 1 | 6 | 0 | 8 |
 | ADP-WEBHOOK-SEND | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 7 | 6 | 6 |

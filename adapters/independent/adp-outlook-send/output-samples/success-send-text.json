@@ -1,0 +1,41 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-OUTLOOK-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_outlook_send_text_001",
+    "source_component":  "C2-I",
+    "provider":  "outlook_m365",
+    "operation":  "send_email",
+    "validation_status":  "valid",
+    "message_id":  "outlook_message_id_or_null",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "log_status",
+    "status_log_event":  "outlook_send_success",
+    "downstream_components":  [
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "id":  "outlook_message_id_or_null"
+                      },
+    "original_input":  {
+                           "request_id":  "req_outlook_send_text_001",
+                           "email":  {
+                                         "bcc":  [
+
+                                                 ],
+                                         "send_format":  "text",
+                                         "subject":  "ADP-OUTLOOK-SEND test - text",
+                                         "to":  [
+                                                    "shwetabh@lexnovahq.com"
+                                                ],
+                                         "body_html":  "",
+                                         "body_text":  "This is a plain text test from ADP-OUTLOOK-SEND.",
+                                         "cc":  [
+
+                                                ]
+                                     },
+                           "source_component":  "C2-I"
+                       }
+}
