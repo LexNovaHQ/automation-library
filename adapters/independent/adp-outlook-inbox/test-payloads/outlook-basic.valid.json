@@ -1,0 +1,28 @@
+﻿{
+  "id": "outlook_msg_001",
+  "conversationId": "outlook_thread_001",
+  "subject": "Automation inquiry via Outlook",
+  "bodyPreview": "Hi, I am interested in your automation service.",
+  "body": {
+    "contentType": "text",
+    "content": "Hi, I am interested in your automation service."
+  },
+  "from": {
+    "emailAddress": {
+      "name": "Lead One",
+      "address": "lead.one@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:00:00+05:30",
+  "parentFolderId": "Inbox"
+}

@@ -1,0 +1,27 @@
+﻿{
+  "conversationId": "outlook_thread_007",
+  "subject": "Missing message ID",
+  "bodyPreview": "Missing message id should fail.",
+  "body": {
+    "contentType": "text",
+    "content": "Missing message id should fail."
+  },
+  "from": {
+    "emailAddress": {
+      "name": "Missing Id",
+      "address": "missing.id@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:30:00+05:30",
+  "parentFolderId": "Inbox"
+}

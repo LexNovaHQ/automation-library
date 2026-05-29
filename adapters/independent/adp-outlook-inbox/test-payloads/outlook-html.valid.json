@@ -1,0 +1,28 @@
+﻿{
+  "id": "outlook_msg_003",
+  "conversationId": "outlook_thread_003",
+  "subject": "HTML email",
+  "bodyPreview": "Hello from an HTML Outlook email.",
+  "body": {
+    "contentType": "html",
+    "content": "<p>Hello from an <strong>HTML</strong> Outlook email.</p>"
+  },
+  "from": {
+    "emailAddress": {
+      "name": "HTML Sender",
+      "address": "html.sender@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:10:00+05:30",
+  "parentFolderId": "Inbox"
+}

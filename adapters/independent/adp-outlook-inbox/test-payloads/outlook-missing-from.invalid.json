@@ -1,0 +1,22 @@
+﻿{
+  "id": "outlook_msg_006",
+  "conversationId": "outlook_thread_006",
+  "subject": "Missing sender",
+  "bodyPreview": "Missing sender should fail.",
+  "body": {
+    "contentType": "text",
+    "content": "Missing sender should fail."
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:25:00+05:30",
+  "parentFolderId": "Inbox"
+}

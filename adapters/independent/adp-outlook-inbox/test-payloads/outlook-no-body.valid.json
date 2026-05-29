@@ -1,0 +1,28 @@
+﻿{
+  "id": "outlook_msg_005",
+  "conversationId": "outlook_thread_005",
+  "subject": "No body email",
+  "bodyPreview": "",
+  "body": {
+    "contentType": "text",
+    "content": ""
+  },
+  "from": {
+    "emailAddress": {
+      "name": "No Body",
+      "address": "nobody@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:20:00+05:30",
+  "parentFolderId": "Inbox"
+}

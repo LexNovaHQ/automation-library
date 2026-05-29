@@ -1,0 +1,28 @@
+﻿{
+  "id": "outlook_msg_004",
+  "conversationId": "outlook_thread_004",
+  "subject": "",
+  "bodyPreview": "No subject but still processable.",
+  "body": {
+    "contentType": "text",
+    "content": "No subject but still processable."
+  },
+  "from": {
+    "emailAddress": {
+      "name": "No Subject",
+      "address": "nosubject@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:15:00+05:30",
+  "parentFolderId": "Inbox"
+}

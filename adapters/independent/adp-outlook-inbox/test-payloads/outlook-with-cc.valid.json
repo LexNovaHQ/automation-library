@@ -1,0 +1,35 @@
+﻿{
+  "id": "outlook_msg_002",
+  "conversationId": "outlook_thread_002",
+  "subject": "Workflow automation request",
+  "bodyPreview": "Please include my operations manager.",
+  "body": {
+    "contentType": "text",
+    "content": "Please include my operations manager."
+  },
+  "from": {
+    "emailAddress": {
+      "name": "Founder Two",
+      "address": "founder.two@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Shwetabh",
+        "address": "shwetabh@lexnovahq.com"
+      }
+    }
+  ],
+  "ccRecipients": [
+    {
+      "emailAddress": {
+        "name": "Ops Manager",
+        "address": "ops.manager@example.com"
+      }
+    }
+  ],
+  "bccRecipients": [],
+  "receivedDateTime": "2026-05-29T10:05:00+05:30",
+  "parentFolderId": "Inbox"
+}
