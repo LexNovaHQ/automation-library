@@ -1,0 +1,14 @@
+﻿{
+  "id": "gmail_msg_003",
+  "threadId": "gmail_thread_003",
+  "labelIds": ["INBOX"],
+  "snippet": "No subject but still processable.",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "No Subject <nosubject@example.com>" },
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:10:00 +0530" }
+    ]
+  },
+  "internalDate": "1780039200000"
+}

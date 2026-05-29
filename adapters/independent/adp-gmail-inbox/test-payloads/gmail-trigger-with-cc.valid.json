@@ -1,0 +1,16 @@
+﻿{
+  "id": "gmail_msg_002",
+  "threadId": "gmail_thread_002",
+  "labelIds": ["INBOX"],
+  "snippet": "Please include my operations manager.",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "Founder Two <founder.two@example.com>" },
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Cc", "value": "ops.manager@example.com" },
+      { "name": "Subject", "value": "Workflow automation request" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:05:00 +0530" }
+    ]
+  },
+  "internalDate": "1780038900000"
+}

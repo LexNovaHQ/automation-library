@@ -1,0 +1,15 @@
+﻿{
+  "id": "gmail_msg_001",
+  "threadId": "gmail_thread_001",
+  "labelIds": ["INBOX", "UNREAD"],
+  "snippet": "Hi, I am interested in your automation service.",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "Lead One <lead.one@example.com>" },
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Subject", "value": "Automation inquiry" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:00:00 +0530" }
+    ]
+  },
+  "internalDate": "1780038600000"
+}

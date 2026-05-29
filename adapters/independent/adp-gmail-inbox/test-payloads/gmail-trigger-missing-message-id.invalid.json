@@ -1,0 +1,14 @@
+﻿{
+  "threadId": "gmail_thread_006",
+  "labelIds": ["INBOX"],
+  "snippet": "Missing message ID should fail.",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "Missing Id <missing.id@example.com>" },
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Subject", "value": "Missing ID" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:25:00 +0530" }
+    ]
+  },
+  "internalDate": "1780040100000"
+}

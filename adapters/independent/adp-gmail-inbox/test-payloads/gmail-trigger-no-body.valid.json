@@ -1,0 +1,15 @@
+﻿{
+  "id": "gmail_msg_004",
+  "threadId": "gmail_thread_004",
+  "labelIds": ["INBOX"],
+  "snippet": "",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "No Body <nobody@example.com>" },
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Subject", "value": "No body email" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:15:00 +0530" }
+    ]
+  },
+  "internalDate": "1780039500000"
+}

@@ -1,0 +1,14 @@
+﻿{
+  "id": "gmail_msg_005",
+  "threadId": "gmail_thread_005",
+  "labelIds": ["INBOX"],
+  "snippet": "Missing sender should fail.",
+  "payload": {
+    "headers": [
+      { "name": "To", "value": "shwetabh@lexnovahq.com" },
+      { "name": "Subject", "value": "Missing sender" },
+      { "name": "Date", "value": "Fri, 29 May 2026 10:20:00 +0530" }
+    ]
+  },
+  "internalDate": "1780039800000"
+}
