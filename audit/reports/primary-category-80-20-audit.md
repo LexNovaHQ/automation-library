@@ -1,14 +1,14 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 00:42:53
+Generated: 2026-05-29 14:31:43
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
-| DEFERRED | 8 |
+| DEFERRED | 7 |
 | NOT_BUILT | 7 |
-| PASS_80_20 | 26 |
+| PASS_80_20 | 27 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
 | PASS_HANDOFF_ONLY | 5 |
@@ -39,6 +39,7 @@ Generated: 2026-05-29 00:42:53
 
 | ID | Layer | 80/20 | Workflows | Nodes | Payloads | Samples |
 |---|---|---|---:|---:|---:|---:|
+| ADP-GMAIL-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 7 |
 | ADP-REST | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 11 | 7 | 7 |
 | ADP-WEBHOOK-SEND | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 7 | 6 | 6 |
 | C2-A | CORE_COMPONENT | PASS_80_20 | 1 | 4 | 7 | 7 |

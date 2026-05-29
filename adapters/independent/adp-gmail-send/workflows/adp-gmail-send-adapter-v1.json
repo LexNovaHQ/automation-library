@@ -1,0 +1,228 @@
+{
+  "name": "ADP-GMAIL-SEND - Gmail Send Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-gmail-send",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "203d3568-2067-4d9d-ba24-980b35bde7a1",
+      "name": "Receive Gmail Send Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        144
+      ],
+      "webhookId": "adp-gmail-send"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.request_id ? $json : (($json.body && $json.body.request_id) ? $json.body : $json);\n\nfunction asArray(value) {\n  if (Array.isArray(value)) return value.map(v => String(v).trim()).filter(Boolean);\n  if (value === undefined || value === null || value === \"\") return [];\n  return String(value).split(\",\").map(v => v.trim()).filter(Boolean);\n}\n\nfunction errorResult(code, message) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GMAIL-SEND\",\n      component_version: \"v1\",\n      request_id: raw.request_id || null,\n      source_component: raw.source_component || null,\n      provider: \"gmail\",\n      operation: \"send_email\",\n      validation_status: \"invalid\",\n      message_id: null,\n      thread_id: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gmail_send_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: null,\n      original_input: raw\n    }\n  }];\n}\n\nif (!raw.request_id) return errorResult(\"MISSING_REQUEST_ID\", \"request_id is required.\");\nif (!raw.email || typeof raw.email !== \"object\") return errorResult(\"MISSING_EMAIL_OBJECT\", \"email object is required.\");\n\nconst email = raw.email;\nconst to = asArray(email.to);\nconst cc = asArray(email.cc);\nconst bcc = asArray(email.bcc);\nconst subject = String(email.subject || \"\").trim();\nconst bodyText = String(email.body_text || \"\");\nconst bodyHtml = String(email.body_html || \"\");\nconst sendFormat = String(email.send_format || \"text\").trim().toLowerCase();\nconst replyTo = String(email.reply_to || email.replyTo || \"\").trim();\nconst senderName = String(email.sender_name || email.senderName || \"\").trim();\n\nif (to.length < 1) return errorResult(\"MISSING_TO\", \"email.to must contain at least one recipient.\");\nif (!subject) return errorResult(\"MISSING_SUBJECT\", \"email.subject is required.\");\nif (![\"text\", \"html\"].includes(sendFormat)) return errorResult(\"INVALID_SEND_FORMAT\", \"email.send_format must be text or html.\");\nif (sendFormat === \"html\" && !bodyHtml && !bodyText) return errorResult(\"MISSING_BODY\", \"body_html or body_text is required for html email.\");\nif (sendFormat === \"text\" && !bodyText && !bodyHtml) return errorResult(\"MISSING_BODY\", \"body_text or body_html is required for text email.\");\n\nconst message = sendFormat === \"html\" ? (bodyHtml || bodyText) : (bodyText || bodyHtml.replace(/<[^>]*>/g, \"\"));\n\nreturn [{\n  json: {\n    adapter_status: \"ready\",\n    component_id: \"ADP-GMAIL-SEND\",\n    component_version: \"v1\",\n    request_id: raw.request_id,\n    source_component: raw.source_component || null,\n    provider: \"gmail\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    gmail: {\n      to: to.join(\",\"),\n      cc: cc.join(\",\"),\n      bcc: bcc.join(\",\"),\n      subject,\n      emailType: sendFormat,\n      message,\n      replyTo,\n      senderName\n    },\n    routing_options: raw.routing_options || {},\n    metadata: raw.metadata || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"execute_gmail_send\",\n    status_log_event: \"gmail_send_request_validated\",\n    original_input: raw\n  }\n}];"
+      },
+      "id": "1f072a14-5168-4885-88d3-fd91c8faddb7",
+      "name": "Normalize And Validate Email Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.adapter_status }}",
+                    "rightValue": "ready",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4970bb21-aa02-4859-8ba5-625d38e371fa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ready"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "4f662637-fb9d-4fa2-83bc-30ae50148328",
+      "name": "Validation Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -320,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.gmail.to }}",
+        "subject": "={{ $json.gmail.subject }}",
+        "message": "={{ $json.gmail.message }}",
+        "options": {
+          "appendAttribution": false,
+          "bccList": "={{ $json.gmail.bcc }}",
+          "ccList": "={{ $json.gmail.cc }}",
+          "senderName": "={{ $json.gmail.senderName }}",
+          "replyTo": "={{ $json.gmail.replyTo }}"
+        }
+      },
+      "id": "516f2c0b-dc25-42fe-9675-1f602bfb5899",
+      "name": "Send Email Through Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "6cbee66a-7295-4479-835a-fad19200e101",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "T8hMMHZpQjhqRRrx",
+          "name": "Gmail account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const validation = $node[\"Normalize And Validate Email Request\"].json;\nconst providerResult = $json;\n\nconst hasError = Boolean(providerResult.error || providerResult.message?.includes?.(\"ERROR\"));\n\nif (hasError) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GMAIL-SEND\",\n      component_version: \"v1\",\n      request_id: validation.request_id || null,\n      source_component: validation.source_component || null,\n      provider: \"gmail\",\n      operation: \"send_email\",\n      validation_status: validation.validation_status || \"valid\",\n      message_id: null,\n      thread_id: null,\n      manual_review_required: true,\n      error_code: \"GMAIL_SEND_FAILED\",\n      error_message: providerResult.error?.message || providerResult.message || \"Gmail send failed.\",\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gmail_send_failed\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: providerResult,\n      original_input: validation.original_input || null\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-GMAIL-SEND\",\n    component_version: \"v1\",\n    request_id: validation.request_id || null,\n    source_component: validation.source_component || null,\n    provider: \"gmail\",\n    operation: \"send_email\",\n    validation_status: \"valid\",\n    message_id: providerResult.id || providerResult.messageId || null,\n    thread_id: providerResult.threadId || null,\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: validation.routing_options?.on_success || \"log_status\",\n    status_log_event: \"gmail_send_success\",\n    downstream_components: [\"C5-W\"],\n    source_result: providerResult,\n    original_input: validation.original_input || null\n  }\n}];"
+      },
+      "id": "90bdd149-02b7-4f31-b001-4b2ff70b9ae6",
+      "name": "Normalize Gmail Send Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "e903f842-e513-4eab-b30c-703efe99c684",
+      "name": "Return Gmail Send Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        144
+      ]
+    }
+  ],
+  "pinData": {
+    "Receive Gmail Send Request": [
+      {
+        "json": {
+          "adapter_status": "error",
+          "component_id": "ADP-GMAIL-SEND",
+          "provider": "gmail",
+          "operation": "send_email",
+          "validation_status": "invalid",
+          "manual_review_required": true,
+          "error_code": "MISSING_TO",
+          "next_action": "route_to_manual_review_or_error_log"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive Gmail Send Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate Email Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate Email Request": {
+      "main": [
+        [
+          {
+            "node": "Validation Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Email Through Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Email Through Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Through Gmail": {
+      "main": [
+        [
+          {
+            "node": "Normalize Gmail Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Gmail Send Result": {
+      "main": [
+        [
+          {
+            "node": "Return Gmail Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9e39e1d7-fe7c-4e78-92f9-d59c0d4b3aa2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "YT1dp8Kl1CqGjnjy",
+  "tags": []
+}

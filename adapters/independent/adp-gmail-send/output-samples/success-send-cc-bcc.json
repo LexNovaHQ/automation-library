@@ -1,0 +1,41 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-GMAIL-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_gmail_send_cc_bcc_001",
+    "source_component":  "C2-O",
+    "provider":  "gmail",
+    "operation":  "send_email",
+    "validation_status":  "valid",
+    "message_id":  "gmail_message_id_example",
+    "thread_id":  "gmail_thread_id_example",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "log_status",
+    "status_log_event":  "gmail_send_success",
+    "downstream_components":  [
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "id":  "gmail_message_id_example",
+                          "threadId":  "gmail_thread_id_example"
+                      },
+    "original_input":  {
+                           "request_id":  "req_gmail_send_cc_bcc_001",
+                           "email":  {
+                                         "subject":  "ADP-GMAIL-SEND test - CC BCC",
+                                         "to":  [
+                                                    "shwetabh@lexnovahq.com"
+                                                ],
+                                         "cc":  [
+                                                    "shwetabh@lexnovahq.com"
+                                                ],
+                                         "send_format":  "html",
+                                         "bcc":  [
+                                                     "shwetabh@lexnovahq.com"
+                                                 ]
+                                     },
+                           "source_component":  "C2-O"
+                       }
+}

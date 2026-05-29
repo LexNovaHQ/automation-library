@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 00:42:52
+Generated: 2026-05-29 14:31:42
 
 ## Layer Type Counts
 
@@ -18,8 +18,8 @@ Generated: 2026-05-29 00:42:52
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 43 |
-| DEFERRED_ADAPTER | 8 |
+| BUILT | 44 |
+| DEFERRED_ADAPTER | 7 |
 | NOT_BUILT | 29 |
 
 ## Priority Counts
@@ -72,7 +72,7 @@ Generated: 2026-05-29 00:42:52
 | ADP-GDRIVE | Google Drive File Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-GHL | GoHighLevel Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
-| ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-NOTION-DB | Notion Database Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PDF | PDF Text Extraction Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
@@ -131,5 +131,6 @@ Generated: 2026-05-29 00:42:52
 | C2-M | WhatsApp Message Automation | HANDOFF_ONLY_CORE | handoff_only |
 | C2-Q | Publishing Adapter Family | HANDOFF_ONLY_CORE | handoff_only |
 | C4-T | OCR / Document Processing Pipeline | HANDOFF_ONLY_CORE | handoff_only |
+| ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | provider_execution |

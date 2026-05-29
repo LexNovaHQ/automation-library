@@ -1,9 +1,10 @@
-﻿ M audit/deferred-scaffolds/failed-workflow-drafts/adp-oauth-test-credential-api-access-test/FAILED_DRAFT_NOTE.md
- M audit/reports/classification-summary.md
- M docs/README.md
- M docs/architecture/platform-architecture-classification.md
- M docs/archive/component-catalog-v1-legacy.md
- M docs/catalog/component-catalog.md
- M docs/catalog/component-readiness-matrix.md
- M docs/process/assembly-pipeline.md
- M docs/roadmap/universal-automation-roadmap.md
+﻿ M adapters/independent/adp-gmail-send/README.md
+ M audit/config/component-classification.csv
+?? adapters/independent/adp-gmail-send/output-samples/error-invalid-send-format.json
+?? adapters/independent/adp-gmail-send/output-samples/error-missing-body.json
+?? adapters/independent/adp-gmail-send/output-samples/error-missing-subject.json
+?? adapters/independent/adp-gmail-send/output-samples/error-missing-to.json
+?? adapters/independent/adp-gmail-send/output-samples/success-send-cc-bcc.json
+?? adapters/independent/adp-gmail-send/output-samples/success-send-html.json
+?? adapters/independent/adp-gmail-send/output-samples/success-send-text.json
+?? adapters/independent/adp-gmail-send/workflows/adp-gmail-send-adapter-v1.json
