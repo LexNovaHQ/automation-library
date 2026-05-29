@@ -1,13 +1,13 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 16:32:14
+Generated: 2026-05-29 17:29:12
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
 | DEFERRED | 6 |
-| NOT_BUILT | 7 |
+| NOT_BUILT | 8 |
 | PASS_80_20 | 28 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
@@ -33,7 +33,7 @@ Generated: 2026-05-29 16:32:14
 | Category 6 - Debugging / Reliability | 8 |
 | Client Config Layer | 10 |
 | Template Glue Layer | 6 |
-| Universal Adapter Layer | 10 |
+| Universal Adapter Layer | 11 |
 
 ## Built Artifact Snapshot
 
@@ -54,7 +54,7 @@ Generated: 2026-05-29 16:32:14
 | C2-F | CORE_COMPONENT | PASS_80_20 | 1 | 3 | 6 | 5 |
 | C2-G | CORE_COMPONENT | PASS_80_20 | 1 | 3 | 8 | 8 |
 | C2-H | HANDOFF_ONLY_CORE | PASS_HANDOFF_ONLY | 1 | 3 | 10 | 10 |
-| C2-I | COMPONENT_ADAPTER | PASS_80_20 | 1 | 6 | 3 | 3 |
+| C2-I | CORE_COMPONENT | PASS_80_20 | 1 | 6 | 3 | 3 |
 | C2-J | CORE_COMPONENT | PASS_80_20 | 1 | 3 | 6 | 6 |
 | C2-K | COMPONENT_ADAPTER | PASS_80_20 | 1 | 7 | 5 | 5 |
 | C2-L | HANDOFF_ONLY_CORE | PASS_HANDOFF_ONLY | 1 | 3 | 9 | 9 |

@@ -1,16 +1,16 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 16:32:14
+Generated: 2026-05-29 17:29:11
 
 ## Layer Type Counts
 
 | Layer Type | Count |
 |---|---:|
 | CLIENT_CONFIG_ASSET | 10 |
-| COMPONENT_ADAPTER | 6 |
-| CORE_COMPONENT | 21 |
+| COMPONENT_ADAPTER | 5 |
+| CORE_COMPONENT | 22 |
 | HANDOFF_ONLY_CORE | 5 |
-| INDEPENDENT_ADAPTER | 10 |
+| INDEPENDENT_ADAPTER | 11 |
 | SCAFFOLD_ONLY | 22 |
 | TEMPLATE_GLUE | 6 |
 
@@ -20,13 +20,13 @@ Generated: 2026-05-29 16:32:14
 |---|---:|
 | BUILT | 45 |
 | DEFERRED_ADAPTER | 6 |
-| NOT_BUILT | 29 |
+| NOT_BUILT | 30 |
 
 ## Priority Counts
 
 | Priority | Count |
 |---|---:|
-| P0 | 50 |
+| P0 | 51 |
 | P1 | 13 |
 | P2 | 11 |
 | P3 | 6 |
@@ -48,7 +48,6 @@ Generated: 2026-05-29 16:32:14
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | BUILT |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | BUILT |
-| C2-I | Notification / Alert Engine | COMPONENT_ADAPTER | BUILT |
 | C2-K | LLM in Workflow Adapter | COMPONENT_ADAPTER | BUILT |
 | C6-C1 | Credential API Access Test Adapter | COMPONENT_ADAPTER | NOT_BUILT |
 | C2-A | Parent Data Sync Router | CORE_COMPONENT | BUILT |
@@ -57,6 +56,7 @@ Generated: 2026-05-29 16:32:14
 | C2-D | Deduplication / Merge Engine | CORE_COMPONENT | BUILT |
 | C2-E | Form Intake Pipeline | CORE_COMPONENT | BUILT |
 | C2-F | Payload Validation Layer | CORE_COMPONENT | BUILT |
+| C2-I | Notification / Alert Engine | CORE_COMPONENT | BUILT |
 | C2-N | CSV / Excel Parser | CORE_COMPONENT | BUILT |
 | C2-O | Human Approval Gate | CORE_COMPONENT | BUILT |
 | C2-O2 | Approval Response Capture | CORE_COMPONENT | BUILT |
@@ -78,6 +78,7 @@ Generated: 2026-05-29 16:32:14
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | NOT_BUILT |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | BUILT |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
 | TPL-P0-002 | Form Submission to CRM Update to Team Alert | TEMPLATE_GLUE | NOT_BUILT |
@@ -103,7 +104,6 @@ Generated: 2026-05-29 16:32:14
 | C2-A1 | Google Sheets Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A2 | Airtable Write Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A3 | HubSpot Contact Write Adapter | COMPONENT_ADAPTER | provider_execution |
-| C2-I | Notification / Alert Engine | COMPONENT_ADAPTER | provider_execution |
 | C2-K | LLM in Workflow Adapter | COMPONENT_ADAPTER | provider_execution |
 | C2-A | Parent Data Sync Router | CORE_COMPONENT | core_logic |
 | C2-B | Conditional Routing Engine | CORE_COMPONENT | core_logic |
@@ -112,6 +112,7 @@ Generated: 2026-05-29 16:32:14
 | C2-E | Form Intake Pipeline | CORE_COMPONENT | core_logic |
 | C2-F | Payload Validation Layer | CORE_COMPONENT | core_logic |
 | C2-G | File Upload Routing | CORE_COMPONENT | core_logic |
+| C2-I | Notification / Alert Engine | CORE_COMPONENT | core_logic |
 | C2-J | Digest Summary Notification Builder | CORE_COMPONENT | core_logic |
 | C2-N | CSV / Excel Parser | CORE_COMPONENT | core_logic |
 | C2-O | Human Approval Gate | CORE_COMPONENT | core_logic |

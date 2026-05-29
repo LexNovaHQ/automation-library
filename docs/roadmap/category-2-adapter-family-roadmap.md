@@ -85,3 +85,19 @@ All new adapters must update:
 3. Every test must include payload and expected response/output shape.
 4. Phase 2 should provide an importable n8n workflow JSON first.
 5. Final repo artifact must use the tested/exported n8n workflow JSON.
+
+
+## C2-I Notification Orchestration Rule
+
+C2-I is not replaced by ADP-SMTP-SEND.
+
+C2-I remains the Category 2 notification/alert orchestration component. Its job is to decide whether a notification should be sent, prepare the notification content, and route the result.
+
+Email provider execution is handled by send adapters:
+
+- ADP-SMTP-SEND for generic SMTP
+- ADP-GMAIL-SEND for Gmail
+- ADP-OUTLOOK-SEND for Outlook/M365
+
+This keeps notification logic separate from provider execution.
+

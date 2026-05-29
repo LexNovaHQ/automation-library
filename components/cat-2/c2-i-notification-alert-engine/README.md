@@ -1,4 +1,4 @@
-# C2-I1 - Email Notification Adapter
+﻿# C2-I1 - Email Notification Adapter
 
 ## Status
 Built v1.0
@@ -144,3 +144,18 @@ v1.0
 Last Tested
 
 2026-05-25
+
+## Relationship to Email Send Adapters
+
+C2-I is a notification orchestration component, not the universal email-send adapter.
+
+C2-I decides whether a notification should be sent, prepares the notification subject/body from upstream automation output, blocks failed/non-requested notifications, and then sends through a configured provider execution layer.
+
+Provider execution adapters include:
+
+- ADP-SMTP-SEND - universal SMTP send fallback
+- ADP-GMAIL-SEND - Gmail send adapter
+- ADP-OUTLOOK-SEND - Outlook/M365 send adapter
+
+The existing C2-I1 workflow uses n8n Send Email with SMTP credentials and remains valid as the built email-notification implementation. ADP-SMTP-SEND is separately built as a lower-level reusable SMTP adapter for arbitrary standardized email-send requests.
+
