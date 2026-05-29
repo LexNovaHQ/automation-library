@@ -1,0 +1,18 @@
+﻿{
+  "request_id": "req_slack_send_basic_001",
+  "source_component": "C2-I",
+  "slack": {
+    "channel": "#alerts",
+    "message": "ADP-SLACK-SEND basic test message.",
+    "title": "Slack Adapter Test",
+    "priority": "normal",
+    "thread_ts": null
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "environment": "n8n-test"
+  }
+}
