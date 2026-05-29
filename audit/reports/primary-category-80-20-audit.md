@@ -1,12 +1,12 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-29 20:04:56
+Generated: 2026-05-29 20:56:04
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
-| BROKEN_ARTIFACTS | 1 |
+| BROKEN_ARTIFACTS | 2 |
 | DEFERRED | 6 |
 | NOT_BUILT | 7 |
 | PASS_80_20 | 30 |
@@ -19,6 +19,7 @@ Generated: 2026-05-29 20:04:56
 
 | ID | Name | Layer | Status | Reason |
 |---|---|---|---|---|
+| ADP-OUTLOOK-INBOX | Outlook/M365 Inbox Trigger Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=0; payloads=7; samples=7; nodes=0; credentials=0 |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=1; payloads=0; samples=8; nodes=6; credentials=1 |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=7; samples=7; nodes=11; credentials=0 |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=6; samples=6; nodes=7; credentials=0 |
@@ -35,7 +36,7 @@ Generated: 2026-05-29 20:04:56
 | Category 6 - Debugging / Reliability | 8 |
 | Client Config Layer | 10 |
 | Template Glue Layer | 6 |
-| Universal Adapter Layer | 13 |
+| Universal Adapter Layer | 14 |
 
 ## Built Artifact Snapshot
 
@@ -44,6 +45,7 @@ Generated: 2026-05-29 20:04:56
 | ADP-GMAIL-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 6 | 6 |
 | ADP-GMAIL-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 7 |
 | ADP-IMAP-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 7 | 7 |
+| ADP-OUTLOOK-INBOX | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | 0 | 0 | 7 | 7 |
 | ADP-OUTLOOK-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 6 |
 | ADP-REST | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | 1 | 11 | 7 | 7 |
 | ADP-SMTP-SEND | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | 1 | 6 | 0 | 8 |

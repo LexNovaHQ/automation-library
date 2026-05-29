@@ -1,0 +1,44 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-OUTLOOK-INBOX",
+    "component_version":  "v1",
+    "provider":  "outlook_m365",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "invalid",
+    "message_id":  "outlook_msg_006",
+    "thread_id":  "outlook_thread_006",
+    "from":  {
+                 "name":  "",
+                 "email":  ""
+             },
+    "to":  [
+
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  null,
+    "snippet":  "",
+    "body_text":  "",
+    "body_html":  "",
+    "received_at":  null,
+    "folder":  "Inbox",
+    "manual_review_required":  true,
+    "error_code":  "MISSING_FROM",
+    "error_message":  "Outlook from/sender field is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "outlook_inbox_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "parentFolderId":  "Inbox",
+                          "conversationId":  "outlook_thread_006",
+                          "id":  "outlook_msg_006"
+                      }
+}

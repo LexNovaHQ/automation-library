@@ -1,12 +1,12 @@
 ﻿# Classification Consistency
 
-Generated: 2026-05-29 20:04:55
+Generated: 2026-05-29 20:56:03
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Classification rows | 83 |
+| Classification rows | 84 |
 | Built component rows | 31 |
 | Built repo folders | 31 |
 | Scaffold-only repo folders | 22 |
