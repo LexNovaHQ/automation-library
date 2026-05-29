@@ -1,0 +1,44 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-GMAIL-INBOX",
+    "component_version":  "v1",
+    "provider":  "gmail",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "invalid",
+    "message_id":  "",
+    "thread_id":  "gmail_thread_006",
+    "from":  {
+                 "name":  "",
+                 "email":  ""
+             },
+    "to":  [
+
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  null,
+    "snippet":  "",
+    "body_text":  "",
+    "received_at":  null,
+    "labels":  [
+                   "INBOX"
+               ],
+    "manual_review_required":  true,
+    "error_code":  "MISSING_MESSAGE_ID",
+    "error_message":  "Gmail message id is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "gmail_inbox_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "id":  "",
+                          "threadId":  "gmail_thread_006"
+                      }
+}

@@ -1,0 +1,44 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-GMAIL-INBOX",
+    "component_version":  "v1",
+    "provider":  "gmail",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "invalid",
+    "message_id":  "gmail_msg_005",
+    "thread_id":  "gmail_thread_005",
+    "from":  {
+                 "name":  "",
+                 "email":  ""
+             },
+    "to":  [
+
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  null,
+    "snippet":  "",
+    "body_text":  "",
+    "received_at":  null,
+    "labels":  [
+                   "INBOX"
+               ],
+    "manual_review_required":  true,
+    "error_code":  "MISSING_FROM",
+    "error_message":  "Gmail From header is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "gmail_inbox_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "id":  "gmail_msg_005",
+                          "threadId":  "gmail_thread_005"
+                      }
+}

@@ -1,0 +1,171 @@
+{
+  "name": "ADP-GMAIL-INBOX - Gmail Inbox Trigger Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "id": "10046bab-d9e3-4a36-88ea-e7f723563b93",
+      "name": "Gmail Trigger - Message Received",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "T8hMMHZpQjhqRRrx",
+          "name": "Gmail account"
+        }
+      },
+      "notes": "Configure Gmail credential manually. Confirm Message Received/new message event and poll time after import."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-gmail-inbox-test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c38cbaa6-d247-414b-9671-d1e43103b307",
+      "name": "Receive Test Gmail Payload",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        352
+      ],
+      "webhookId": "adp-gmail-inbox-test"
+    },
+    {
+      "parameters": {
+        "jsCode": "function getHeader(headers, name) {\n  if (!Array.isArray(headers)) return \"\";\n  const found = headers.find(h => String(h.name || \"\").toLowerCase() === String(name).toLowerCase());\n  return found ? String(found.value || \"\") : \"\";\n}\n\nfunction parseAddress(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return { email: \"\", name: \"\" };\n\n  const match = raw.match(/^(.*)<([^>]+)>$/);\n  if (match) {\n    return {\n      name: String(match[1] || \"\").trim().replace(/^\"|\"$/g, \"\"),\n      email: String(match[2] || \"\").trim()\n    };\n  }\n\n  return { name: \"\", email: raw };\n}\n\nfunction splitAddresses(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return [];\n  return raw.split(\",\").map(v => parseAddress(v).email).filter(Boolean);\n}\n\nfunction errorResult(code, message, source) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GMAIL-INBOX\",\n      component_version: \"v1\",\n      provider: \"gmail\",\n      operation: \"inbound_email_trigger\",\n      validation_status: \"invalid\",\n      message_id: source.id || null,\n      thread_id: source.threadId || null,\n      from: { email: \"\", name: \"\" },\n      to: [],\n      cc: [],\n      bcc: [],\n      subject: null,\n      snippet: source.snippet || \"\",\n      body_text: source.snippet || \"\",\n      received_at: source.internalDate || null,\n      labels: source.labelIds || [],\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gmail_inbox_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: source\n    }\n  }];\n}\n\nconst source = $json.body && ($json.body.id || $json.body.threadId || $json.body.payload)\n  ? $json.body\n  : $json;\n\nconst headers = source.payload?.headers || source.headers || [];\nconst fromHeader = getHeader(headers, \"From\") || source.from || \"\";\nconst toHeader = getHeader(headers, \"To\") || source.to || \"\";\nconst ccHeader = getHeader(headers, \"Cc\") || source.cc || \"\";\nconst bccHeader = getHeader(headers, \"Bcc\") || source.bcc || \"\";\nconst subject = getHeader(headers, \"Subject\") || source.subject || \"\";\nconst dateHeader = getHeader(headers, \"Date\") || source.date || null;\n\nif (!source.id) return errorResult(\"MISSING_MESSAGE_ID\", \"Gmail message id is required.\", source);\n\nconst from = parseAddress(fromHeader);\nif (!from.email) return errorResult(\"MISSING_FROM\", \"Gmail From header is required.\", source);\n\nconst snippet = String(source.snippet || \"\");\nconst bodyText = String(source.body_text || source.text || snippet || \"\");\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-GMAIL-INBOX\",\n    component_version: \"v1\",\n    provider: \"gmail\",\n    operation: \"inbound_email_trigger\",\n    validation_status: \"valid\",\n    message_id: source.id,\n    thread_id: source.threadId || null,\n    from,\n    to: splitAddresses(toHeader),\n    cc: splitAddresses(ccHeader),\n    bcc: splitAddresses(bccHeader),\n    subject: subject || \"\",\n    snippet,\n    body_text: bodyText,\n    received_at: dateHeader || source.internalDate || null,\n    labels: source.labelIds || [],\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"route_to_email_processing\",\n    status_log_event: \"gmail_inbox_message_normalized\",\n    downstream_components: [\"C4-B\", \"C4-A\", \"C2-D\", \"C2-B\", \"C5-W\"],\n    source_result: source\n  }\n}];"
+      },
+      "id": "06748eb7-87fd-48be-8c43-1f24a6ed8c6e",
+      "name": "Normalize Live Gmail Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function getHeader(headers, name) {\n  if (!Array.isArray(headers)) return \"\";\n  const found = headers.find(h => String(h.name || \"\").toLowerCase() === String(name).toLowerCase());\n  return found ? String(found.value || \"\") : \"\";\n}\n\nfunction parseAddress(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return { email: \"\", name: \"\" };\n\n  const match = raw.match(/^(.*)<([^>]+)>$/);\n  if (match) {\n    return {\n      name: String(match[1] || \"\").trim().replace(/^\"|\"$/g, \"\"),\n      email: String(match[2] || \"\").trim()\n    };\n  }\n\n  return { name: \"\", email: raw };\n}\n\nfunction splitAddresses(value) {\n  const raw = String(value || \"\").trim();\n  if (!raw) return [];\n  return raw.split(\",\").map(v => parseAddress(v).email).filter(Boolean);\n}\n\nfunction errorResult(code, message, source) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GMAIL-INBOX\",\n      component_version: \"v1\",\n      provider: \"gmail\",\n      operation: \"inbound_email_trigger\",\n      validation_status: \"invalid\",\n      message_id: source.id || null,\n      thread_id: source.threadId || null,\n      from: { email: \"\", name: \"\" },\n      to: [],\n      cc: [],\n      bcc: [],\n      subject: null,\n      snippet: source.snippet || \"\",\n      body_text: source.snippet || \"\",\n      received_at: source.internalDate || null,\n      labels: source.labelIds || [],\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gmail_inbox_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: source\n    }\n  }];\n}\n\nconst source = $json.body && ($json.body.id || $json.body.threadId || $json.body.payload)\n  ? $json.body\n  : $json;\n\nconst headers = source.payload?.headers || source.headers || [];\nconst fromHeader = getHeader(headers, \"From\") || source.from || \"\";\nconst toHeader = getHeader(headers, \"To\") || source.to || \"\";\nconst ccHeader = getHeader(headers, \"Cc\") || source.cc || \"\";\nconst bccHeader = getHeader(headers, \"Bcc\") || source.bcc || \"\";\nconst subject = getHeader(headers, \"Subject\") || source.subject || \"\";\nconst dateHeader = getHeader(headers, \"Date\") || source.date || null;\n\nif (!source.id) return errorResult(\"MISSING_MESSAGE_ID\", \"Gmail message id is required.\", source);\n\nconst from = parseAddress(fromHeader);\nif (!from.email) return errorResult(\"MISSING_FROM\", \"Gmail From header is required.\", source);\n\nconst snippet = String(source.snippet || \"\");\nconst bodyText = String(source.body_text || source.text || snippet || \"\");\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-GMAIL-INBOX\",\n    component_version: \"v1\",\n    provider: \"gmail\",\n    operation: \"inbound_email_trigger\",\n    validation_status: \"valid\",\n    message_id: source.id,\n    thread_id: source.threadId || null,\n    from,\n    to: splitAddresses(toHeader),\n    cc: splitAddresses(ccHeader),\n    bcc: splitAddresses(bccHeader),\n    subject: subject || \"\",\n    snippet,\n    body_text: bodyText,\n    received_at: dateHeader || source.internalDate || null,\n    labels: source.labelIds || [],\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"route_to_email_processing\",\n    status_log_event: \"gmail_inbox_message_normalized\",\n    downstream_components: [\"C4-B\", \"C4-A\", \"C2-D\", \"C2-B\", \"C5-W\"],\n    source_result: source\n  }\n}];"
+      },
+      "id": "fbaf0248-517f-4323-b28b-81932a59345c",
+      "name": "Normalize Test Gmail Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "ea45bdc4-af8b-46bf-80ca-6bfccf2765fb",
+      "name": "Return Test Normalized Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "Receive Test Gmail Payload": [
+      {
+        "json": {
+          "id": "gmail_msg_005",
+          "threadId": "gmail_thread_005",
+          "labelIds": [
+            "INBOX"
+          ],
+          "snippet": "Missing sender should fail.",
+          "payload": {
+            "headers": [
+              {
+                "name": "To",
+                "value": "shwetabh@lexnovahq.com"
+              },
+              {
+                "name": "Subject",
+                "value": "Missing sender"
+              },
+              {
+                "name": "Date",
+                "value": "Fri, 29 May 2026 10:20:00 +0530"
+              }
+            ]
+          },
+          "internalDate": "1780039800000"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Gmail Trigger - Message Received": {
+      "main": [
+        [
+          {
+            "node": "Normalize Live Gmail Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Test Gmail Payload": {
+      "main": [
+        [
+          {
+            "node": "Normalize Test Gmail Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Test Gmail Payload": {
+      "main": [
+        [
+          {
+            "node": "Return Test Normalized Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "12114ae9-3128-400a-81cb-3fe5ddc776c0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "6pNxL1r1oSK11OiX",
+  "tags": []
+}

@@ -1,0 +1,49 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-GMAIL-INBOX",
+    "component_version":  "v1",
+    "provider":  "gmail",
+    "operation":  "inbound_email_trigger",
+    "validation_status":  "valid",
+    "message_id":  "gmail_msg_004",
+    "thread_id":  "gmail_thread_004",
+    "from":  {
+                 "name":  "No Body",
+                 "email":  "nobody@example.com"
+             },
+    "to":  [
+               "shwetabh@lexnovahq.com"
+           ],
+    "cc":  [
+
+           ],
+    "bcc":  [
+
+            ],
+    "subject":  "No body email",
+    "snippet":  "",
+    "body_text":  "",
+    "received_at":  "Fri, 29 May 2026 10:15:00 +0530",
+    "labels":  [
+                   "INBOX"
+               ],
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "route_to_email_processing",
+    "status_log_event":  "gmail_inbox_message_normalized",
+    "downstream_components":  [
+                                  "C4-B",
+                                  "C4-A",
+                                  "C2-D",
+                                  "C2-B",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "threadId":  "gmail_thread_004",
+                          "id":  "gmail_msg_004",
+                          "labelIds":  [
+                                           "INBOX"
+                                       ]
+                      }
+}
