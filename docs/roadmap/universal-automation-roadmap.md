@@ -403,3 +403,22 @@ Universal adapters must still be production-usable as universal adapters. They m
 
 
 
+
+
+---
+
+# Category 2 Adapter Family Rule
+
+Category 2 adapters are now built family-by-family.
+
+Rule:
+
+1. Build/update the universal adapter first.
+2. Build the two highest-ROI platform adapters.
+3. Defer the long tail.
+4. Move to the next family.
+
+Source of truth:
+
+- docs/roadmap/category-2-adapter-family-roadmap.md
+- audit/config/category-2-adapter-family-roadmap.csv

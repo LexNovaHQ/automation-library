@@ -1,9 +1,3 @@
-﻿ M adapters/independent/adp-gmail-inbox/README.md
- M audit/config/component-classification.csv
-?? adapters/independent/adp-gmail-inbox/output-samples/error-missing-from.json
-?? adapters/independent/adp-gmail-inbox/output-samples/error-missing-message-id.json
-?? adapters/independent/adp-gmail-inbox/output-samples/success-basic-message.json
-?? adapters/independent/adp-gmail-inbox/output-samples/success-empty-subject.json
-?? adapters/independent/adp-gmail-inbox/output-samples/success-no-body.json
-?? adapters/independent/adp-gmail-inbox/output-samples/success-with-cc.json
-?? adapters/independent/adp-gmail-inbox/workflows/adp-gmail-inbox-trigger-adapter-v1.json
+﻿ M docs/roadmap/universal-automation-roadmap.md
+?? audit/config/category-2-adapter-family-roadmap.csv
+?? docs/roadmap/category-2-adapter-family-roadmap.md
