@@ -1,0 +1,21 @@
+﻿{
+  "request_id": "req_outlook_send_text_001",
+  "source_component": "C2-I",
+  "email": {
+    "to": ["shwetabh@lexnovahq.com"],
+    "cc": [],
+    "bcc": [],
+    "subject": "ADP-OUTLOOK-SEND test - text",
+    "body_text": "This is a plain text test from ADP-OUTLOOK-SEND.",
+    "body_html": "",
+    "send_format": "text"
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "template_id": "outlook-send-test",
+    "environment": "n8n-test"
+  }
+}

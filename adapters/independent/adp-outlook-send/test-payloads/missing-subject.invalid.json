@@ -1,0 +1,17 @@
+﻿{
+  "request_id": "req_outlook_missing_subject_001",
+  "source_component": "C4-E",
+  "email": {
+    "to": ["shwetabh@lexnovahq.com"],
+    "cc": [],
+    "bcc": [],
+    "subject": "",
+    "body_text": "This should fail.",
+    "body_html": "",
+    "send_format": "text"
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  }
+}

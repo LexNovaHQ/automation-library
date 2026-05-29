@@ -1,0 +1,21 @@
+﻿{
+  "request_id": "req_outlook_send_html_001",
+  "source_component": "C4-E",
+  "email": {
+    "to": ["shwetabh@lexnovahq.com"],
+    "cc": [],
+    "bcc": [],
+    "subject": "ADP-OUTLOOK-SEND test - HTML",
+    "body_text": "Your Outlook adapter test is ready.",
+    "body_html": "<p><strong>ADP-OUTLOOK-SEND test</strong></p><p>Your Outlook adapter test is ready.</p>",
+    "send_format": "html"
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "template_id": "TPL-P0-005",
+    "environment": "n8n-test"
+  }
+}
