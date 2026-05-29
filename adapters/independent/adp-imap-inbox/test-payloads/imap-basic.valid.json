@@ -1,0 +1,13 @@
+﻿{
+  "uid": "imap_uid_001",
+  "messageId": "<imap_msg_001@example.com>",
+  "mailbox": "INBOX",
+  "from": "Lead One <lead.one@example.com>",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "",
+  "bcc": "",
+  "subject": "Automation inquiry via IMAP",
+  "textPlain": "Hi, I am interested in your automation service.",
+  "textHtml": "",
+  "date": "Fri, 29 May 2026 10:00:00 +0530"
+}

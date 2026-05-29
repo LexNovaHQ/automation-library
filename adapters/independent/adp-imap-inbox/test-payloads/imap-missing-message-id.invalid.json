@@ -1,0 +1,11 @@
+﻿{
+  "mailbox": "INBOX",
+  "from": "Missing Id <missing.id@example.com>",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "",
+  "bcc": "",
+  "subject": "Missing ID",
+  "textPlain": "Missing message id should fail.",
+  "textHtml": "",
+  "date": "Fri, 29 May 2026 10:30:00 +0530"
+}

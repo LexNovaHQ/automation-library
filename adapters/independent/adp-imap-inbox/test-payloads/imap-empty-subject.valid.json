@@ -1,0 +1,13 @@
+﻿{
+  "uid": "imap_uid_004",
+  "messageId": "<imap_msg_004@example.com>",
+  "mailbox": "INBOX",
+  "from": "No Subject <nosubject@example.com>",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "",
+  "bcc": "",
+  "subject": "",
+  "textPlain": "No subject but still processable.",
+  "textHtml": "",
+  "date": "Fri, 29 May 2026 10:15:00 +0530"
+}

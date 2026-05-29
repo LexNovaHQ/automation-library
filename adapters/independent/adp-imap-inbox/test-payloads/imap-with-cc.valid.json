@@ -1,0 +1,13 @@
+﻿{
+  "uid": "imap_uid_002",
+  "messageId": "<imap_msg_002@example.com>",
+  "mailbox": "INBOX",
+  "from": "Founder Two <founder.two@example.com>",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "ops.manager@example.com",
+  "bcc": "",
+  "subject": "Workflow automation request",
+  "textPlain": "Please include my operations manager.",
+  "textHtml": "",
+  "date": "Fri, 29 May 2026 10:05:00 +0530"
+}

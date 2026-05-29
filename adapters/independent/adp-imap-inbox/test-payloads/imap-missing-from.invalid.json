@@ -1,0 +1,13 @@
+﻿{
+  "uid": "imap_uid_006",
+  "messageId": "<imap_msg_006@example.com>",
+  "mailbox": "INBOX",
+  "from": "",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "",
+  "bcc": "",
+  "subject": "Missing sender",
+  "textPlain": "Missing sender should fail.",
+  "textHtml": "",
+  "date": "Fri, 29 May 2026 10:25:00 +0530"
+}

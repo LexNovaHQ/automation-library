@@ -1,0 +1,13 @@
+﻿{
+  "uid": "imap_uid_003",
+  "messageId": "<imap_msg_003@example.com>",
+  "mailbox": "INBOX",
+  "from": "HTML Sender <html.sender@example.com>",
+  "to": "shwetabh@lexnovahq.com",
+  "cc": "",
+  "bcc": "",
+  "subject": "HTML email",
+  "textPlain": "",
+  "textHtml": "<p>Hello from an <strong>HTML</strong> IMAP email.</p>",
+  "date": "Fri, 29 May 2026 10:10:00 +0530"
+}
