@@ -1,10 +1,11 @@
-﻿ M adapters/independent/adp-outlook-inbox/README.md
+﻿ M adapters/independent/adp-slack-send/README.md
  M audit/config/category-2-adapter-family-roadmap.csv
  M audit/config/component-classification.csv
-?? adapters/independent/adp-outlook-inbox/output-samples/error-missing-from.json
-?? adapters/independent/adp-outlook-inbox/output-samples/error-missing-message-id.json
-?? adapters/independent/adp-outlook-inbox/output-samples/success-basic-message.json
-?? adapters/independent/adp-outlook-inbox/output-samples/success-empty-subject.json
-?? adapters/independent/adp-outlook-inbox/output-samples/success-html-message.json
-?? adapters/independent/adp-outlook-inbox/output-samples/success-no-body.json
-?? adapters/independent/adp-outlook-inbox/output-samples/success-with-cc.json
+?? adapters/independent/adp-slack-send/output-samples/error-invalid-priority.json
+?? adapters/independent/adp-slack-send/output-samples/error-missing-channel.json
+?? adapters/independent/adp-slack-send/output-samples/error-missing-message.json
+?? adapters/independent/adp-slack-send/output-samples/error-provider-not-in-channel.json
+?? adapters/independent/adp-slack-send/output-samples/success-basic-message.json
+?? adapters/independent/adp-slack-send/output-samples/success-critical-manual-review.json
+?? adapters/independent/adp-slack-send/output-samples/success-high-priority-alert.json
+?? adapters/independent/adp-slack-send/workflows/adp-slack-send-adapter-v1.json

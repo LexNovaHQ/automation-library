@@ -1,0 +1,27 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-SLACK-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_slack_missing_channel_001",
+    "source_component":  "C2-I",
+    "provider":  "slack",
+    "operation":  "send_message",
+    "validation_status":  "invalid",
+    "channel":  "",
+    "message_ts":  null,
+    "manual_review_required":  true,
+    "error_code":  "MISSING_CHANNEL",
+    "error_message":  "slack.channel is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "slack_send_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  null,
+    "original_input":  {
+                           "source_component":  "C2-I",
+                           "request_id":  "req_slack_missing_channel_001"
+                       }
+}

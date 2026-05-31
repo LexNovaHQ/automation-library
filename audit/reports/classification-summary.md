@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-29 20:56:03
+Generated: 2026-05-31 16:59:39
 
 ## Layer Type Counts
 
@@ -18,8 +18,8 @@ Generated: 2026-05-29 20:56:03
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 49 |
-| DEFERRED_ADAPTER | 6 |
+| BUILT | 50 |
+| DEFERRED_ADAPTER | 5 |
 | NOT_BUILT | 29 |
 
 ## Priority Counts
@@ -80,7 +80,7 @@ Generated: 2026-05-29 20:56:03
 | ADP-PDF | PDF Text Extraction Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-PIPEDRIVE | Pipedrive Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | BUILT |
-| ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | BUILT |
 | TPL-P0-001 | Lead Intake to Qualification to Follow-up | TEMPLATE_GLUE | NOT_BUILT |
@@ -141,5 +141,6 @@ Generated: 2026-05-29 20:56:03
 | ADP-OUTLOOK-INBOX | Outlook/M365 Inbox Trigger Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-OUTLOOK-SEND | Outlook/M365 Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | provider_execution |
+| ADP-SLACK-SEND | Slack Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | provider_execution |

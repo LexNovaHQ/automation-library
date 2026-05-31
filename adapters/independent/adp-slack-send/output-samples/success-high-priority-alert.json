@@ -1,0 +1,36 @@
+﻿{
+    "adapter_status":  "success",
+    "component_id":  "ADP-SLACK-SEND",
+    "component_version":  "v1",
+    "request_id":  "req_slack_send_alert_001",
+    "source_component":  "C6-G",
+    "provider":  "slack",
+    "operation":  "send_message",
+    "validation_status":  "valid",
+    "channel":  "#alerts",
+    "message_ts":  "slack_message_ts_example",
+    "manual_review_required":  false,
+    "error_code":  null,
+    "error_message":  null,
+    "next_action":  "log_status",
+    "status_log_event":  "slack_send_success",
+    "downstream_components":  [
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "ok":  true,
+                          "channel":  "#alerts",
+                          "ts":  "slack_message_ts_example"
+                      },
+    "original_input":  {
+                           "request_id":  "req_slack_send_alert_001",
+                           "slack":  {
+                                         "priority":  "high",
+                                         "message":  "Workflow error captured and routed to retry queue.",
+                                         "channel":  "#alerts",
+                                         "title":  "Automation Error Alert",
+                                         "thread_ts":  null
+                                     },
+                           "source_component":  "C6-G"
+                       }
+}
