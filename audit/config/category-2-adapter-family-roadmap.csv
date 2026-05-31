@@ -2,7 +2,7 @@
 "1","FAM-C2-API-WEBHOOK","API and Webhook Execution","Category 2 - Automation Workflows","ADP-REST; ADP-WEBHOOK-SEND","N/A","N/A","FAMILY_BASE_COMPLETE","N/A","Authenticated REST v2; signed webhook v2"
 "2","FAM-C2-EMAIL","Email Send and Inbox","Category 2 - Automation Workflows","ADP-SMTP-SEND; ADP-IMAP-INBOX","ADP-GMAIL-SEND; ADP-GMAIL-INBOX","ADP-OUTLOOK-SEND; ADP-OUTLOOK-INBOX","FAMILY_COMPLETE","N/A","SendGrid; Mailgun; Brevo; Zoho Mail"
 "3","FAM-C2-TEAM-NOTIFY","Team Notifications","Category 2 - Automation Workflows","ADP-WEBHOOK-SEND","ADP-SLACK-SEND","ADP-TEAMS-SEND deferred","COMPLETE_FOR_NOW","N/A","ADP-TEAMS-SEND; Discord; Telegram"
-"4","FAM-C2-DATA-CRM","Data and CRM Write","Category 2 - Automation Workflows","C2-A; ADP-REST","C2-A1; C2-A2; C2-A3","ADP-NOTION-DB; ADP-PIPEDRIVE","IN_PROGRESS","ADP-NOTION-DB; ADP-PIPEDRIVE","GoHighLevel; Salesforce; Zoho"
+"4","FAM-C2-DATA-CRM","Data and CRM Write","Category 2 - Automation Workflows","C2-A; ADP-REST","C2-A1; C2-A2","C2-A3","FAMILY_COMPLETE","N/A","ADP-NOTION-DB; ADP-PIPEDRIVE; GoHighLevel; Salesforce; Zoho"
 "5","FAM-C2-FILE","File Storage and File Intake","Category 2 - Automation Workflows","ADP-FILE-HANDOFF","ADP-GDRIVE","ADP-ONEDRIVE or ADP-DROPBOX","PLANNED","ADP-FILE-HANDOFF; ADP-GDRIVE","Dropbox/OneDrive alternate"
 "6","FAM-C2-CALENDAR","Calendar and Scheduling","Category 2 - Automation Workflows","C2-L; ADP-REST","C2-L1-GOOGLE-CALENDAR","C2-L2-CALENDLY or C2-L2-OUTLOOK-CALENDAR","PLANNED","C2-L1-GOOGLE-CALENDAR; C2-L2-CALENDLY","Acuity; TidyCal; Cal.com unless demanded"
 "7","FAM-C2-PAYMENT","Payment Links and Payment Status","Category 2 - Automation Workflows","C2-H; ADP-REST","C2-H1-STRIPE","C2-H2-RAZORPAY","PLANNED","C2-H1-STRIPE; C2-H2-RAZORPAY","PayPal; Wise; Payoneer"
