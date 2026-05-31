@@ -1,0 +1,19 @@
+﻿{
+  "request_id": "req_teams_send_priority_error_001",
+  "source_component": "C5-W",
+  "teams": {
+    "team": "Automation Team",
+    "channel": "Alerts",
+    "message": "Payment intake workflow needs manual review.",
+    "title": "Manual Review Required",
+    "priority": "critical"
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "environment": "n8n-test",
+    "client_id": "client_example"
+  }
+}

@@ -1,0 +1,15 @@
+﻿{
+  "request_id": "req_teams_invalid_priority_001",
+  "source_component": "C2-I",
+  "teams": {
+    "team": "Automation Team",
+    "channel": "Alerts",
+    "message": "This should fail because priority is unsupported.",
+    "title": "Invalid Priority",
+    "priority": "panic"
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  }
+}
