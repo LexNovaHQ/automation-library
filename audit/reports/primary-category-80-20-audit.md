@@ -1,6 +1,6 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-31 16:59:40
+Generated: 2026-05-31 17:43:13
 
 ## Status Counts
 
@@ -13,6 +13,7 @@ Generated: 2026-05-31 16:59:40
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
 | PASS_CONFIG_ASSET | 10 |
 | PASS_HANDOFF_ONLY | 5 |
+| REVIEW_REQUIRED | 1 |
 | SCAFFOLD_ONLY | 22 |
 
 ## Discussion Items
@@ -21,6 +22,7 @@ Generated: 2026-05-31 16:59:40
 |---|---|---|---|---|
 | ADP-OUTLOOK-INBOX | Outlook/M365 Inbox Trigger Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=0; payloads=7; samples=7; nodes=0; credentials=0 |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=1; payloads=0; samples=8; nodes=6; credentials=1 |
+| ADP-TEAMS-SEND | Microsoft Teams Send Adapter | INDEPENDENT_ADAPTER | REVIEW_REQUIRED | workflows=0; payloads=6; samples=0; nodes=0; credentials=0 |
 | ADP-REST | Generic REST API Adapter | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=7; samples=7; nodes=11; credentials=0 |
 | ADP-WEBHOOK-SEND | Generic Webhook Sender | INDEPENDENT_ADAPTER | PASS_80_20_FOR_DECLARED_SCOPE | workflows=1; payloads=6; samples=6; nodes=7; credentials=0 |
 
@@ -36,7 +38,7 @@ Generated: 2026-05-31 16:59:40
 | Category 6 - Debugging / Reliability | 8 |
 | Client Config Layer | 10 |
 | Template Glue Layer | 6 |
-| Universal Adapter Layer | 14 |
+| Universal Adapter Layer | 15 |
 
 ## Built Artifact Snapshot
 

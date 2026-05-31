@@ -1,18 +1,20 @@
 ﻿# Classification Consistency
 
-Generated: 2026-05-31 16:59:39
+Generated: 2026-05-31 17:43:12
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Classification rows | 84 |
+| Classification rows | 85 |
 | Built component rows | 31 |
 | Built repo folders | 31 |
 | Scaffold-only repo folders | 22 |
-| FAIL issues | 0 |
+| FAIL issues | 1 |
 | WARN issues | 0 |
 
 ## Issues
 
-None.
+| Severity | Code | Component | Message |
+|---|---|---|---|
+| FAIL | INVALID_READINESS | ADP-TEAMS-SEND | Invalid readiness: DEFERRED |

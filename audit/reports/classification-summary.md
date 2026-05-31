@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-31 16:59:39
+Generated: 2026-05-31 17:43:12
 
 ## Layer Type Counts
 
@@ -10,7 +10,7 @@ Generated: 2026-05-31 16:59:39
 | COMPONENT_ADAPTER | 5 |
 | CORE_COMPONENT | 22 |
 | HANDOFF_ONLY_CORE | 5 |
-| INDEPENDENT_ADAPTER | 14 |
+| INDEPENDENT_ADAPTER | 15 |
 | SCAFFOLD_ONLY | 22 |
 | TEMPLATE_GLUE | 6 |
 
@@ -19,6 +19,7 @@ Generated: 2026-05-31 16:59:39
 | Readiness | Count |
 |---|---:|
 | BUILT | 50 |
+| DEFERRED | 1 |
 | DEFERRED_ADAPTER | 5 |
 | NOT_BUILT | 29 |
 
@@ -27,7 +28,7 @@ Generated: 2026-05-31 16:59:39
 | Priority | Count |
 |---|---:|
 | P0 | 54 |
-| P1 | 13 |
+| P1 | 14 |
 | P2 | 11 |
 | P3 | 6 |
 
