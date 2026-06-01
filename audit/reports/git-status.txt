@@ -1,1 +1,19 @@
 ﻿ M audit/config/category-2-adapter-family-roadmap.csv
+ M audit/config/component-classification.csv
+ M audit/reports/audit-summary.md
+ M audit/reports/build-completeness.md
+ M audit/reports/catalog-consistency.md
+ M audit/reports/classification-consistency.md
+ M audit/reports/classification-summary.md
+ M audit/reports/component-inventory.md
+ M audit/reports/duplicate-component-ids.md
+ M audit/reports/git-status.txt
+ M audit/reports/primary-category-80-20-audit.csv
+ M audit/reports/primary-category-80-20-audit.md
+?? adapters/independent/adp-gdrive/output-samples/error-missing-binary-property.json
+?? adapters/independent/adp-gdrive/output-samples/error-missing-file.json
+?? adapters/independent/adp-gdrive/output-samples/error-missing-filename.json
+?? adapters/independent/adp-gdrive/output-samples/error-missing-folder.json
+?? adapters/independent/adp-gdrive/output-samples/error-missing-mime-type.json
+?? adapters/independent/adp-gdrive/output-samples/error-provider-upload-failed.json
+?? adapters/independent/adp-gdrive/workflows/adp-gdrive-adapter-v1.json

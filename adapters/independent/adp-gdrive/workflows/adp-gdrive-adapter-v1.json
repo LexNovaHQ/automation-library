@@ -1,0 +1,266 @@
+{
+  "name": "ADP-GDRIVE - Google Drive File Storage Adapter v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adp-gdrive-upload",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2b593760-f5b1-4ffb-9372-d2cf49c7de62",
+      "name": "Receive Google Drive Upload Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        144
+      ],
+      "webhookId": "adp-gdrive-upload"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.request_id ? $json : (($json.body && $json.body.request_id) ? $json.body : $json);\n\nfunction errorResult(code, message) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GDRIVE\",\n      component_version: \"v1\",\n      request_id: raw.request_id || null,\n      source_component: raw.source_component || null,\n      provider: \"google_drive\",\n      operation: \"upload_file\",\n      validation_status: \"invalid\",\n      source_file_id: raw.file?.file_id || null,\n      drive_file: null,\n      manual_review_required: true,\n      error_code: code,\n      error_message: message,\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gdrive_upload_validation_error\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: null,\n      original_input: raw\n    }\n  }];\n}\n\nif (!raw.request_id) return errorResult(\"MISSING_REQUEST_ID\", \"request_id is required.\");\nif (!raw.file || typeof raw.file !== \"object\") return errorResult(\"MISSING_FILE_OBJECT\", \"file object is required.\");\nif (!raw.drive || typeof raw.drive !== \"object\") return errorResult(\"MISSING_DRIVE_OBJECT\", \"drive object is required.\");\n\nconst file = raw.file;\nconst drive = raw.drive;\n\nconst fileId = String(file.file_id || \"\").trim();\nconst filename = String(file.filename || \"\").trim();\nconst mimeType = String(file.mime_type || \"\").trim();\nconst extension = String(file.extension || \"\").trim();\nconst sizeBytes = Number(file.size_bytes || 0);\nconst binaryPropertyName = String(file.binary_property_name || \"data\").trim();\nconst folderId = String(drive.destination_folder_id || \"\").trim();\nconst pathLabel = String(drive.destination_path_label || \"\").trim();\n\nif (!fileId) return errorResult(\"MISSING_SOURCE_FILE_ID\", \"file.file_id is required.\");\nif (!filename) return errorResult(\"MISSING_FILENAME\", \"file.filename is required.\");\nif (!mimeType) return errorResult(\"MISSING_MIME_TYPE\", \"file.mime_type is required.\");\nif (!binaryPropertyName) return errorResult(\"MISSING_BINARY_PROPERTY\", \"file.binary_property_name is required.\");\nif (!folderId || folderId === \"configured_manually_in_n8n\") return errorResult(\"MISSING_DESTINATION_FOLDER\", \"drive.destination_folder_id must be set to a real Google Drive folder ID.\");\n\nconst testContent = raw.metadata?.test_content || `ADP-GDRIVE test upload\\nrequest_id=${raw.request_id}\\nfilename=${filename}\\n`;\n\nconst item = {\n  json: {\n    adapter_status: \"ready\",\n    component_id: \"ADP-GDRIVE\",\n    component_version: \"v1\",\n    request_id: raw.request_id,\n    source_component: raw.source_component || null,\n    provider: \"google_drive\",\n    operation: \"upload_file\",\n    validation_status: \"valid\",\n    source_file_id: fileId,\n    drive_upload: {\n      filename,\n      mime_type: mimeType,\n      extension,\n      size_bytes: sizeBytes,\n      source_url: file.source_url || null,\n      storage_provider: file.storage_provider || null,\n      binary_property_name: binaryPropertyName,\n      destination_folder_id: folderId,\n      destination_path_label: pathLabel,\n      overwrite_existing: Boolean(drive.overwrite_existing)\n    },\n    routing_options: raw.routing_options || {},\n    metadata: raw.metadata || {},\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: \"execute_gdrive_upload\",\n    status_log_event: \"gdrive_upload_request_validated\",\n    original_input: raw\n  },\n  binary: {}\n};\n\nconst incomingBinary = $binary && $binary[binaryPropertyName] ? $binary[binaryPropertyName] : null;\n\nif (incomingBinary) {\n  item.binary[binaryPropertyName] = incomingBinary;\n} else {\n  item.binary[binaryPropertyName] = {\n    data: Buffer.from(testContent, \"utf8\").toString(\"base64\"),\n    mimeType,\n    fileName: filename\n  };\n}\n\nreturn [item];"
+      },
+      "id": "72edb4c7-f914-4da5-8b05-8bfd16d76bc0",
+      "name": "Normalize And Validate Google Drive Upload Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.adapter_status }}",
+                    "rightValue": "ready",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55540631-72cf-4e2f-bedf-c0fbf5bde452"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ready"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "54a57fbe-e004-4c32-b010-e1ca3a2b68d7",
+      "name": "Validation Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        144
+      ],
+      "notesInFlow": true,
+      "notes": "After import, manually confirm fallback/extra output is connected to Return Google Drive Upload Result."
+    },
+    {
+      "parameters": {
+        "jsCode": "const validation = $node[\"Normalize And Validate Google Drive Upload Request\"].json;\nconst providerResult = $json;\n\nconst hasError = Boolean(providerResult.error || providerResult.statusCode >= 400 || providerResult.message?.includes?.(\"ERROR\"));\n\nif (hasError) {\n  return [{\n    json: {\n      adapter_status: \"error\",\n      component_id: \"ADP-GDRIVE\",\n      component_version: \"v1\",\n      request_id: validation.request_id || null,\n      source_component: validation.source_component || null,\n      provider: \"google_drive\",\n      operation: \"upload_file\",\n      validation_status: validation.validation_status || \"valid\",\n      source_file_id: validation.source_file_id || null,\n      drive_file: null,\n      manual_review_required: true,\n      error_code: \"GDRIVE_UPLOAD_FAILED\",\n      error_message: providerResult.error?.message || providerResult.message || \"Google Drive upload failed.\",\n      next_action: \"route_to_manual_review_or_error_log\",\n      status_log_event: \"gdrive_upload_failed\",\n      downstream_components: [\"C5-E\", \"C6-G\", \"C5-W\"],\n      source_result: providerResult,\n      original_input: validation.original_input || null\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    adapter_status: \"success\",\n    component_id: \"ADP-GDRIVE\",\n    component_version: \"v1\",\n    request_id: validation.request_id || null,\n    source_component: validation.source_component || null,\n    provider: \"google_drive\",\n    operation: \"upload_file\",\n    validation_status: \"valid\",\n    source_file_id: validation.source_file_id || null,\n    drive_file: {\n      id: providerResult.id || providerResult.fileId || null,\n      name: providerResult.name || validation.drive_upload?.filename || null,\n      mime_type: providerResult.mimeType || validation.drive_upload?.mime_type || null,\n      web_view_link: providerResult.webViewLink || providerResult.webContentLink || null,\n      folder_id: validation.drive_upload?.destination_folder_id || null\n    },\n    manual_review_required: false,\n    error_code: null,\n    error_message: null,\n    next_action: validation.routing_options?.on_success || \"log_status\",\n    status_log_event: \"gdrive_upload_success\",\n    downstream_components: [\"C5-W\"],\n    source_result: providerResult,\n    original_input: validation.original_input || null\n  }\n}];"
+      },
+      "id": "5ad7cadf-c5e3-49b3-bdec-18705acbcde8",
+      "name": "Normalize Google Drive Upload Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "161d7dd9-4d64-4aa8-99f4-df2af151f248",
+      "name": "Return Google Drive Upload Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -672,
+        -80
+      ],
+      "id": "cceeafd8-cd4c-47fe-b82a-139bd16d0494",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.drive_upload.filename }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1_1IcYXQdfTxyW9Zpzows74z5pqlx_Wd0",
+          "mode": "list",
+          "cachedResultName": "n8n test folder",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1_1IcYXQdfTxyW9Zpzows74z5pqlx_Wd0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -64,
+        -80
+      ],
+      "id": "974c73db-7a7e-46b2-87f6-2d18dcc36322",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "9lH6poSxqApYJQdt",
+          "name": "Google Drive account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Receive Google Drive Upload Request": [
+      {
+        "json": {
+          "request_id": "req_gdrive_upload_csv_001",
+          "source_component": "C2-G",
+          "file": {
+            "file_id": "file_csv_001",
+            "filename": "leads.csv",
+            "mime_type": "text/csv",
+            "extension": "csv",
+            "size_bytes": 24576,
+            "source_url": "https://example.com/uploads/leads.csv",
+            "binary_property_name": "data",
+            "storage_provider": "temporary_upload"
+          },
+          "drive": {
+            "destination_folder_id": "1_1IcYXQdfTxyW9Zpzows74z5pqlx_Wd0",
+            "destination_path_label": "Lead Uploads",
+            "overwrite_existing": false
+          },
+          "routing_options": {
+            "on_success": "log_status",
+            "on_failure": "manual_review"
+          },
+          "metadata": {
+            "origin": "website_upload",
+            "environment": "n8n-test",
+            "test_account": "shwetabh@lexnovahq.com",
+            "test_content": "name,email\nTest Lead,test@example.com"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive Google Drive Upload Request": {
+      "main": [
+        [
+          {
+            "node": "Normalize And Validate Google Drive Upload Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize And Validate Google Drive Upload Request": {
+      "main": [
+        [
+          {
+            "node": "Validation Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Switch": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Google Drive Upload Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Google Drive Upload Result": {
+      "main": [
+        [
+          {
+            "node": "Return Google Drive Upload Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Normalize Google Drive Upload Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "981e4f8d-7cc8-4c67-b159-4ec43042fb25",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6921c529c7575c28bcf6b5c378c41adccb87fede34e27a2b37f009783bd0b391"
+  },
+  "id": "3uAbbAG6ax4ePBSx",
+  "tags": []
+}

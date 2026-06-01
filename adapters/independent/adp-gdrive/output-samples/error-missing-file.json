@@ -1,0 +1,27 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-GDRIVE",
+    "component_version":  "v1",
+    "request_id":  "req_gdrive_missing_file_001",
+    "source_component":  "C2-G",
+    "provider":  "google_drive",
+    "operation":  "upload_file",
+    "validation_status":  "invalid",
+    "source_file_id":  "",
+    "drive_file":  null,
+    "manual_review_required":  true,
+    "error_code":  "MISSING_FILE_OBJECT",
+    "error_message":  "file object is required.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "gdrive_upload_validation_error",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  null,
+    "original_input":  {
+                           "source_component":  "C2-G",
+                           "request_id":  "req_gdrive_missing_file_001"
+                       }
+}

@@ -1,13 +1,13 @@
 ﻿# Primary Category + 80/20 Audit
 
-Generated: 2026-05-31 18:53:03
+Generated: 2026-06-01 16:34:03
 
 ## Status Counts
 
 | 80/20 Status | Count |
 |---|---:|
-| BROKEN_ARTIFACTS | 2 |
-| DEFERRED | 5 |
+| BROKEN_ARTIFACTS | 3 |
+| DEFERRED | 4 |
 | NOT_BUILT | 7 |
 | PASS_80_20 | 31 |
 | PASS_80_20_FOR_DECLARED_SCOPE | 2 |
@@ -20,6 +20,7 @@ Generated: 2026-05-31 18:53:03
 
 | ID | Name | Layer | Status | Reason |
 |---|---|---|---|---|
+| ADP-GDRIVE | Google Drive File Storage Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=1; payloads=0; samples=6; nodes=7; credentials=1 |
 | ADP-OUTLOOK-INBOX | Outlook/M365 Inbox Trigger Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=0; payloads=7; samples=7; nodes=0; credentials=0 |
 | ADP-SMTP-SEND | Generic SMTP Send Adapter | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | workflows=1; payloads=0; samples=8; nodes=6; credentials=1 |
 | ADP-TEAMS-SEND | Microsoft Teams Send Adapter | INDEPENDENT_ADAPTER | REVIEW_REQUIRED | workflows=0; payloads=6; samples=0; nodes=0; credentials=0 |
@@ -44,6 +45,7 @@ Generated: 2026-05-31 18:53:03
 
 | ID | Layer | 80/20 | Workflows | Nodes | Payloads | Samples |
 |---|---|---|---:|---:|---:|---:|
+| ADP-GDRIVE | INDEPENDENT_ADAPTER | BROKEN_ARTIFACTS | 1 | 7 | 0 | 6 |
 | ADP-GMAIL-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 6 | 6 |
 | ADP-GMAIL-SEND | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 6 | 7 | 7 |
 | ADP-IMAP-INBOX | INDEPENDENT_ADAPTER | PASS_80_20 | 1 | 5 | 7 | 7 |

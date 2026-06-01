@@ -1,6 +1,6 @@
 ﻿# Classification Summary
 
-Generated: 2026-05-31 18:53:02
+Generated: 2026-06-01 16:34:02
 
 ## Layer Type Counts
 
@@ -18,9 +18,9 @@ Generated: 2026-05-31 18:53:02
 
 | Readiness | Count |
 |---|---:|
-| BUILT | 50 |
+| BUILT | 51 |
 | DEFERRED | 1 |
-| DEFERRED_ADAPTER | 5 |
+| DEFERRED_ADAPTER | 4 |
 | NOT_BUILT | 29 |
 
 ## Priority Counts
@@ -70,7 +70,7 @@ Generated: 2026-05-31 18:53:02
 | C5-E | Manual Review Queue | CORE_COMPONENT | BUILT |
 | C5-W | Automation Status Control Table | CORE_COMPONENT | BUILT |
 | C6-G | Error Log / Retry Queue | CORE_COMPONENT | BUILT |
-| ADP-GDRIVE | Google Drive File Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
+| ADP-GDRIVE | Google Drive File Storage Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-GHL | GoHighLevel Adapter | INDEPENDENT_ADAPTER | DEFERRED_ADAPTER |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | BUILT |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | BUILT |
@@ -136,6 +136,7 @@ Generated: 2026-05-31 18:53:02
 | C2-M | WhatsApp Message Automation | HANDOFF_ONLY_CORE | handoff_only |
 | C2-Q | Publishing Adapter Family | HANDOFF_ONLY_CORE | handoff_only |
 | C4-T | OCR / Document Processing Pipeline | HANDOFF_ONLY_CORE | handoff_only |
+| ADP-GDRIVE | Google Drive File Storage Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-GMAIL-INBOX | Gmail Inbox Trigger Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-GMAIL-SEND | Gmail Send Adapter | INDEPENDENT_ADAPTER | provider_execution |
 | ADP-IMAP-INBOX | Generic IMAP Inbox Adapter | INDEPENDENT_ADAPTER | provider_execution |

@@ -1,0 +1,29 @@
+﻿{
+    "adapter_status":  "error",
+    "component_id":  "ADP-GDRIVE",
+    "component_version":  "v1",
+    "request_id":  "req_gdrive_upload_pdf_001",
+    "source_component":  "C2-G",
+    "provider":  "google_drive",
+    "operation":  "upload_file",
+    "validation_status":  "valid",
+    "source_file_id":  "file_pdf_001",
+    "drive_file":  null,
+    "manual_review_required":  true,
+    "error_code":  "GDRIVE_UPLOAD_FAILED",
+    "error_message":  "Google Drive upload failed.",
+    "next_action":  "route_to_manual_review_or_error_log",
+    "status_log_event":  "gdrive_upload_failed",
+    "downstream_components":  [
+                                  "C5-E",
+                                  "C6-G",
+                                  "C5-W"
+                              ],
+    "source_result":  {
+                          "error":  "provider_failure_example"
+                      },
+    "original_input":  {
+                           "source_component":  "C2-G",
+                           "request_id":  "req_gdrive_upload_pdf_001"
+                       }
+}
