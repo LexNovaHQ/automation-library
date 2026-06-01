@@ -1,0 +1,23 @@
+﻿{
+  "request_id": "req_onedrive_missing_mime_001",
+  "source_component": "C2-G",
+  "file": {
+    "file_id": "file_missing_mime_001",
+    "filename": "client-brief.pdf",
+    "mime_type": "",
+    "extension": "pdf",
+    "size_bytes": 524288,
+    "source_url": "https://example.com/uploads/client-brief.pdf",
+    "binary_property_name": "data",
+    "storage_provider": "temporary_upload"
+  },
+  "onedrive": {
+    "destination_folder_id": "configured_manually_in_n8n",
+    "destination_path_label": "Client Uploads",
+    "overwrite_existing": false
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  }
+}

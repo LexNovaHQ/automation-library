@@ -1,0 +1,27 @@
+﻿{
+  "request_id": "req_onedrive_upload_image_001",
+  "source_component": "C2-G",
+  "file": {
+    "file_id": "file_img_001",
+    "filename": "receipt.png",
+    "mime_type": "image/png",
+    "extension": "png",
+    "size_bytes": 734003,
+    "source_url": "https://example.com/uploads/receipt.png",
+    "binary_property_name": "data",
+    "storage_provider": "temporary_upload"
+  },
+  "onedrive": {
+    "destination_folder_id": "configured_manually_in_n8n",
+    "destination_path_label": "Receipt Uploads",
+    "overwrite_existing": false
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "origin": "form_upload",
+    "environment": "n8n-test"
+  }
+}

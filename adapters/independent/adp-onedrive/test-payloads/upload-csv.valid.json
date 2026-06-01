@@ -1,0 +1,27 @@
+﻿{
+  "request_id": "req_onedrive_upload_csv_001",
+  "source_component": "C2-G",
+  "file": {
+    "file_id": "file_csv_001",
+    "filename": "leads.csv",
+    "mime_type": "text/csv",
+    "extension": "csv",
+    "size_bytes": 24576,
+    "source_url": "https://example.com/uploads/leads.csv",
+    "binary_property_name": "data",
+    "storage_provider": "temporary_upload"
+  },
+  "onedrive": {
+    "destination_folder_id": "configured_manually_in_n8n",
+    "destination_path_label": "Lead Uploads",
+    "overwrite_existing": false
+  },
+  "routing_options": {
+    "on_success": "log_status",
+    "on_failure": "manual_review"
+  },
+  "metadata": {
+    "origin": "website_upload",
+    "environment": "n8n-test"
+  }
+}
