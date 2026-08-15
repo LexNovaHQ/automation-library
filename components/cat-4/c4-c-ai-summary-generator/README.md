@@ -1,21 +1,15 @@
-﻿# C4-C - AI Summary Generator
+# C4-C - AI Summary Generator
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C4 - AI / LLM Workflow Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Creates concise summaries from workflow payloads, records, transcripts, messages, or documents.
+Prepares a structured summarization request for C2-K and validates/normalizes the returned AI result.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`text`, optional `config`; on second pass include `ai_result`.
 
-## Build Status
-Not built yet.
+## Output
+Either an `llm_request` or normalized summary, key points, confidence and review flag.
 
-## Version
-v1.0 draft
+## Boundary
+LLM execution itself remains in C2-K; low-confidence output is review-gated.

@@ -1,21 +1,15 @@
-﻿# C1-E - Multi-Step Sequence Engine
+# C1-E - Multi-Step Sequence Engine
 
-## Status
-Planned / skeleton created.
-
-## Category
-C1 - Outreach, Sequences & Communication Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Creates multi-step follow-up or nurture sequence plans from lead, campaign, or workflow context.
+Maintains a controlled outreach/follow-up sequence state, chooses the next uncompleted step, enforces stop conditions, and calculates the due time.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`sequence[]`, current `state`, and optional `now`.
 
-## Build Status
-Not built yet.
+## Output
+Sequence status, stop reason where applicable, and a guarded `next_step` with due time.
 
-## Version
-v1.0 draft
+## Boundary
+This engine schedules intent only. Provider sending belongs to attached email/messaging adapters, and suppression/consent should be enforced through C2-P.

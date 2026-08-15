@@ -1,0 +1,1 @@
+[{"case":"next_step","expect":{"sequence_status":"active","next_step.id":"s2"}},{"case":"reply_stop","expect":{"sequence_status":"stopped","next_action":"no_send"}}]

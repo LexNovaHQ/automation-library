@@ -1,0 +1,1 @@
+[{"name":"request","input":{"text":"Long customer email text here.","config":{"max_points":3}}},{"name":"normalize","input":{"text":"Long customer email text here.","ai_result":{"summary":"Customer requests a refund.","key_points":["Refund requested"],"confidence":0.9}}}]

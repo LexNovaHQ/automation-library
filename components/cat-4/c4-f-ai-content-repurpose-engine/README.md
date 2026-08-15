@@ -1,21 +1,15 @@
-﻿# C4-F - AI Content Repurpose Engine
+# C4-F - AI Content Repurpose Engine
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C4 - AI / LLM Workflow Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Repurposes long-form content into posts, scripts, summaries, or campaign assets.
+Prepares a multi-target repurposing request and validates returned content before human approval.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`source_content`, `targets[]`, optional second-pass `ai_result`.
 
-## Build Status
-Not built yet.
+## Output
+LLM request or normalized per-target outputs with missing-target detection.
 
-## Version
-v1.0 draft
+## Boundary
+All generated external-facing content is approval-first; publishing/sending belongs to other components.
