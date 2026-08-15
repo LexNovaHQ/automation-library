@@ -1,0 +1,1 @@
+[{"name":"public_post","input":{"event":{"event_type":"lead_update","payload":{"email":"riya@example.com","status":"qualified"}},"validation":{"required_fields":["email"],"field_rules":{"email":"email"}},"api":{"method":"POST","url":"https://httpbingo.org/anything"}}}]
