@@ -1,21 +1,12 @@
-﻿# C3-H - Payment-to-Onboarding
+# C3-H - Payment to Onboarding
 
-## Status
-Planned / skeleton created.
-
-## Category
-C3 - Client Delivery, Documents & Billing Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Converts successful payment events into onboarding tasks, intake requests, and client status updates.
+Gates onboarding from normalized payment status so onboarding only starts after an accepted paid/succeeded/captured state.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`payment` with id, status, client/customer id, amount and currency.
 
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+## Output
+Payment verification result and onboarding-start payload.

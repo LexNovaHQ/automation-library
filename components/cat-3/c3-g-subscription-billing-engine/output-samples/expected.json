@@ -1,0 +1,1 @@
+[{"case":"failed_retry","expect":{"billing_action":"schedule_retry"}},{"case":"cancel","expect":{"subscription_state.status":"cancelled"}}]

@@ -1,0 +1,1 @@
+[{"case":"paid","expect":{"payment_verified":true,"onboarding.start":true}},{"case":"refund","expect":{"payment_verified":false,"next_action":"stop_or_reverse_onboarding"}}]

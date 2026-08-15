@@ -1,21 +1,15 @@
-﻿# C3-G - Subscription Billing Engine
+# C3-G - Subscription Billing Engine
 
-## Status
-Planned / skeleton created.
-
-## Category
-C3 - Client Delivery, Documents & Billing Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Creates subscription billing, renewal, failed-payment, and invoice workflow objects.
+Maintains a provider-neutral subscription state from billing events and decides retry/manual-review actions.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`subscription` plus a normalized billing `event`.
 
-## Build Status
-Not built yet.
+## Output
+Updated subscription state and controlled billing action.
 
-## Version
-v1.0 draft
+## Boundary
+No charge is created here. Provider billing actions require Stripe/Razorpay/etc. adapters.

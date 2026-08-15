@@ -1,21 +1,15 @@
-﻿# C3-I - Welcome Sequence
+# C3-I - Welcome Sequence
 
-## Status
-Planned / skeleton created.
-
-## Category
-C3 - Client Delivery, Documents & Billing Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Creates welcome sequence messages, onboarding instructions, and kickoff workflow objects.
+Creates a deterministic onboarding/welcome communication schedule from client and step configuration.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`client`, `steps[]`, optional `start_at`.
 
-## Build Status
-Not built yet.
+## Output
+Scheduled provider-neutral messages with due times and approval flags.
 
-## Version
-v1.0 draft
+## Boundary
+Actual sending is delegated to Gmail/Outlook/SMTP/other adapters.

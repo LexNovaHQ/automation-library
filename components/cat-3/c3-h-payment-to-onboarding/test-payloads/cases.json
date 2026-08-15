@@ -1,0 +1,1 @@
+[{"name":"paid","input":{"payment":{"id":"pay1","status":"paid","client_id":"c1","amount":200,"currency":"USD"}}},{"name":"refund","input":{"payment":{"id":"pay2","status":"refunded","client_id":"c1"}}}]

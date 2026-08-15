@@ -1,0 +1,1 @@
+[{"name":"failed_retry","input":{"subscription":{"id":"sub1","customer_id":"c1","status":"active","failed_attempts":0,"max_failed_attempts":3},"event":{"type":"payment_failed"}}},{"name":"cancel","input":{"subscription":{"id":"sub1","customer_id":"c1"},"event":{"type":"subscription_cancelled"}}}]
