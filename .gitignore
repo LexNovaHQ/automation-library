@@ -4,4 +4,4 @@ Keys/
 n8n/.env
 *.key
 *.pem
-
+.build/
