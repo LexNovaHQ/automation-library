@@ -1,0 +1,1 @@
+[{"case":"progress","expect":{"delivery.status":"in_progress"}},{"case":"blocked","expect":{"delivery.status":"blocked","next_action":"resolve_blockers"}}]

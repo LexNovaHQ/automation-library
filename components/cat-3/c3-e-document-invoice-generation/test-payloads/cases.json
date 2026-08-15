@@ -1,0 +1,1 @@
+[{"name":"invoice","input":{"type":"invoice","data":{"invoice_number":"INV-1","client_name":"Acme","currency":"USD","items":[{"description":"Automation build","quantity":1,"unit_price":200}],"tax_amount":20}}},{"name":"document","input":{"type":"document","data":{"title":"Handoff","sections":[{"heading":"Outcome","body":"Workflow delivered."}]}}}]

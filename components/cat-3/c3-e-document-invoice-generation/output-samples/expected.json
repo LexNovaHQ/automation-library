@@ -1,0 +1,1 @@
+[{"case":"invoice","expect":{"invoice_totals.total":220}},{"case":"document","expect":{"document_type":"document"}}]

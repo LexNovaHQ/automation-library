@@ -1,0 +1,1 @@
+[{"name":"pending","input":{"document":{"id":"doc1","name":"MSA"},"signers":[{"name":"A","email":"a@example.com"},{"name":"B","email":"b@example.com"}],"provider":"docusign"}},{"name":"complete","input":{"document":{"id":"doc1","name":"MSA"},"signers":[{"name":"A","status":"signed"},{"name":"B","status":"signed"}]}}]

@@ -1,21 +1,15 @@
-﻿# C3-E - Document / Invoice Generation
+# C3-E - Document / Invoice Generation
 
-## Status
-Planned / skeleton created.
-
-## Category
-C3 - Client Delivery, Documents & Billing Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Generates document or invoice payloads from structured client, billing, or delivery data.
+Builds deterministic document or invoice render payloads from structured data, including invoice totals.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`type` (`document|invoice`) plus structured `data`.
 
-## Build Status
-Not built yet.
+## Output
+Markdown render payload; invoices also return normalized totals and currency.
 
-## Version
-v1.0 draft
+## Boundary
+Rendering/export to Google Docs/PDF/e-signature is an adapter responsibility.

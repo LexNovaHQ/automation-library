@@ -1,21 +1,15 @@
-﻿# C3-D - E-Signature Flow
+# C3-D - E-Signature Flow
 
-## Status
-Planned / skeleton created.
-
-## Category
-C3 - Client Delivery, Documents & Billing Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Prepares e-signature workflow objects for documents requiring execution.
+Normalizes a document/signers packet, tracks signature status, and prepares a provider-neutral e-signature handoff.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`document`, `signers[]`, and optional provider name.
 
-## Build Status
-Not built yet.
+## Output
+Signature packet status plus provider-neutral next action.
 
-## Version
-v1.0 draft
+## Boundary
+Actual envelope creation/signing requires a provider adapter or client provider workflow.
