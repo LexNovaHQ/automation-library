@@ -1,0 +1,36 @@
+item_id,layer,path,current_state,implementation_gate,local_runtime_gate,provider_gate
+ADP-GHL,adapter,adapters/independent/gohighlevel-adapter,DEFERRED_ADAPTER,build workflow+tests+docs,import+mock tests,GoHighLevel sandbox/API test
+ADP-NOTION-DB,adapter,adapters/independent/notion-database-adapter,DEFERRED_ADAPTER,build workflow+tests+docs,import+mock tests,Notion sandbox/database test
+ADP-ONEDRIVE,adapter,adapters/independent/adp-onedrive,NOT_BUILT,complete workflow+tests+docs,import+mock tests,Microsoft OneDrive sandbox/OAuth test
+ADP-PDF,adapter,adapters/independent/pdf-text-extraction-adapter,DEFERRED_ADAPTER,build workflow+tests+docs,import+fixture tests,provider/local parser smoke test
+ADP-PIPEDRIVE,adapter,adapters/independent/pipedrive-adapter,DEFERRED_ADAPTER,build workflow+tests+docs,import+mock tests,Pipedrive sandbox/API test
+ADP-TEAMS-SEND,adapter,adapters/independent/adp-teams-send,DEFERRED,complete workflow+tests+docs,import+mock tests,Microsoft Teams sandbox/OAuth/webhook test
+C1-E,core,components/cat-1/c1-e-multi-step-sequence-engine,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-D,core,components/cat-3/c3-d-e-signature-flow,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-E,core,components/cat-3/c3-e-document-invoice-generation,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-F,core,components/cat-3/c3-f-delivery-tracking,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-G,core,components/cat-3/c3-g-subscription-billing-engine,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-H,core,components/cat-3/c3-h-payment-to-onboarding,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C3-I,core,components/cat-3/c3-i-welcome-sequence,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C4-C,core,components/cat-4/c4-c-ai-summary-generator,NOT_BUILT,build workflow+tests+docs,import+deterministic/mock AI tests,LLM sandbox smoke test
+C4-F,core,components/cat-4/c4-f-ai-content-repurpose-engine,NOT_BUILT,build workflow+tests+docs,import+deterministic/mock AI tests,LLM sandbox smoke test
+C5-A,core,components/cat-5/c5-a-basic-dashboard-view,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C5-B,core,components/cat-5/c5-b-client-portal-table,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C5-C,core,components/cat-5/c5-c-reporting-data-model,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C5-D,core,components/cat-5/c5-d-kpi-summary-builder,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C5-L,core,components/cat-5/c5-l-file-preview,NOT_BUILT,build workflow+tests+docs,import+fixture tests,N/A
+C5-T,core,components/cat-5/c5-t-export-reports,NOT_BUILT,build workflow+tests+docs,import+fixture tests,N/A
+C5-X,core,components/cat-5/c5-x-kpi-monitoring-threshold-alert-engine,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C6-A,diagnostic,components/cat-6/c6-a-workflow-audit-checker,NOT_BUILT,build workflow+tests+docs,import+fixture tests,N/A
+C6-B,diagnostic,components/cat-6/c6-b-error-pattern-library,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C6-C,diagnostic,components/cat-6/c6-c-api-auth-debugger,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C6-C1,diagnostic_adapter,components/cat-6/c6-c1-credential-api-access-test-adapter,NOT_BUILT,build workflow+tests+docs,import+no-auth smoke test,sandbox credential API test
+C6-D,diagnostic,components/cat-6/c6-d-data-mapping-diagnostic,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C6-E,diagnostic,components/cat-6/c6-e-integration-health-check,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+C6-F,diagnostic,components/cat-6/c6-f-handoff-documentation-pack,NOT_BUILT,build workflow+tests+docs,import+deterministic tests,N/A
+TPL-P0-001,template,templates/p0/lead-intake-qualification-followup,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,provider smoke tests for chosen stack
+TPL-P0-002,template,templates/p0/form-crm-alert,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,provider smoke tests for chosen stack
+TPL-P0-003,template,templates/p0/csv-crm-import,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,provider smoke tests for chosen stack
+TPL-P0-004,template,templates/p0/webhook-normalize-api-sync,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,API sandbox smoke test
+TPL-P0-005,template,templates/p0/ai-email-approval-send,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,LLM+email sandbox smoke test
+TPL-P0-006,template,templates/p0/inbound-email-extract-crm,NOT_BUILT,assemble+docs+fixtures,end-to-end local test,email+CRM sandbox smoke test
