@@ -1,0 +1,1 @@
+[{"name":"sandbox_upload","input":{"request_id":"od-1","parent_id":"REPLACE_WITH_TEST_FOLDER_ITEM_ID","filename":"automation-test.txt","binary_property":"data"},"binary_fixture":"Attach a small local test file to binary property data before execution."},{"name":"missing_filename","input":{"request_id":"od-2","parent_id":"folder","binary_property":"data"}}]

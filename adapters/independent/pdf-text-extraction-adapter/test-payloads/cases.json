@@ -1,0 +1,1 @@
+[{"name":"digital_pdf_fixture","input":{"binary_property":"data"},"binary_fixture":"Attach a small digital-text PDF to binary property data before execution."},{"name":"missing_binary","input":{"binary_property":"data"}}]

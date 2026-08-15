@@ -1,0 +1,1 @@
+[{"case":"sandbox_send","expect":"Capture after Microsoft Teams sandbox execution."},{"case":"missing_content","expect":{"valid":false,"error.code":"MISSING_CONTENT"}}]

@@ -1,0 +1,1 @@
+[{"case":"digital_pdf_fixture","expect":{"component_id":"ADP-PDF","success":true,"text":"non-empty"}},{"case":"missing_binary","expect":{"valid":false,"error.code":"MISSING_PDF_BINARY"}}]

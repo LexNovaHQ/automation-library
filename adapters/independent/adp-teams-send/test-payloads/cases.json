@@ -1,0 +1,1 @@
+[{"name":"sandbox_send","input":{"request_id":"teams-1","team_id":"REPLACE_WITH_TEST_TEAM_ID","channel_id":"REPLACE_WITH_TEST_CHANNEL_ID","content":"Automation library sandbox verification message.","content_type":"text"}},{"name":"missing_content","input":{"request_id":"teams-2","team_id":"t","channel_id":"c"}}]

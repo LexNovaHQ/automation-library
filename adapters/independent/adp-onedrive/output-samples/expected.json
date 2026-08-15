@@ -1,0 +1,1 @@
+[{"case":"sandbox_upload","expect":"Capture after Microsoft Graph sandbox execution."},{"case":"missing_filename","expect":{"valid":false,"error.code":"MISSING_FILENAME"}}]
