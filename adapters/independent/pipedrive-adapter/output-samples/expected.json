@@ -1,0 +1,1 @@
+[{"case":"sandbox_create","expect":"Capture after provider sandbox execution."},{"case":"missing_name","expect":{"valid":false,"error.code":"MISSING_PERSON_NAME"}}]

@@ -1,0 +1,1 @@
+[{"case":"sandbox_create","expect":"Capture after provider sandbox execution."},{"case":"missing_properties","expect":{"valid":false,"error.code":"MISSING_PROPERTIES"}}]

@@ -1,0 +1,1 @@
+[{"name":"sandbox_upsert","input":{"request_id":"ghl-1","locationId":"REPLACE_WITH_SANDBOX_LOCATION","contact":{"email":"automation-test@example.com","firstName":"Automation","lastName":"Test"}}},{"name":"missing_key","input":{"request_id":"ghl-2","locationId":"loc","contact":{"firstName":"No Email"}}}]
