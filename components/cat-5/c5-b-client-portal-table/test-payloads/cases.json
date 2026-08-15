@@ -1,0 +1,1 @@
+[{"name":"scope","input":{"rows":[{"client_id":"c1","status":"done","internal_note":"not-visible"},{"client_id":"c2","status":"open"}],"config":{"client_id":"c1","allowed_fields":["client_id","status"]}}}]

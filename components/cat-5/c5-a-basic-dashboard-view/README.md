@@ -1,21 +1,5 @@
-﻿# C5-A - Basic Dashboard View
+# C5-A - Basic Dashboard View
 
-## Status
-Planned / Phase 1 skeleton created.
+**Status:** Implemented; local verification pending.
 
-## Category
-C5 - Dashboards, Portals & Control Surfaces
-
-## Purpose
-Creates simple dashboard/control views from workflow or business records.
-
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
-
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+Builds a bounded tabular dashboard payload from workflow/status rows. Input: `rows[]` and optional columns/limit config. Output: columns, normalized rows, counts and truncation flag.

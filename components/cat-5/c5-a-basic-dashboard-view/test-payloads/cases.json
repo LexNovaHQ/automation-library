@@ -1,0 +1,1 @@
+[{"name":"view","input":{"rows":[{"id":1,"status":"ok"},{"id":2,"status":"fail"}],"config":{"columns":["id","status"],"limit":10}}}]

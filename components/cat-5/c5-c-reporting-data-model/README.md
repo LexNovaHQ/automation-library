@@ -1,21 +1,5 @@
-﻿# C5-C - Reporting Data Model
+# C5-C - Reporting Data Model
 
-## Status
-Planned / Phase 1 skeleton created.
+**Status:** Implemented; local verification pending.
 
-## Category
-C5 - Dashboards, Portals & Control Surfaces
-
-## Purpose
-Defines reporting schemas for automation outputs, KPIs, campaign results, and operational records.
-
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
-
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+Normalizes execution/business events into a stable reporting schema and declares the available dimensions and metrics for downstream reporting.

@@ -1,21 +1,5 @@
-﻿# C5-B - Client Portal Table
+# C5-B - Client Portal Table
 
-## Status
-Planned / Phase 1 skeleton created.
+**Status:** Implemented; local verification pending.
 
-## Category
-C5 - Dashboards, Portals & Control Surfaces
-
-## Purpose
-Creates structured client-facing tables for status, tasks, files, or delivery tracking.
-
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
-
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+Produces a client-scoped table with an explicit field allowlist to reduce accidental data exposure. This is a data payload, not an authentication layer; portal access control still belongs in the serving application.

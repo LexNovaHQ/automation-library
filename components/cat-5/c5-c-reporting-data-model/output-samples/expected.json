@@ -1,0 +1,1 @@
+[{"case":"events","expect":{"reporting_model.rows.length":1,"reporting_model.schema_version":"v1"}}]
