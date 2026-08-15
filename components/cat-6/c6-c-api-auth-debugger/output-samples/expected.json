@@ -1,0 +1,1 @@
+[{"case":"missing_scope_403","expect":{"diagnosis.category":"scope_permission_or_resource_access","manual_review_required":true}},{"case":"accepted_200","expect":{"diagnosis.category":"credential_path_accepted"}},{"case":"secret_rejected","expect":{"success":false,"error.code":"SECRET_MATERIAL_NOT_ALLOWED"}}]

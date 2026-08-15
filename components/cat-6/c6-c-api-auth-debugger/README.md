@@ -1,21 +1,12 @@
-﻿# C6-C - API/Auth Debugger
+# C6-C - API/Auth Debugger
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented; local runtime verification pending.
 
 ## Purpose
-Diagnoses API authentication, OAuth, token, permission, scope, and credential failures.
+Diagnoses authentication, token-expiry, scope/permission, and access-path failures from sanitized evidence.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Security boundary
+Do not pass token, API-key, password, or other secret values into this diagnostic. Pass only status codes, response text, auth type, expiry metadata, and granted/required scope names. Use C6-C1 for a controlled live access test.
 
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+## Output
+Returns a diagnosis category, confidence, structured checks, manual-review flag, and next action.

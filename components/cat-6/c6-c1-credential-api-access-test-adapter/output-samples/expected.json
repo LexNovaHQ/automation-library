@@ -1,0 +1,1 @@
+[{"case":"no_auth_200","expect":{"component_id":"C6-C1","access_result":"accepted","secret_material_returned":false}},{"case":"provider_auth_cases","expect":"Capture only after sandbox credential execution on the new laptop."}]
