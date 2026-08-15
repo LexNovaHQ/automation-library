@@ -1,0 +1,1 @@
+[{"case":"valid_mapping","expect":{"mapping_status":"valid"}},{"case":"missing_required_and_type","expect":{"mapping_status":"invalid","issues":"contains MISSING_REQUIRED_SOURCE and TYPE_MISMATCH"}}]

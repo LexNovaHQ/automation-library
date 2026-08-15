@@ -1,21 +1,15 @@
-﻿# C6-E - Integration Health Check
+# C6-E - Integration Health Check
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented; local verification pending.
 
 ## Purpose
-Checks whether connected tools, APIs, webhooks, and credentials are functioning correctly.
+Aggregates runtime checks from credentials, mappings, webhooks, provider tests, and other diagnostics into one integration health result.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`checks[]` with `name`, `status` (`pass|warn|fail`), optional `critical`, `detail`, `latency_ms`, and `source`.
 
-## Build Status
-Not built yet.
+## Output
+Health status (`healthy|warning|degraded|down`), score, counts, normalized checks, and next action.
 
-## Version
-v1.0 draft
+## Pairing
+Feed results from C6-C1, C6-D, webhook tests, and provider-specific smoke tests into this component.

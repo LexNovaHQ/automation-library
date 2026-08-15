@@ -1,0 +1,1 @@
+[{"case":"healthy_warning","expect":{"health.status":"warning"}},{"case":"critical_failure","expect":{"health.status":"down","manual_review_required":true}}]

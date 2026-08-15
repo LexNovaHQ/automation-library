@@ -1,21 +1,12 @@
-﻿# C6-F - Handoff Documentation Pack
+# C6-F - Handoff Documentation Pack
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented; local verification pending.
 
 ## Purpose
-Produces client handoff docs, workflow maps, credential notes, testing records, and maintenance instructions.
+Produces a repeatable client handoff pack from project metadata, workflow inventory, credential references, test results, and known limitations.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Security
+Only credential names/references and required scopes belong in the input. Never supply credential secret values.
 
-## Build Status
-Not built yet.
-
-## Version
-v1.0 draft
+## Output
+Five Markdown documents: overview, setup/credentials, test record, maintenance, and known limitations.

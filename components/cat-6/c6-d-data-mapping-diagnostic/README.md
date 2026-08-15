@@ -1,21 +1,15 @@
-﻿# C6-D - Data Mapping Diagnostic
+# C6-D - Data Mapping Diagnostic
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented; local verification pending.
 
 ## Purpose
-Finds broken field mappings, missing payload fields, type mismatches, and transformation issues.
+Validates field mappings before data is sent to a CRM/API/database. It detects missing required sources, missing targets, and type mismatches while producing a mapped preview.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+`source` plus `mapping[]` rules containing `source_path`, `target_path`, optional `type`, and optional `required`.
 
-## Build Status
-Not built yet.
+## Output
+`mapping_status`, structured `issues[]`, and `mapped_preview`.
 
-## Version
-v1.0 draft
+## Boundary
+This component does not write to the destination. Use the destination adapter only after the mapping contract passes.
