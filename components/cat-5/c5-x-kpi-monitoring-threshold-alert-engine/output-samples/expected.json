@@ -1,0 +1,1 @@
+[{"case":"alert","expect":{"monitoring.status":"critical"}},{"case":"normal","expect":{"monitoring.alert_count":0}}]

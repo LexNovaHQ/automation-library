@@ -1,0 +1,1 @@
+[{"name":"alert","input":{"metrics":{"failure_rate":0.2},"rules":[{"metric":"failure_rate","operator":"gt","threshold":0.1,"severity":"critical"}]}},{"name":"normal","input":{"metrics":{"failure_rate":0.02},"rules":[{"metric":"failure_rate","operator":"gt","threshold":0.1}]}}]
