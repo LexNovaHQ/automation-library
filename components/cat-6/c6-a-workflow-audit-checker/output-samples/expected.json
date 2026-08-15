@@ -1,0 +1,1 @@
+[{"case":"valid_connected_workflow","expect":{"success":true,"audit.blocking":false}},{"case":"disconnected_and_no_resilience","expect":{"success":true,"audit.findings_count":">=2"}}]

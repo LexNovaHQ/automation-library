@@ -1,21 +1,18 @@
-﻿# C6-B - Error Pattern Library
+# C6-B - Error Pattern Library
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented; local runtime verification pending.
 
 ## Purpose
-Stores recurring automation failure types, causes, fixes, and prevention notes.
+Normalizes common automation/provider failures into a stable failure taxonomy with likely causes, remediation steps, and a retryability decision.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Supported v1 patterns
+Authentication failure, authorization/scope failure, rate limit, timeout, not-found, duplicate/conflict, validation/mapping, provider 5xx, network connectivity, and unknown.
 
-## Build Status
-Not built yet.
+## Input
+Pass `error` with any combination of `code`, `message`, and `status_code`.
 
-## Version
-v1.0 draft
+## Output
+Returns `pattern.id`, `pattern.category`, `pattern.retryable`, `likely_causes`, `remediations`, and a controlled `next_action`.
+
+## Boundary
+This component classifies evidence already available. It does not call a provider or mutate workflow state.

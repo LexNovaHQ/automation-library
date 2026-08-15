@@ -1,21 +1,18 @@
-﻿# C6-A - Workflow Audit Checker
+# C6-A - Workflow Audit Checker
 
-## Status
-Planned / Phase 1 skeleton created.
-
-## Category
-C6 - Diagnostic, Error Handling, QA & Handoff Systems
+**Status:** Implemented on `sept-launch-full-build`; local import/runtime verification pending.
 
 ## Purpose
-Reviews workflows for missing steps, weak error handling, broken mappings, and unsafe assumptions.
+Audits an n8n workflow export for structural and operational red flags before a repair or client handoff.
 
-## Standard Folder Structure
-- workflows/
-- test-payloads/
-- output-samples/
+## Input
+Pass `workflow` as an n8n workflow JSON object. The checker reviews trigger presence, graph connectivity, generic node names, resilience/error controls, possible literal secrets, and basic export settings.
 
-## Build Status
-Not built yet.
+## Output
+Returns `audit.score`, `audit.blocking`, and structured `audit.findings[]` with severity, code, message, remediation, and affected node where available.
 
-## Version
-v1.0 draft
+## Boundaries
+This is a static audit. It cannot prove that credentials, provider APIs, or live webhooks work. Pair it with C6-C/C6-C1 and C6-E for runtime/provider checks.
+
+## Verification
+Run both cases in `test-payloads/cases.json`; capture the resulting output into the expected contract before promoting the classification row to `BUILT`.

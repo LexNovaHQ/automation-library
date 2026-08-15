@@ -1,0 +1,29 @@
+{
+  "name": "C6-A_CORE_Workflow_Audit_Checker_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [-240,0],
+      "id": "8c93be9b-be6a-4d1d-9d40-ad4901948e10",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const root = $input.first().json || {};\nconst workflow = root.workflow || root.input?.workflow || root.input || {};\nconst nodes = Array.isArray(workflow.nodes) ? workflow.nodes : [];\nconst connections = workflow.connections && typeof workflow.connections === 'object' ? workflow.connections : {};\nconst findings = [];\nconst add = (severity, code, message, remediation, node = null) => findings.push({severity, code, message, remediation, node});\n\nif (!nodes.length) {\n  return [{json:{success:false,component_id:'C6-A',component_version:'v1',error:{code:'NO_WORKFLOW_NODES',message:'workflow.nodes must contain at least one node.'},findings:[],score:0,next_action:'provide_workflow_json'}}];\n}\n\nconst triggerTypes = ['webhook','formTrigger','scheduleTrigger','manualTrigger','executeWorkflowTrigger','emailReadImap','gmailTrigger','microsoftOutlookTrigger'];\nif (!nodes.some(n => triggerTypes.some(t => String(n.type||'').includes(t)))) add('high','NO_TRIGGER','No recognizable trigger node was found.','Confirm how the workflow starts and add the appropriate trigger.');\n\nconst genericNames = new Set(['HTTP Request','Code','Set','Edit Fields','If','Switch','Merge']);\nfor (const n of nodes) if (genericNames.has(String(n.name||''))) add('low','GENERIC_NODE_NAME','A node still has a generic default name.','Rename nodes in plain English for supportability.',n.name);\n\nconst sourceNames = new Set(Object.keys(connections));\nconst targetNames = new Set();\nfor (const branches of Object.values(connections)) { for (const group of (branches.main || [])) for (const link of (group || [])) if (link?.node) targetNames.add(link.node); }\nif (nodes.length > 1) { for (const n of nodes) if (!sourceNames.has(n.name) && !targetNames.has(n.name)) add('high','DISCONNECTED_NODE','Node is not connected to the workflow graph.','Connect it or remove it.',n.name); }\n\nconst resilience = nodes.some(n => n.retryOnFail === true || n.onError || /error|retry|failure|manual review/i.test(String(n.name||'')));\nif (!resilience) add('medium','NO_RESILIENCE_PATH','No retry, failure, or manual-review control was detected.','Add a controlled error/retry/manual-review path.');\n\nconst serialized = JSON.stringify(nodes.map(n => n.parameters || {}));\nconst secretPatterns = [/Bearer\\s+[A-Za-z0-9._\\-]{16,}/i,/\\bsk-[A-Za-z0-9_\\-]{12,}/,/\"?(api[_-]?key|client[_-]?secret|password|token)\"?\\s*:\\s*\"[^={][^\"]{7,}\"/i];\nif (secretPatterns.some(r => r.test(serialized))) add('critical','POSSIBLE_LITERAL_SECRET','Possible literal credential material was detected in node parameters.','Move secrets into n8n Credentials or environment variables and rotate any exposed value.');\n\nif (!workflow.settings?.executionOrder) add('low','MISSING_EXECUTION_SETTING','settings.executionOrder is not declared.','Save/export the workflow from the target n8n version after validation.');\nconst severityPenalty = {critical:30,high:18,medium:9,low:3};\nconst score = Math.max(0, 100 - findings.reduce((s,f)=>s+(severityPenalty[f.severity]||5),0));\nconst blocking = findings.some(f => ['critical','high'].includes(f.severity));\nreturn [{json:{success:true,component_id:'C6-A',component_version:'v1',workflow_name:workflow.name || null,audit:{score,blocking,findings_count:findings.length,findings},next_action:blocking ? 'repair_blocking_findings' : findings.length ? 'review_non_blocking_findings' : 'workflow_audit_passed',error:null}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [40,0],
+      "id": "78557dff-a65a-4e14-8021-6bd2a1a2ba26",
+      "name": "Run Component Logic"
+    }
+  ],
+  "connections": {"When Executed by Another Workflow":{"main":[[{"node":"Run Component Logic","type":"main","index":0}]]}},
+  "active": false,
+  "settings": {"executionOrder":"v1"},
+  "tags": []
+}

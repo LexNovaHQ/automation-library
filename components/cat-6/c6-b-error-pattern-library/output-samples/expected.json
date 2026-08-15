@@ -1,0 +1,1 @@
+[{"case":"rate_limit","expect":{"pattern.id":"rate_limit","pattern.retryable":true}},{"case":"permission","expect":{"pattern.id":"auth_scope_or_permission"}},{"case":"mapping","expect":{"pattern.id":"validation_or_mapping"}}]

@@ -1,0 +1,1 @@
+[{"name":"rate_limit","input":{"error":{"code":"HTTP_429","message":"Too many requests","status_code":429}}},{"name":"permission","input":{"error":{"code":"HTTP_403","message":"Forbidden: missing contacts.write scope","status_code":403}}},{"name":"mapping","input":{"error":{"code":"BAD_REQUEST","message":"required field email is missing","status_code":400}}}]

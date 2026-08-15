@@ -1,0 +1,4 @@
+[
+  {"name":"valid_connected_workflow","input":{"workflow":{"name":"Demo Lead Intake","nodes":[{"name":"Receive Lead","type":"n8n-nodes-base.webhook","parameters":{}},{"name":"Validate Lead","type":"n8n-nodes-base.code","parameters":{}},{"name":"Error Log","type":"n8n-nodes-base.code","parameters":{}}],"connections":{"Receive Lead":{"main":[[{"node":"Validate Lead","type":"main","index":0}]]},"Validate Lead":{"main":[[{"node":"Error Log","type":"main","index":0}]]}},"settings":{"executionOrder":"v1"}}}},
+  {"name":"disconnected_and_no_resilience","input":{"workflow":{"name":"Broken","nodes":[{"name":"Webhook","type":"n8n-nodes-base.webhook","parameters":{}},{"name":"HTTP Request","type":"n8n-nodes-base.httpRequest","parameters":{}},{"name":"Orphan","type":"n8n-nodes-base.code","parameters":{}}],"connections":{"Webhook":{"main":[[{"node":"HTTP Request","type":"main","index":0}]]}}}}}
+]
